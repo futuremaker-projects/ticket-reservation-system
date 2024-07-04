@@ -1,0 +1,63 @@
+@startuml
+
+hide footbox
+
+participant "사용자" as 사용자
+participant "콘서트" as 콘서트
+participant "대기열" as 대기열
+participant "DB" as DB
+
+group step 1: 유저 대기열 토큰
+
+    '콘서트 목록 조회
+    사용자 -> 콘서트 : 콘서트 목록조회 요청 (GET /concerts)
+    activate 콘서트
+    콘서트 -> DB : 콘서트 리스트 조회요청
+    activate DB
+    DB --> 콘서트 : 콘서트 리스트 조회응답
+    deactivate DB
+    콘서트 --> 사용자 : 콘서트 목록 응답
+    deactivate 콘서트
+
+    '콘서트 단일 조회
+    사용자 -> 콘서트 : 콘서트 스케줄 및 정보 요청 (GET /concerts/{concertId})
+    activate 콘서트
+    콘서트 -> DB : 콘서트 단건 조회요청
+    activate DB
+    DB --> 콘서트 : 콘서트 단건 조회응답
+    deactivate DB
+    콘서트 --> 사용자 : 콘서트 스케줄 및 정보 응답
+    deactivate 콘서트
+    DB --> 사용자 : 존재하지 않는 콘서트 조회시 예외발생
+    destroy DB
+
+    '대기열 조회
+    group optional 1: 대기열 현황
+
+    사용자 -> 콘서트 : 콘서트예매 조회 요청 (GET /concerts/{concertId})
+    activate 콘서트
+    콘서트 -> 대기열 : 대기열 토큰생성 요청 \n(UUID 및 대기열 관련 정보)
+    activate 대기열
+    대기열 -> DB : 토큰 조회
+    activate DB
+    DB --> 대기열 : 조회한 토큰 반환
+    deactivate DB
+
+    DB --> 사용자 : 토큰이 존재하지 않을시 예외처리
+    destroy DB
+    note right
+        토큰이 존재하지 않는다면
+        토큰을 생성하게 해주는것도
+        고려해야한다.
+    end note
+
+    대기열 --> 콘서트 : 토큰검증 확인 및 대기열 정보응답
+    deactivate 대기열
+    콘서트 --> 사용자 : 현재 50인 미만의 사용자가 콘서트를 예매시 \n콘서트 예매페이지로 이동
+
+    콘서트 --> 사용자 : 현재 50인 이상의 사용자가 콘서트를 예매시 \n대기열 페이지로 이동 및 대기열 정보 반환
+    deactivate 콘서트
+    end
+end
+
+@enduml

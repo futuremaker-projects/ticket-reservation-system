@@ -1,0 +1,21 @@
+@startuml
+
+hide footbox
+autoactivate on
+
+participant "사용자" as 사용자
+participant "포인트" as 포인트
+
+group 금액 충전 / 조회
+    사용자 -> 포인트 : 포인트 조회\n(GET /point)
+    포인트 --> 사용자 : 조회한 포인트를 보내준다.
+    사용자 -> 포인트 : 포인트 충전\n(POST /point)
+    포인트 --> 사용자 : 충전된 포인트 및 총 포인트를 보여준다.
+
+    포인트 --> 사용자 : 마이너스 포인트 충전시 예외발생
+    destroy 포인트
+    포인트 --> 사용자 : 제한된 상한선 이상의 포인트 충전시 예외발생
+    destroy 포인트
+end
+
+@enduml

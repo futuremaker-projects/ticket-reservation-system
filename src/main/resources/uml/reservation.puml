@@ -1,0 +1,46 @@
+@startuml
+
+hide footbox
+autoactivate on
+
+participant "사용자" as 사용자
+participant "예매" as 예매
+participant "대기열" as 대기열
+participant "포인트" as 포인트
+
+group step 2: 티켓 예매 화면
+    사용자 -> 예매 : 예액 가능한 날짜 요청 \n(GET /reservation/date)
+
+    예매 -> 대기열 : 토큰 검증
+
+    대기열 --> 예매 : 토큰 검증완료
+
+    예매 --> 사용자 : 예약 가능한 날짜 목록 응답
+
+    사용자 -> 예매 : 가능한 자리 요청 \n(GET /reservation/seat)
+    note right
+        예약 가능한 자리는 1 ~ 50개
+    end note
+    예매 -> 대기열 : 토큰 검증
+    대기열 --> 예매 : 토큰 검증완료
+    예매 --> 사용자 : 예약 가능한 자리 응답
+
+    사용자 -> 예매 : 티켓 구매 \n(POST /reservation/payment)
+
+    예매 -> 대기열 : 토큰 검증
+    대기열 --> 예매 : 토큰 검증완료
+
+    예매 -> 포인트 : 포인트 조회 및 차감
+    포인트 --> 예매 : 포인트 차감 성공
+
+    포인트 --> 사용자 : 차감할 포인트가 없을시 예외발생
+    destroy 포인트
+    note right
+        차감할 포인트가 없다면
+        포인트를 충전하게 해주는것도
+        고려해야 한다.
+    end note
+
+end
+
+@enduml
