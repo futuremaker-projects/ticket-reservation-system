@@ -7,7 +7,7 @@ participant "콘서트" as 콘서트
 participant "대기열" as 대기열
 participant "DB" as DB
 
-group step 1: 유저 대기열 토큰
+group step 1: 콘서트 조회
 
     '콘서트 목록 조회
     사용자 -> 콘서트 : 콘서트 목록조회 요청 (GET /concerts)
@@ -32,9 +32,9 @@ group step 1: 유저 대기열 토큰
     destroy DB
 
     '대기열 조회
-    group optional 1: 대기열 현황
+    group optional 1: 유저 대기열 토큰
 
-    사용자 -> 콘서트 : 콘서트예매 조회 요청 (GET /concerts/{concertId})
+    사용자 -> 콘서트 : 유저 토큰발급 요청 (GET /queue/token)
     activate 콘서트
     콘서트 -> 대기열 : 대기열 토큰생성 요청 \n(UUID 및 대기열 관련 정보)
     activate 대기열

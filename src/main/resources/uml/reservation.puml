@@ -9,7 +9,7 @@ participant "대기열" as 대기열
 participant "포인트" as 포인트
 
 group step 2: 티켓 예매 화면
-    사용자 -> 예매 : 예액 가능한 날짜 요청 \n(GET /reservation/date)
+    사용자 -> 예매 : 예액 가능한 날짜 요청 \n(GET /reservation/concert/{concertId}/available-date)
 
     예매 -> 대기열 : 토큰 검증
 
@@ -17,7 +17,7 @@ group step 2: 티켓 예매 화면
 
     예매 --> 사용자 : 예약 가능한 날짜 목록 응답
 
-    사용자 -> 예매 : 가능한 자리 요청 \n(GET /reservation/seat)
+    사용자 -> 예매 : 가능한 자리 요청 \n(GET /reservation/concert-schedule/{concertScheduleId}/seat)
     note right
         예약 가능한 자리는 1 ~ 50개
     end note
