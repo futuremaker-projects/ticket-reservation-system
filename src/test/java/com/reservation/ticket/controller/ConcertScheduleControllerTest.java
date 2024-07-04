@@ -1,8 +1,8 @@
 package com.reservation.ticket.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponseDto;
 import com.reservation.ticket.controller.dto.concert.ConcertResponseDto;
-import com.reservation.ticket.controller.dto.concertInfo.ConcertInfoResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,20 +20,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ConcertController.class)
+@WebMvcTest(ConcertScheduleController.class)
 @ExtendWith(SpringExtension.class)
-class ConcertControllerTest {
+class ConcertScheduleControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired ObjectMapper objectMapper;
 
-    @DisplayName("콘서트 목록을 조회한다.")
+    @DisplayName("콘서트 일정 목록을 조회한다.")
     @Test
-    void givenNothing_whenRequestingConcertList_thenReturnsConcertList() throws Exception {
+    void givenNothing_whenRequestingConcertScheduleList_thenReturnsConcertScheduleList() throws Exception {
         // given
-        List<ConcertResponseDto> concerts = List.of(
-            ConcertResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertInfoResponseDto.of(1L, "concert1")),
-            ConcertResponseDto.of(2L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertInfoResponseDto.of(2L, "concert2"))
+        List<ConcertScheduleResponseDto> concerts = List.of(
+            ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponseDto.of(1L, "concert1")),
+            ConcertScheduleResponseDto.of(2L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponseDto.of(2L, "concert2"))
         );
 
         // when
@@ -47,12 +47,12 @@ class ConcertControllerTest {
 
     }
 
-    @DisplayName("콘서트 id로 콘서트를 조회한다.")
+    @DisplayName("콘서트 일정 id로 콘서트 일정를 조회한다.")
     @Test
-    public void givenConcertId_when_then() throws Exception {
+    public void givenConcertScheduleId_whenRequestingConcertSchedule_thenReturnsConcertSchedule() throws Exception {
         // given
-        ConcertResponseDto concert =
-                ConcertResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertInfoResponseDto.of(1L, "concert1"));
+        ConcertScheduleResponseDto concert =
+                ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponseDto.of(1L, "concert1"));
         Long concertId = 1L;
         // when
 

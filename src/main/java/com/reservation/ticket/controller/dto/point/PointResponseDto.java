@@ -1,9 +1,9 @@
 package com.reservation.ticket.controller.dto.point;
 
-public record PointResponseDto(Long id, Integer point) {
+public record PointResponseDto(Integer point) {
 
-    public static PointResponseDto of(Long id, Integer point) {
-        return new PointResponseDto(id, point);
+    public static PointResponseDto of(Integer point) {
+        return new PointResponseDto(point);
     }
 
 }

@@ -1,20 +1,17 @@
 package com.reservation.ticket.controller.dto.concert;
 
-import com.reservation.ticket.controller.dto.concertInfo.ConcertInfoResponseDto;
+import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponseDto;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-public record ConcertResponseDto(Long id,
-                                 int amountOfSeat,
-                                 LocalDateTime openedAt,
-                                 ConcertInfoResponseDto concertInfo) {
+public record ConcertResponseDto(Long id, String name, List<ConcertScheduleResponseDto> concertSchedules) {
 
-    public static ConcertResponseDto of(
-            Long id,
-            int amountOfSeat,
-            LocalDateTime openedAt,
-            ConcertInfoResponseDto concertInfo) {
-        return new ConcertResponseDto(id, amountOfSeat, openedAt, concertInfo);
+    public static ConcertResponseDto of(Long id, String name, List<ConcertScheduleResponseDto> concertSchedules) {
+        return new ConcertResponseDto(id, name, concertSchedules);
+    }
+
+    public static ConcertResponseDto of(Long id, String name) {
+        return new ConcertResponseDto(id, name, null);
     }
 
 }
