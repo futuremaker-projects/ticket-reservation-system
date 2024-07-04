@@ -2,7 +2,6 @@ package com.reservation.ticket.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponseDto;
-import com.reservation.ticket.controller.dto.concert.ConcertResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ConcertScheduleController.class)
+@WebMvcTest(ConcertController.class)
 @ExtendWith(SpringExtension.class)
-class ConcertScheduleControllerTest {
+class ConcertControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired ObjectMapper objectMapper;
@@ -32,8 +31,8 @@ class ConcertScheduleControllerTest {
     void givenNothing_whenRequestingConcertScheduleList_thenReturnsConcertScheduleList() throws Exception {
         // given
         List<ConcertScheduleResponseDto> concerts = List.of(
-            ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponseDto.of(1L, "concert1")),
-            ConcertScheduleResponseDto.of(2L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponseDto.of(2L, "concert2"))
+            ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), com.reservation.ticket.controller.dto.concert.ConcertResponseDto.of(1L, "concert1")),
+            ConcertScheduleResponseDto.of(2L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), com.reservation.ticket.controller.dto.concert.ConcertResponseDto.of(2L, "concert2"))
         );
 
         // when
@@ -52,7 +51,7 @@ class ConcertScheduleControllerTest {
     public void givenConcertScheduleId_whenRequestingConcertSchedule_thenReturnsConcertSchedule() throws Exception {
         // given
         ConcertScheduleResponseDto concert =
-                ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponseDto.of(1L, "concert1"));
+                ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), com.reservation.ticket.controller.dto.concert.ConcertResponseDto.of(1L, "concert1"));
         Long concertId = 1L;
         // when
 
