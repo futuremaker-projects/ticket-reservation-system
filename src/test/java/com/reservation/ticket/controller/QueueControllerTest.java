@@ -2,7 +2,7 @@ package com.reservation.ticket.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.controller.dto.queue.TokenStatus;
-import com.reservation.ticket.controller.dto.queue.QueueResponseDto;
+import com.reservation.ticket.controller.dto.queue.QueueResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ class QueueControllerTest {
     @Test
     void given_when_then() throws Exception {
         // given
-        QueueResponseDto queue = QueueResponseDto.of(1L, 1L, "UUID-1", TokenStatus.WAIT,
+        QueueResponse queue = QueueResponse.of(1L, 1L, "UUID-1", TokenStatus.WAIT,
                 LocalDateTime.of(2022, 5, 20, 2, 10),
                 LocalDateTime.of(2022, 5, 20, 2, 10));
 

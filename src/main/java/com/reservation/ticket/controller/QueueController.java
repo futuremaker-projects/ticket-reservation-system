@@ -1,7 +1,7 @@
 package com.reservation.ticket.controller;
 
 import com.reservation.ticket.controller.dto.queue.TokenStatus;
-import com.reservation.ticket.controller.dto.queue.QueueResponseDto;
+import com.reservation.ticket.controller.dto.queue.QueueResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class QueueController {
 
     @PostMapping("/token")
-    public ResponseEntity<QueueResponseDto> createToken() {
-        QueueResponseDto queue = QueueResponseDto.of(1L, 1L, "UUID-1", TokenStatus.WAIT,
+    public ResponseEntity<QueueResponse> createToken() {
+        QueueResponse queue = QueueResponse.of(1L, 1L, "UUID-1", TokenStatus.WAIT,
                 LocalDateTime.of(2022, 5, 20, 2, 10),
                 LocalDateTime.of(2022, 5, 20, 2, 10));
 

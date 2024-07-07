@@ -1,7 +1,8 @@
 package com.reservation.ticket.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponseDto;
+import com.reservation.ticket.controller.dto.concert.ConcertResponse;
+import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +31,9 @@ class ConcertControllerTest {
     @Test
     void givenNothing_whenRequestingConcertScheduleList_thenReturnsConcertScheduleList() throws Exception {
         // given
-        List<ConcertScheduleResponseDto> concerts = List.of(
-            ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), com.reservation.ticket.controller.dto.concert.ConcertResponseDto.of(1L, "concert1")),
-            ConcertScheduleResponseDto.of(2L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), com.reservation.ticket.controller.dto.concert.ConcertResponseDto.of(2L, "concert2"))
+        List<ConcertScheduleResponse> concerts = List.of(
+            ConcertScheduleResponse.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponse.of(1L, "concert1")),
+            ConcertScheduleResponse.of(2L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponse.of(2L, "concert2"))
         );
 
         // when
@@ -50,8 +51,8 @@ class ConcertControllerTest {
     @Test
     public void givenConcertScheduleId_whenRequestingConcertSchedule_thenReturnsConcertSchedule() throws Exception {
         // given
-        ConcertScheduleResponseDto concert =
-                ConcertScheduleResponseDto.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), com.reservation.ticket.controller.dto.concert.ConcertResponseDto.of(1L, "concert1"));
+        ConcertScheduleResponse concert =
+                ConcertScheduleResponse.of(1L, 10, LocalDateTime.of(2022, 5, 20, 2, 10), ConcertResponse.of(1L, "concert1"));
         Long concertId = 1L;
         // when
 
