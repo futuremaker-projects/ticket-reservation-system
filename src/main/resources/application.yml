@@ -1,1 +1,68 @@
-spring.application.name=ticket
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+
+---
+
+logging:
+  level:
+    com.reservation.ticket: debug
+    org.springframework.web.servlet: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+
+spring:
+  config:
+    activate:
+      on-profile: common
+
+springdoc:
+  packages-to-scan: org.enrollment.lecture.application
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: /api
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+---
+
+spring:
+  profiles.active: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+  jpa:
+    hibernate.ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+    defer-datasource-initialization: true
+    open-in-view: false
+  sql.init.mode: always
+
+
+---
+
+spring:
+  profiles.active: test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+
+
