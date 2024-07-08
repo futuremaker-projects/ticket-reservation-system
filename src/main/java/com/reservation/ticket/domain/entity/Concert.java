@@ -1,14 +1,13 @@
 package com.reservation.ticket.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -16,21 +15,29 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Concert {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
     private LocalDateTime createdAt;
 
-    public Concert(Long id, String name, LocalDateTime createdAt) {
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ConcertSchedule> concertSchedules = new ArrayList<>();
+
+    public Concert(Long id, String name, LocalDateTime createdAt, List<ConcertSchedule> concertSchedules) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
+        this.concertSchedules = concertSchedules;
     }
 
     public static Concert of(String name, LocalDateTime createdAt) {
-        return new Concert(null, name, createdAt);
+        return new Concert(null, name, createdAt, null);
+    }
+
+    public static Concert of(String name, LocalDateTime createdAt, List<ConcertSchedule> concertSchedules) {
+        return new Concert(null, name, createdAt, concertSchedules);
     }
 
     @Override

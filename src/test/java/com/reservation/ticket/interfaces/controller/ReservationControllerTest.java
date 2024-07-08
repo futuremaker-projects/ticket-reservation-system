@@ -1,9 +1,7 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.ticket.interfaces.controller.ReservationController;
-import com.reservation.ticket.interfaces.controller.dto.concert.ConcertResponse;
-import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleResponse;
+import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,17 +44,12 @@ class ReservationControllerTest {
         // then
     }
 
-    public static List<ConcertScheduleResponse> selectConcertScheduleResponseDtoList() {
+    public static List<ConcertScheduleDto.Response> selectConcertScheduleResponseDtoList() {
         return List.of(
-                ConcertScheduleResponse.of(
-                        1L, 50, LocalDateTime.of(2022, 5, 10, 2, 10),
-                        ConcertResponse.of(1L, "concert1")
-                ),
-                ConcertScheduleResponse.of(
-                        2L, 50, LocalDateTime.of(2022, 5, 20, 2, 10),
-                        ConcertResponse.of(1L, "concert1")
-                )
+                ConcertScheduleDto.Response.of(
+                        1L, 50, LocalDateTime.of(2022, 5, 10, 2, 10)),
+                ConcertScheduleDto.Response.of(
+                        2L, 50, LocalDateTime.of(2022, 5, 20, 2, 10))
         );
     }
-
 }

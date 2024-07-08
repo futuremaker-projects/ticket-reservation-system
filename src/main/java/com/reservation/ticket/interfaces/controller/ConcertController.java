@@ -1,6 +1,8 @@
 package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.interfaces.controller.dto.concert.ConcertResponse;
+import com.reservation.ticket.domain.service.ConcertService;
+import com.reservation.ticket.interfaces.controller.dto.concert.ConcertDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,21 +13,23 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/concerts")
+@RequiredArgsConstructor
 public class ConcertController {
 
+    private final ConcertService concertService;
+
     @GetMapping
-    public ResponseEntity<List<ConcertResponse>> selectConcerts() {
-        List<ConcertResponse> concerts = List.of(
-                        ConcertResponse.of(1L, "concert1"),
-                        ConcertResponse.of(2L, "concert2")
-        );
-        return ResponseEntity.ok().body(concerts);
+    public ResponseEntity<List<ConcertDto.Response>> selectConcerts() {
+        List<ConcertDto.Response> responses = concertService.selectAllConcerts().stream()
+                .map(ConcertDto.Response::from)
+                .toList();
+
+        return ResponseEntity.ok().body(responses);
     }
 
     @GetMapping("/{concertId}")
-    public ResponseEntity<ConcertResponse> selectConcertById(@PathVariable Long concertId) {
-        ConcertResponse concert = ConcertResponse.of(concertId, "concert1");
-        return ResponseEntity.ok().body(concert);
+    public ResponseEntity<ConcertDto.Response> selectConcertById(@PathVariable Long concertId) {
+        return ResponseEntity.ok().body(ConcertDto.Response.of(1L, "concert1"));
     }
 
 }

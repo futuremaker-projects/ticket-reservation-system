@@ -1,7 +1,7 @@
 package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.interfaces.controller.dto.concert.ConcertResponse;
-import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleResponse;
+import com.reservation.ticket.interfaces.controller.dto.concert.ConcertDto;
+import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleDto;
 import com.reservation.ticket.interfaces.controller.dto.point.PointRequest;
 import com.reservation.ticket.interfaces.controller.dto.reservation.ReservationRequest;
 import com.reservation.ticket.interfaces.controller.dto.seat.SeatResponse;
@@ -20,7 +20,7 @@ public class ReservationController {
      * 콘서트 id로 콘서트 스케줄 목록을 조회한다.
      */
     @GetMapping("/concert/{concertId}/available-date")
-    public ResponseEntity<ConcertResponse> selectAvailableDate(@PathVariable Long concertId) {
+    public ResponseEntity<ConcertDto.Response> selectAvailableDate(@PathVariable Long concertId) {
         return ResponseEntity.ok().body(getConcertScheduleDateInfoList(concertId));
     }
 
@@ -56,15 +56,13 @@ public class ReservationController {
     /**
      * 콘서트 예약시 콘서트의 기본정보 및 콘서트 스케줄정보를 응답해주기 위한 메서드
      */
-    public static ConcertResponse getConcertScheduleDateInfoList(Long concertId) {
-        return ConcertResponse.of(
-                concertId, "concert1",
-                List.of(
-                        ConcertScheduleResponse.of(1L, LocalDateTime.of(2022, 5, 10, 2, 10)),
-                        ConcertScheduleResponse.of(2L, LocalDateTime.of(2022, 5, 15, 2, 10)),
-                        ConcertScheduleResponse.of(3L, LocalDateTime.of(2022, 5, 20, 2, 10))
-                )
+    public static ConcertDto.Response getConcertScheduleDateInfoList(Long concertId) {
+        List.of(
+                ConcertScheduleDto.Response.of(1L, 30, LocalDateTime.of(2022, 5, 10, 2, 10)),
+                ConcertScheduleDto.Response.of(2L, 40, LocalDateTime.of(2022, 5, 15, 2, 10)),
+                ConcertScheduleDto.Response.of(3L, 50, LocalDateTime.of(2022, 5, 20, 2, 10))
         );
+        return ConcertDto.Response.of(concertId, "concert1");
     }
 
     /**

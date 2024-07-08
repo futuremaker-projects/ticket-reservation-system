@@ -13,26 +13,38 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ConcertSchedule {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private int limitSeat;
+    private LocalDateTime openedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Concert concert;
 
-    private int limitSeat;
-
-    private LocalDateTime openedAt;
-
-    public ConcertSchedule(Long id, Concert concert, int limitSeat, LocalDateTime openedAt) {
+    public ConcertSchedule(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
         this.id = id;
         this.concert = concert;
         this.limitSeat = limitSeat;
         this.openedAt = openedAt;
     }
 
-    public static ConcertSchedule of(Concert concert, int limitSeat, LocalDateTime openedAt) {
-        return new ConcertSchedule(null, concert, limitSeat, openedAt);
+    public static ConcertSchedule of(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
+        return new ConcertSchedule(id, limitSeat, openedAt, concert);
+    }
+
+    public static ConcertSchedule of(Long id, int limitSeat, LocalDateTime openedAt) {
+        return new ConcertSchedule(id, limitSeat, openedAt, null);
+    }
+
+    public static ConcertSchedule of(int limitSeat, LocalDateTime openedAt, Concert concert) {
+        return new ConcertSchedule(null, limitSeat, openedAt, concert);
+    }
+
+    public static ConcertSchedule of(int limitSeat, LocalDateTime openedAt) {
+        return new ConcertSchedule(null, limitSeat, openedAt, null);
     }
 
     @Override
