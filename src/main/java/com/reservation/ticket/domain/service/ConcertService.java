@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.concert.ConcertCommand;
+import com.reservation.ticket.domain.command.ConcertCommand;
 import com.reservation.ticket.domain.repository.ConcertRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

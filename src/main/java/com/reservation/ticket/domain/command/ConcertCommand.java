@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.command.concert;
+package com.reservation.ticket.domain.command;
 
 import com.reservation.ticket.domain.entity.Concert;
 

@@ -1,12 +1,11 @@
 package com.reservation.ticket.domain.entity;
 
-import com.reservation.ticket.domain.command.payment.PaymentStatus;
+import com.reservation.ticket.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
