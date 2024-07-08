@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.pointHistory;
+package com.reservation.ticket.infrastructure.repository.pointHistory;
 
 import com.reservation.ticket.domain.entity.PointHistory;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.userAccount;
+package com.reservation.ticket.infrastructure.repository.userAccount;
 
 import com.reservation.ticket.domain.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;

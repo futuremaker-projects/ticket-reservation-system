@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.payment;
+package com.reservation.ticket.infrastructure.repository.payment;
 
 import com.reservation.ticket.domain.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.userAccount;
+package com.reservation.ticket.infrastructure.repository.userAccount;
 
 import com.reservation.ticket.domain.entity.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;

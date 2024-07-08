@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.pointHistory;
+package com.reservation.ticket.infrastructure.repository.pointHistory;
 
 import com.reservation.ticket.domain.repository.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;

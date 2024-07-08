@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.concert;
+package com.reservation.ticket.infrastructure.repository.concert;
 
 import com.reservation.ticket.domain.entity.Concert;
 import org.springframework.data.jpa.repository.JpaRepository;

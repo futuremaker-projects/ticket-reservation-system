@@ -1,4 +1,4 @@
-package com.reservation.ticket.infra.repository.concertSchedule;
+package com.reservation.ticket.infrastructure.repository.concertSchedule;
 
 import com.reservation.ticket.domain.repository.ConcertScheduleRepository;
 import lombok.RequiredArgsConstructor;
