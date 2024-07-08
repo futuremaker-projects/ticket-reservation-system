@@ -1,11 +1,11 @@
-package com.reservation.ticket.controller;
+package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.controller.dto.concert.ConcertResponse;
-import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponse;
-import com.reservation.ticket.controller.dto.point.PointRequest;
-import com.reservation.ticket.controller.dto.reservation.ReservationRequest;
-import com.reservation.ticket.controller.dto.seat.SeatResponse;
-import com.reservation.ticket.controller.dto.userAccount.UserAccountResponse;
+import com.reservation.ticket.interfaces.controller.dto.concert.ConcertResponse;
+import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleResponse;
+import com.reservation.ticket.interfaces.controller.dto.point.PointRequest;
+import com.reservation.ticket.interfaces.controller.dto.reservation.ReservationRequest;
+import com.reservation.ticket.interfaces.controller.dto.seat.SeatResponse;
+import com.reservation.ticket.interfaces.controller.dto.userAccount.UserAccountResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

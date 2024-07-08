@@ -1,8 +1,8 @@
-package com.reservation.ticket.controller;
+package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.controller.dto.point.PointRequest;
-import com.reservation.ticket.controller.dto.point.PointResponse;
-import com.reservation.ticket.controller.dto.userAccount.UserAccountResponse;
+import com.reservation.ticket.interfaces.controller.dto.point.PointRequest;
+import com.reservation.ticket.interfaces.controller.dto.point.PointResponse;
+import com.reservation.ticket.interfaces.controller.dto.userAccount.UserAccountResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

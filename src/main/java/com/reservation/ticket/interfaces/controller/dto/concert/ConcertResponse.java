@@ -1,6 +1,6 @@
-package com.reservation.ticket.controller.dto.concert;
+package com.reservation.ticket.interfaces.controller.dto.concert;
 
-import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponse;
+import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleResponse;
 
 import java.util.List;
 

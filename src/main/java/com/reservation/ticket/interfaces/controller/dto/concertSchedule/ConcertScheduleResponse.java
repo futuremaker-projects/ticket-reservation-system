@@ -1,6 +1,6 @@
-package com.reservation.ticket.controller.dto.concertSchedule;
+package com.reservation.ticket.interfaces.controller.dto.concertSchedule;
 
-import com.reservation.ticket.controller.dto.concert.ConcertResponse;
+import com.reservation.ticket.interfaces.controller.dto.concert.ConcertResponse;
 
 import java.time.LocalDateTime;
 

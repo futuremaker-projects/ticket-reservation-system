@@ -1,4 +1,4 @@
-package com.reservation.ticket.controller.dto.point;
+package com.reservation.ticket.interfaces.controller.dto.point;
 
 public record PointResponse(Integer point) {
 

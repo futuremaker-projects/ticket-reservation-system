@@ -1,8 +1,9 @@
-package com.reservation.ticket.controller;
+package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.ticket.controller.dto.queue.TokenStatus;
-import com.reservation.ticket.controller.dto.queue.QueueResponse;
+import com.reservation.ticket.interfaces.controller.QueueController;
+import com.reservation.ticket.interfaces.controller.dto.queue.TokenStatus;
+import com.reservation.ticket.interfaces.controller.dto.queue.QueueResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

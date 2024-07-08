@@ -1,4 +1,4 @@
-package com.reservation.ticket.controller.dto.seat;
+package com.reservation.ticket.interfaces.controller.dto.seat;
 
 public record SeatResponse(Long id, Long seatId, Long concertScheduleId, boolean occupied) {
 

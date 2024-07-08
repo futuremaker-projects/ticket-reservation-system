@@ -1,8 +1,8 @@
-package com.reservation.ticket.controller;
+package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.ticket.controller.dto.concert.ConcertResponse;
-import com.reservation.ticket.controller.dto.concertSchedule.ConcertScheduleResponse;
+import com.reservation.ticket.interfaces.controller.dto.concert.ConcertResponse;
+import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

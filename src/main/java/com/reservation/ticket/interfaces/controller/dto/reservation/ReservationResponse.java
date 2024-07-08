@@ -1,4 +1,4 @@
-package com.reservation.ticket.controller.dto.reservation;
+package com.reservation.ticket.interfaces.controller.dto.reservation;
 
 import java.time.LocalDateTime;
 

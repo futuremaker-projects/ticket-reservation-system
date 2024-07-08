@@ -1,4 +1,4 @@
-package com.reservation.ticket.controller.dto.queue;
+package com.reservation.ticket.interfaces.controller.dto.queue;
 
 public enum TokenStatus {
 

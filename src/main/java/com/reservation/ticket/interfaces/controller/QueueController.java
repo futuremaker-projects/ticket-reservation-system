@@ -1,7 +1,7 @@
-package com.reservation.ticket.controller;
+package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.controller.dto.queue.TokenStatus;
-import com.reservation.ticket.controller.dto.queue.QueueResponse;
+import com.reservation.ticket.interfaces.controller.dto.queue.TokenStatus;
+import com.reservation.ticket.interfaces.controller.dto.queue.QueueResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
