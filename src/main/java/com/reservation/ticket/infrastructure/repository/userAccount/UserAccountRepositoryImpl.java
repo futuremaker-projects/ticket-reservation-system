@@ -1,8 +1,13 @@
 package com.reservation.ticket.infrastructure.repository.userAccount;
 
+import com.reservation.ticket.domain.entity.UserAccount;
 import com.reservation.ticket.domain.repository.UserAccountRepository;
+import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -10,4 +15,9 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     private final UserAccountJpaRepository userAccountJpaRepository;
 
+    @Override
+    public UserAccount findById(Long id) {
+        return userAccountJpaRepository.findById(id).orElseThrow(
+                () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND, "user not found: id - %d".formatted(id)));
+    }
 }
