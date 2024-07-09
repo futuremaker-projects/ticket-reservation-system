@@ -19,12 +19,19 @@ class ReservationServiceTest {
 
     /**
      * 예약을 진행한다. 예약시 콘서트 스케줄 id, 자리 id 필요
+     *
      */
     @Test
     void given_when_then() {
         // given
         Long concertScheduleId = 1L;
         List<Integer> seats = List.of(1, 2);
+        /**
+         *  reservation 저장
+         *      1. user_id
+          */
+
+        // seat 저장
 
 
         // when

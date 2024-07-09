@@ -26,11 +26,7 @@ public class Reservation {
     @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private ConcertSchedule concertSchedule;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Seat> seats = new ArrayList<>();
-
     private Integer price;
-
     private LocalDateTime reservedAt;
 
     @Override
