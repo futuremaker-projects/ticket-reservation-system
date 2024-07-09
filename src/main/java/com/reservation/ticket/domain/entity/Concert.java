@@ -22,22 +22,14 @@ public class Concert {
     private String name;
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<ConcertSchedule> concertSchedules = new ArrayList<>();
-
-    public Concert(Long id, String name, LocalDateTime createdAt, List<ConcertSchedule> concertSchedules) {
+    public Concert(Long id, String name, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
-        this.concertSchedules = concertSchedules;
     }
 
     public static Concert of(String name, LocalDateTime createdAt) {
-        return new Concert(null, name, createdAt, null);
-    }
-
-    public static Concert of(String name, LocalDateTime createdAt, List<ConcertSchedule> concertSchedules) {
-        return new Concert(null, name, createdAt, concertSchedules);
+        return new Concert(null, name, createdAt);
     }
 
     @Override

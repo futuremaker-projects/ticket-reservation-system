@@ -29,9 +29,32 @@ public class Queue {
     private LocalDateTime expiredAt;
     private LocalDateTime createdAt;
 
+    public Queue(Long id, UserAccount userAccount, String token, QueueStatus status) {
+        this.id = id;
+        this.userAccount = userAccount;
+        this.token = token;
+        this.status = status;
+    }
+
+    public static Queue of() {
+        return new Queue();
+    }
+
+    public static Queue of(Long id, UserAccount userAccount, String token, QueueStatus status) {
+        return new Queue(id, userAccount, token, status);
+    }
+
+    public static Queue of(UserAccount userAccount, String token, QueueStatus status) {
+        return new Queue(null, userAccount, token, status);
+    }
+
     @PrePersist
-    public void createdAt() {
-        this.createdAt = LocalDateTime.now();
+    public void setDates() {
+        LocalDateTime now = LocalDateTime.now();
+        int expiredMin = 10;
+
+        this.createdAt = now;
+        this.expiredAt = now.plusMinutes(expiredMin);
     }
 
     @Override
@@ -46,4 +69,22 @@ public class Queue {
         return Objects.hash(id);
     }
 
+    public void saveStatusInQueue(int countActiveStatus) {
+        int allowedActiveCount = 30;
+        if (countActiveStatus < allowedActiveCount) {
+            this.status = QueueStatus.ACTIVE;
+        }
+        if (countActiveStatus >= allowedActiveCount) {
+            this.status = QueueStatus.WAIT;
+        }
+    }
+
+    public void saveData(UserAccount userAccount, String token) {
+        this.userAccount = userAccount;
+        this.token = token;
+    }
+
+    public void changeStatus(QueueStatus queueStatus) {
+        this.status = queueStatus;
+    }
 }
