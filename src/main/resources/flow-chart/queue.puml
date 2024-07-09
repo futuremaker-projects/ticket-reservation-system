@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:콘서트 스케줄 선택;
+-> //예매하기//;
+:예매 페이지;
+:대기열 토큰 발급;
+-> 전체 사용자를 검색해서 status가 \n `active`인 사람이 50명 이상인지 확인;
+if (50명 이상의 사용자가 접속했나) is (yes) then
+  :대기열의 상태를 확인할 수 있는 \n 페이지로 이동;
+  note left
+     스케줄러를 이용하여
+     대기열의 상태를 확인시켜준다.
+  end note
+else (no)
+  :예매 페이지로 이동;
+endif
+
+stop
+
+@enduml

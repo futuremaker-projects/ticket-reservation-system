@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:콘서트 날짜 선택;
+-> //토큰 검증//;
+:콘서트 자리 선택;
+-> //토큰 검증//;
+:자리 예약 페이지 \n(occupied true, occupied_at 날짜);
+-> //자리 예약//;
+:결제 페이지;
+if (결제 완료?) is (yes) then
+  :결제 완료 액션;
+  note left
+    결제시 예약된 자리가
+    다른 사람이 차지 했는지
+    확인이 필요할 듯 하다.
+    (결제 페이지에서 오랫동안 머물러 있다면
+    자리를 차지하는 )
+  end note
+else (no)
+  :결재 미완료;
+  note right
+      특정 시간이 지났을 때
+      `occupied`를 false 로
+      변경시키는 방법은 없을까
+      ====
+      굳이 그럴 필요가 없다면
+      특정 사람이 들어와 예약을 할때
+      예약을 할 수 있도록 만들어 줘야할 거 같다.
+      (현재시간과 occupied_at을 비교)
+      (위와 같은 상황에서 false 로 변경하면 힘들거 같은데)
+      (스케줄러 돌려야 할거 같기도 한데)
+      그럼 그 자리를 다른 사람이 또 선택했다면?
+  end note
+  :차지한 자리 활성화;
+
+endif
+
+
+'if (Page.onSecurityCheck) then (true)
+'  :Page.onInit();
+'  if (isForward?) then (no)
+'    :Process controls;
+'    if (continue processing?) then (no)
+'      stop
+'    endif
+'
+'    if (isPost?) then (yes)
+'      :Page.onPost();
+'    else (no)
+'      :Page.onGet();
+'    endif
+'    :Page.onRender();
+'  endif
+'else (false)
+'endif
+'
+'if (do redirect?) then (yes)
+'  :redirect process;
+'else
+'  if (do forward?) then (yes)
+'    :Forward request;
+'  else (no)
+'    :Render page template;
+'  endif
+'endif
+
+stop
+
+@enduml
