@@ -6,6 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan("com.reservation.ticket.domain.service")
+@ComponentScan("com.reservation.ticket")
 public class ScheduledConfig {
 }
