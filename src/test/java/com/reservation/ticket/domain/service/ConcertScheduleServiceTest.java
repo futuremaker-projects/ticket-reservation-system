@@ -3,7 +3,6 @@ package com.reservation.ticket.domain.service;
 import com.reservation.ticket.domain.command.ConcertScheduleCommand;
 import com.reservation.ticket.domain.entity.ConcertSchedule;
 import com.reservation.ticket.domain.repository.ConcertScheduleRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +41,7 @@ class ConcertScheduleServiceTest {
         given(concertScheduleRepository.findAllByConcertId(concertId)).willReturn(concertSchedules);
 
         // when
-        List<ConcertScheduleCommand.Select> schedules = sut.selectAllConcertSchedulesByConcertId(concertId);
+        List<ConcertScheduleCommand.Get> schedules = sut.selectAllConcertSchedulesByConcertId(concertId);
 
         // then
         assertThat(schedules).isNotNull();

@@ -21,11 +21,10 @@ public class ConcertScheduleService {
     /**
      *  콘서트 id로 전체 콘서트 스케줄을 불러온다.
      */
-    public List<ConcertScheduleCommand.Select> selectAllConcertSchedulesByConcertId(Long concertId) {
+    public List<ConcertScheduleCommand.Get> selectAllConcertSchedulesByConcertId(Long concertId) {
         return concertScheduleRepository.findAllByConcertId(concertId).stream()
-                .map(ConcertScheduleCommand.Select::from)
+                .map(ConcertScheduleCommand.Get::from)
                 .toList();
     }
-
 
 }

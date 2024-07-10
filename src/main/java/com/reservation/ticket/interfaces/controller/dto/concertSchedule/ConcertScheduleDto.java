@@ -15,7 +15,7 @@ public class ConcertScheduleDto {
             return new Response(id, limitSeat, openedAt, null);
         }
 
-        public static Response from(ConcertScheduleCommand.Select command) {
+        public static Response from(ConcertScheduleCommand.Get command) {
             return Response.of(
                     command.id(),
                     command.limitSeat(),

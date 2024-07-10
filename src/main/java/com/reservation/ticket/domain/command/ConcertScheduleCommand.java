@@ -6,23 +6,23 @@ import com.reservation.ticket.domain.entity.ConcertSchedule;
 import java.time.LocalDateTime;
 
 public class ConcertScheduleCommand {
-    public record Select(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
-        public static Select of(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
-            return new Select(id, limitSeat, openedAt, concert);
+    public record Get(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
+        public static Get of(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
+            return new Get(id, limitSeat, openedAt, concert);
         }
 
-        public static Select from(ConcertSchedule concertSchedule) {
-            return Select.of(
+        public static Get from(ConcertSchedule concertSchedule) {
+            return Get.of(
                 concertSchedule.getId(), concertSchedule.getLimitSeat(), concertSchedule.getOpenedAt()
             );
         }
 
-        public static Select of(Long id, int limitSeat, LocalDateTime openedAt) {
-            return new Select(id, limitSeat, openedAt, null);
+        public static Get of(Long id, int limitSeat, LocalDateTime openedAt) {
+            return new Get(id, limitSeat, openedAt, null);
         }
 
-        public static Select fromWithConcert(ConcertSchedule concertSchedule) {
-            return Select.of(
+        public static Get fromWithConcert(ConcertSchedule concertSchedule) {
+            return Get.of(
                     concertSchedule.getId(), concertSchedule.getLimitSeat(),
                     concertSchedule.getOpenedAt(), concertSchedule.getConcert()
             );
