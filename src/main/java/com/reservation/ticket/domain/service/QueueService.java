@@ -7,9 +7,12 @@ import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.repository.QueueRepository;
 import com.reservation.ticket.domain.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,7 +35,21 @@ public class QueueService {
         return QueueCommand.Get.from(queueRepository.save(queue));
     }
 
-    public QueueCommand.Get getQueue(Long userId) {
+    @Transactional(readOnly = true)
+    public List<QueueCommand.Get> selectQueueByStatus(QueueStatus status) {
+        return queueRepository.findAllByQueueStatus(status).stream()
+                .map(QueueCommand.Get::from)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<QueueCommand.Get> selectQueueByStatusPerLimit(QueueStatus status, int limit) {
+        return queueRepository.findAllByQueueStatusPerLimit(status, limit).stream()
+                .map(QueueCommand.Get::from)
+                .toList();
+    }
+
+    public QueueCommand.Get getQueueByUserId(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
         Queue queue = queueRepository.findByToken(userAccount.getToken());
         return QueueCommand.Get.from(queue);
@@ -45,7 +62,28 @@ public class QueueService {
         queue.changeStatus(QueueStatus.EXPIRED);
     }
 
+    @Transactional
+    @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
+    public void changeTokenStatusExpired() {
+        List<Queue> queuesAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
+        queuesAsActive.forEach(queue -> {
+            if (queue.getCreatedAt().plusMinutes(5).isBefore(LocalDateTime.now())) {
+                queue.changeStatus(QueueStatus.EXPIRED);
+            }
+        });
+    }
 
+    @Transactional
+    @Scheduled(cron = "8 * * * * *", zone = "Asia/Seoul")
+    public void changeTokenStatusActive() {
+        int maxAllowedActive = 30;
+        List<QueueCommand.Get> queuesAsActive = selectQueueByStatus(QueueStatus.ACTIVE);
+        if (queuesAsActive.size() < maxAllowedActive) {
+            int searchSize = maxAllowedActive - queuesAsActive.size();
+            List<QueueCommand.Get> queuesAsWait = selectQueueByStatusPerLimit(QueueStatus.WAIT, searchSize);
+
+        }
+    }
 
     private String generateToken() {
         String uuid = UUID.randomUUID().toString();

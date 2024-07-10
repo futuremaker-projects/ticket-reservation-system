@@ -126,7 +126,7 @@ class QueueServiceTest {
         given(queueRepository.findByToken(token)).willReturn(queue);
 
         // when
-        QueueCommand.Get getQueue = sut.getQueue(userId);
+        QueueCommand.Get getQueue = sut.getQueueByUserId(userId);
 
         // then
         assertThat(getQueue).isNotNull();
@@ -160,10 +160,20 @@ class QueueServiceTest {
         sut.expireQueueByChangingStatus(userId);
 
         // then
-        assertThat(queue.getStatus()).isEqualTo(QueueStatus.EXPIRED);
+        assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
 
         then(userAccountRepository).should().findById(userId);
         then(queueRepository).should().findByToken(token);
+    }
+
+    @DisplayName("`ACTIVE` 상태의 대기열이 30개 이하일 때 변경할 `WAIT`의 데이터 조회")
+    @Test
+    public void given_when() {
+        // given
+
+        // when
+
+        // then
     }
 
     private String generateToken() {
