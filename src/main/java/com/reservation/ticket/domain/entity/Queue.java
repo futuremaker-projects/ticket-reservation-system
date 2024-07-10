@@ -38,6 +38,14 @@ public class Queue {
         this.queueStatus = queueStatus;
     }
 
+    public Queue(Long id, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+        this.id = id;
+        this.token = token;
+        this.queueStatus = queueStatus;
+        this.shouldExpiredAt = shouldExpiredAt;
+        this.createdAt = createdAt;
+    }
+
     public static Queue of() {
         return new Queue();
     }
@@ -48,6 +56,10 @@ public class Queue {
 
     public static Queue of(UserAccount userAccount, String token, QueueStatus status) {
         return new Queue(null, userAccount, token, status);
+    }
+
+    public static Queue of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+        return new Queue(id, token, status, shouldExpiredAt, createdAt);
     }
 
     @PrePersist
@@ -88,5 +100,12 @@ public class Queue {
 
     public void changeStatus(QueueStatus queueStatus) {
         this.queueStatus = queueStatus;
+    }
+
+    public void extendShouldExpiredAt() {
+        int extendMin = 5;
+        if (this.queueStatus == QueueStatus.ACTIVE) {
+            this.shouldExpiredAt = this.shouldExpiredAt.plusMinutes(extendMin);
+        }
     }
 }

@@ -62,28 +62,62 @@ public class QueueService {
         queue.changeStatus(QueueStatus.EXPIRED);
     }
 
+    public boolean verifyToken(Queue queue) {
+        return queue.getQueueStatus() == QueueStatus.ACTIVE;
+    }
+
+    public QueueCommand.Get renewExpirationDate(Long userId) {
+        UserAccount userAccount = userAccountRepository.findById(userId);
+        Queue queue = queueRepository.findByToken(userAccount.getToken());
+        queue.extendShouldExpiredAt();
+        return QueueCommand.Get.from(queue);
+    }
+
+    /**
+     * 대기열 생성 시에 모두 WAIT으로 만들고 줄을 세운다
+     *  스케줄러를 돌려서 ACTIVE 로 변경시키는 작업을 해준다.
+     */
     @Transactional
     @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
     public void changeTokenStatusExpired() {
         List<Queue> queuesAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
-        queuesAsActive.forEach(queue -> {
-            if (queue.getCreatedAt().plusMinutes(5).isBefore(LocalDateTime.now())) {
-                queue.changeStatus(QueueStatus.EXPIRED);
-            }
-        });
-    }
-
-    @Transactional
-    @Scheduled(cron = "8 * * * * *", zone = "Asia/Seoul")
-    public void changeTokenStatusActive() {
-        int maxAllowedActive = 30;
-        List<QueueCommand.Get> queuesAsActive = selectQueueByStatus(QueueStatus.ACTIVE);
-        if (queuesAsActive.size() < maxAllowedActive) {
-            int searchSize = maxAllowedActive - queuesAsActive.size();
-            List<QueueCommand.Get> queuesAsWait = selectQueueByStatusPerLimit(QueueStatus.WAIT, searchSize);
-
+        // 사용자가 들어오기 전에
+        if (!queuesAsActive.isEmpty()) {
+            queuesAsActive.forEach(queue -> {
+                if (queue.getCreatedAt().plusMinutes(5).isBefore(LocalDateTime.now())) {
+                    queue.changeStatus(QueueStatus.EXPIRED);
+                }
+            });
         }
+
+        // 1 안. ACTIVE -> EXPIRED 로 변경된 수 만큼의 WAIT 사용자를 ACTIVE 로 변경 시킨다.
+        // 2 안. ACTIVE 사용자를 다시 검색해서 30에서 뺀후 들어간다.
+//        int maxAllowedActive = 30;
+//        List<Queue> queuesAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
+//        if (queuesAsActive.size() < maxAllowedActive) {
+//            int searchSize = maxAllowedActive - queuesAsActive.size();
+//            List<Queue> queuesAsWait = queueRepository.findAllByQueueStatusPerLimit(QueueStatus.WAIT, searchSize);
+//            queuesAsWait.forEach(queue -> {
+//                queue.changeStatus(QueueStatus.ACTIVE);
+//            });
+//        }
     }
+
+
+
+//    @Transactional
+//    @Scheduled(cron = "8 * * * * *", zone = "Asia/Seoul")
+//    public void changeTokenStatusActive() {
+//        int maxAllowedActive = 30;
+//        List<QueueCommand.Get> queuesAsActive = selectQueueByStatus(QueueStatus.ACTIVE);
+//        if (queuesAsActive.size() < maxAllowedActive) {
+//            int searchSize = maxAllowedActive - queuesAsActive.size();
+//            List<Queue> queuesAsWait = queueRepository.findAllByQueueStatusPerLimit(QueueStatus.WAIT, searchSize);
+//            queuesAsWait.forEach(queue -> {
+//                queue.changeStatus(QueueStatus.ACTIVE);
+//            });
+//        }
+//    }
 
     private String generateToken() {
         String uuid = UUID.randomUUID().toString();

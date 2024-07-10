@@ -10,15 +10,15 @@ public class QueueCommand {
                       UserCommand.Get user,
                       String token,
                       QueueStatus status,
-                      LocalDateTime expiredAt,
+                      LocalDateTime shouldExpiredAt,
                       LocalDateTime createdAt
     ) {
-        public static Get of(Long id, UserCommand.Get user, String token, QueueStatus status, LocalDateTime expiredAt, LocalDateTime createdAt) {
-            return new Get(id, user, token, status, expiredAt, createdAt);
+        public static Get of(Long id, UserCommand.Get user, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+            return new Get(id, user, token, status, shouldExpiredAt, createdAt);
         }
 
-        public static Get of(Long id, String token, QueueStatus status, LocalDateTime expiredAt, LocalDateTime createdAt) {
-            return new Get(id, null, token, status, expiredAt, createdAt);
+        public static Get of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+            return new Get(id, null, token, status, shouldExpiredAt, createdAt);
         }
 
         public static Get from(Queue queue) {

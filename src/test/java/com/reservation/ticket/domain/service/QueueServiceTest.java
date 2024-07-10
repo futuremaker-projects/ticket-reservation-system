@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -166,6 +167,9 @@ class QueueServiceTest {
         then(queueRepository).should().findByToken(token);
     }
 
+    /**
+     *
+     */
     @DisplayName("`ACTIVE` 상태의 대기열이 30개 이하일 때 변경할 `WAIT`의 데이터 조회")
     @Test
     public void given_when() {
@@ -175,6 +179,37 @@ class QueueServiceTest {
 
         // then
     }
+
+    /**
+     * 대기열 만료시간 갱신
+     */
+    @Test
+    void givenTokenInUser_whenRequestingRenewExpireDate_thenRenewExpireDate() {
+        // given
+        // 사용자를 검색하여 토큰을 찾음
+        Long userId = 1L;
+        UserAccount userAccount = UserAccount.of(userId, "Sofia", generateToken());
+        given(userAccountRepository.findById(userId)).willReturn(userAccount);
+
+        // 찾은 토큰으로 대기열 데이터를 가져옴
+        Long queueId = 21L;
+        LocalDateTime shouldExpiredAt = LocalDateTime.of(2024, 7, 10, 10, 10, 5);
+        LocalDateTime createdAt = LocalDateTime.of(2024, 7, 10, 10, 5, 5);
+
+        Queue queue = Queue.of(queueId, userAccount.getToken(), QueueStatus.ACTIVE, shouldExpiredAt, createdAt);
+        given(queueRepository.findByToken(queue.getToken())).willReturn(queue);
+
+        LocalDateTime renewedExpiredAt = LocalDateTime.of(2024, 7, 10, 10, 15, 5);
+        Queue renewedQueue = Queue.of(queueId, userAccount.getToken(), QueueStatus.ACTIVE, renewedExpiredAt, createdAt);
+
+        // when
+        QueueCommand.Get queueCommand = sut.renewExpirationDate(userId);
+
+        // then
+        assertThat(queueCommand).isNotNull();
+        assertThat(queueCommand.shouldExpiredAt()).isEqualTo(renewedQueue.getShouldExpiredAt());
+    }
+
 
     private String generateToken() {
         String uuid = UUID.randomUUID().toString();

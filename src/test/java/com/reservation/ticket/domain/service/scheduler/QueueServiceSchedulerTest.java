@@ -1,7 +1,8 @@
-package com.reservation.ticket.domain.service;
+package com.reservation.ticket.domain.service.scheduler;
 
 import com.reservation.ticket.domain.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.domain.service.QueueService;
 import com.reservation.ticket.infrastructure.config.ScheduledConfig;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Import({ScheduledConfig.class})
-//@SpringJUnitConfig(ScheduledConfig.class)
 public class QueueServiceSchedulerTest {
 
     @Autowired
