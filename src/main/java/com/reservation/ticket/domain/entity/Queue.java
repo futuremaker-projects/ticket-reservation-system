@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Entity
+@ToString(of = {"id", "token", "queueStatus", "shouldExpiredAt", "createdAt"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Queue {
 
@@ -24,16 +26,16 @@ public class Queue {
     private String token;
 
     @Enumerated(EnumType.STRING)
-    private QueueStatus status;
+    private QueueStatus queueStatus;
 
-    private LocalDateTime expiredAt;
+    private LocalDateTime shouldExpiredAt;
     private LocalDateTime createdAt;
 
-    public Queue(Long id, UserAccount userAccount, String token, QueueStatus status) {
+    public Queue(Long id, UserAccount userAccount, String token, QueueStatus queueStatus) {
         this.id = id;
         this.userAccount = userAccount;
         this.token = token;
-        this.status = status;
+        this.queueStatus = queueStatus;
     }
 
     public static Queue of() {
@@ -54,7 +56,7 @@ public class Queue {
         int expiredMin = 10;
 
         this.createdAt = now;
-        this.expiredAt = now.plusMinutes(expiredMin);
+        this.shouldExpiredAt = now.plusMinutes(expiredMin);
     }
 
     @Override
@@ -72,10 +74,10 @@ public class Queue {
     public void saveStatusInQueue(int countActiveStatus) {
         int allowedActiveCount = 30;
         if (countActiveStatus < allowedActiveCount) {
-            this.status = QueueStatus.ACTIVE;
+            this.queueStatus = QueueStatus.ACTIVE;
         }
         if (countActiveStatus >= allowedActiveCount) {
-            this.status = QueueStatus.WAIT;
+            this.queueStatus = QueueStatus.WAIT;
         }
     }
 
@@ -85,6 +87,6 @@ public class Queue {
     }
 
     public void changeStatus(QueueStatus queueStatus) {
-        this.status = queueStatus;
+        this.queueStatus = queueStatus;
     }
 }

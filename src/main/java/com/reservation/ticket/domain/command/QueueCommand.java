@@ -17,13 +17,16 @@ public class QueueCommand {
             return new Get(id, user, token, status, expiredAt, createdAt);
         }
 
+        public static Get of(Long id, String token, QueueStatus status, LocalDateTime expiredAt, LocalDateTime createdAt) {
+            return new Get(id, null, token, status, expiredAt, createdAt);
+        }
+
         public static Get from(Queue queue) {
             return Get.of(
                     queue.getId(),
-                    UserCommand.Get.form(queue.getUserAccount()),
                     queue.getToken(),
-                    queue.getStatus(),
-                    queue.getExpiredAt(),
+                    queue.getQueueStatus(),
+                    queue.getShouldExpiredAt(),
                     queue.getCreatedAt()
             );
         }

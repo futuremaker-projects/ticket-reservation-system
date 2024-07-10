@@ -7,7 +7,7 @@ public record QueueResponse(Long id,
                             String token,
                             TokenStatus status,
                             LocalDateTime createdAt,
-                            LocalDateTime expiredAt
+                            LocalDateTime shouldExpiredAt
 ) {
 
     public static QueueResponse of(Long id, Long userId, String token, TokenStatus status, LocalDateTime createdAt, LocalDateTime expiredAt) {
