@@ -4,7 +4,10 @@ import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.repository.QueueRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,5 +28,16 @@ public class QueueRepositoryImpl implements QueueRepository {
     @Override
     public Queue findByToken(String token) {
         return queueJpaRepository.findByToken(token);
+    }
+
+    @Override
+    public List<Queue> findAllByQueueStatus(QueueStatus queueStatus) {
+        return queueJpaRepository.findAllByQueueStatus(queueStatus);
+    }
+
+    @Override
+    public List<Queue> findAllByQueueStatusPerLimit(QueueStatus queueStatus, int limit) {
+        PageRequest pageRequest = PageRequest.of(0, limit);
+        return queueJpaRepository.findAllByQueueStatusOrderByIdAsc(queueStatus, pageRequest);
     }
 }
