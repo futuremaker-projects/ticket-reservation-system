@@ -1,8 +1,10 @@
 package com.reservation.ticket.domain.entity;
 
 import com.reservation.ticket.domain.enums.PaymentStatus;
+import com.reservation.ticket.domain.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,7 @@ import java.util.Objects;
 
 @Getter
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
 
@@ -22,16 +25,21 @@ public class Reservation {
     private UserAccount userAccount;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(10) default 'NOT_PAID' comment '지불상태'")
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'NOT_PAID' COMMENT '지불상태'")
     private PaymentStatus paymentStatus;
 
-    private Integer price;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE' COMMENT '예약상태'")
+    private ReservationStatus reservationStatus;
 
+    private Integer price;
     private LocalDateTime reservedAt;
 
     @PrePersist
     public void reservedAt() {
         this.reservedAt = LocalDateTime.now();
+        this.paymentStatus = PaymentStatus.NOT_PAID;
+        this.reservationStatus = ReservationStatus.ACTIVE;
     }
 
     public Reservation(UserAccount userAccount, Integer price) {
@@ -55,8 +63,7 @@ public class Reservation {
         return Objects.hash(id);
     }
 
+    public void changeReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
 }
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    private ConcertSchedule concertSchedule;
