@@ -54,17 +54,18 @@ public class QueueService {
         queue.changeStatus(QueueStatus.EXPIRED);
     }
 
-//    public boolean verifyQueueByUserId(Long userId) {
-//        Queue queue = getQueue(userId);
-//        queue.verifyQueueStatus();
-//        renewQueueAfterVerification(queue);
-//        return queue.getQueueStatus() == QueueStatus.ACTIVE;
-//    }
-//
-//    @Transactional
-//    public void renewQueueAfterVerification(Queue queue) {
-//        queue.extendShouldExpiredAt();
-//    }
+    public QueueCommand.Get verifyQueueByUserId(Long userId) {
+        Queue queue = getQueue(userId);
+        // ACTIVE 가 아니면 예외발생
+        queue.verifyQueueStatus();
+        return QueueCommand.Get.from(queue);
+    }
+
+    @Transactional
+    public void renewQueueExpirationDate(String token) {
+        Queue queue = queueRepository.findByToken(token);
+        queue.extendShouldExpiredAt();
+    }
 
     @Transactional
     public QueueCommand.Get renewExpirationDate(Long userId) {
