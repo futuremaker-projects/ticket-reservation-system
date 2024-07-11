@@ -1,6 +1,7 @@
 package com.reservation.ticket.domain.service;
 
 import com.reservation.ticket.domain.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.entity.ConcertSchedule;
 import com.reservation.ticket.domain.repository.ConcertScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,15 @@ public class ConcertScheduleService {
     }
 
     /**
-     *  선택된 날짜의 콘서트 스케줄을 가져온다.
+     * 콘서트 스케줄 id로 스케줄 단건조회
+     */
+    public ConcertScheduleCommand.Get getConcertScheduleById(Long concertScheduleId) {
+        ConcertSchedule concertSchedule = concertScheduleRepository.findById(concertScheduleId);
+        return ConcertScheduleCommand.Get.from(concertSchedule);
+    }
+
+    /**
+     *  선택된 날짜의 콘서트 스케줄 단건조회
      */
     public ConcertScheduleCommand.Get getConcertScheduleByOpenedDate(LocalDateTime openedDate) {
         return ConcertScheduleCommand.Get.from(concertScheduleRepository.findByOpenedAt(openedDate));

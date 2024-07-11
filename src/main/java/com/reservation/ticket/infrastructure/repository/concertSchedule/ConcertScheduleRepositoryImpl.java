@@ -30,6 +30,16 @@ public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository 
     public ConcertSchedule findByOpenedAt(LocalDateTime openedAt) {
         return concertScheduleJpaRepository.findByOpenedAt(openedAt).orElseThrow(
                 () -> new ApplicationException(
-                        ErrorCode.CONTENT_NOT_FOUND, "No concert schedule found for opened at %d".formatted(openedAt)));
+                        ErrorCode.CONTENT_NOT_FOUND,
+                        "No concert schedule found for opened at %s".formatted(openedAt)));
+    }
+
+    @Override
+    public ConcertSchedule findById(Long id) {
+        return concertScheduleJpaRepository.findById(id).orElseThrow(
+                () -> new ApplicationException(
+                        ErrorCode.CONTENT_NOT_FOUND,
+                        "No concert schedule found for concert schedule id at %d".formatted(id))
+        );
     }
 }

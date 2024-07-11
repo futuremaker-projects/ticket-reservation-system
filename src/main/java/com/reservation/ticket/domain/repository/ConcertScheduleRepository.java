@@ -11,5 +11,6 @@ public interface ConcertScheduleRepository {
     List<ConcertSchedule> findAllByConcertId(Long concertId);
 
     ConcertSchedule findByOpenedAt(LocalDateTime openedAt);
+    ConcertSchedule findById(Long id);
 
 }
