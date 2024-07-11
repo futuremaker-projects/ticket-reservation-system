@@ -21,7 +21,7 @@ public class ConcertScheduleUsecase {
 
     /**
      * 1. 대기열 검증
-     * 2. 모든 스케줄 검색
+     * 2. 콘서트가 열리는 예약날자가 포함된 모든 스케줄을 조회한다.
      */
     public List<ConcertScheduleCommand.Get> selectConcertSchedulesByConcertId(Long userId, Long concertId) {
         // 토큰 검증
@@ -34,7 +34,7 @@ public class ConcertScheduleUsecase {
 
     /**
      * 1. 대기열 상태 검증
-     * 2. 날짜로 선택된 콘서트 스케줄에서 연관된 자리를 전달한다.
+     * 2. 날짜로 선택된 콘서트 스케줄에서 연관된 좌석을 조회한다.
      */
     public ConcertScheduleCommand.GetForSeats selectSeatsByConcertScheduleId(Long userId, Long concertScheduleId) {
         // 토큰 검증

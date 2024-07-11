@@ -41,11 +41,12 @@ public class ConcertScheduleController {
     /**
      * 콘서트 스케줄러 id로 콘서트 스케즐 정보와 좌석 목록조회 - 자리 선택을 위함
      */
-    @GetMapping("/{concertScheduleId}/seats")
+    @GetMapping("/{concertScheduleId}/seats/users/{userId}")
     public ResponseEntity<ConcertScheduleDto.ResponseScheduleAndSeats> getConcertSchedule(
-            @PathVariable Long concertScheduleId
+            @PathVariable Long concertScheduleId,
+            @PathVariable Long userId
     ) {
-        Long userId = 1L;   // spring security, JWT를 이용한 인증 구현 필요
+//        Long userId = 1L;   // spring security, JWT를 이용한 인증 구현 필요
         ConcertScheduleCommand.GetForSeats concertScheduleWithSeats =
                 concertScheduleUsecase.selectSeatsByConcertScheduleId(userId, concertScheduleId);
 
