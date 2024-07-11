@@ -4,6 +4,7 @@ import com.reservation.ticket.domain.entity.Concert;
 import com.reservation.ticket.domain.entity.ConcertSchedule;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ConcertScheduleCommand {
     public record Get(Long id, int limitSeat, LocalDateTime openedAt, Concert concert) {
@@ -29,7 +30,10 @@ public class ConcertScheduleCommand {
         }
     }
 
-    public record Update() {
-
+    public record GetForSeats(Get concertSchedule, List<SeatCommand.Get> seats) {
+        public static GetForSeats of (Get concertSchedule, List<SeatCommand.Get> seats) {
+            return new GetForSeats(concertSchedule, seats);
+        }
     }
+
 }
