@@ -13,9 +13,9 @@ public class ConcertService {
 
     private final ConcertRepository concertRepository;
 
-    public List<ConcertCommand.Select> selectAllConcerts() {
+    public List<ConcertCommand.Get> selectAllConcerts() {
         return concertRepository.findAll().stream()
-                .map(ConcertCommand.Select::from)
+                .map(ConcertCommand.Get::from)
                 .toList();
     }
 

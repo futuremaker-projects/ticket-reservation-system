@@ -8,8 +8,8 @@ public class ConcertDto {
             return new Response(id, name);
         }
 
-        public static Response from(ConcertCommand.Select commandSelect) {
-            return Response.of(commandSelect.id(), commandSelect.name());
+        public static Response from(ConcertCommand.Get commandGet) {
+            return Response.of(commandGet.id(), commandGet.name());
         }
     }
 
