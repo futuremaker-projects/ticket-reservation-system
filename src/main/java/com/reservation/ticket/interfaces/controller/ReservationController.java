@@ -17,22 +17,6 @@ import java.util.List;
 public class ReservationController {
 
     /**
-     * 콘서트 id로 콘서트 스케줄 목록을 조회한다.
-     */
-    @GetMapping("/concert/{concertId}/available-date")
-    public ResponseEntity<ConcertDto.Response> selectAvailableDate(@PathVariable Long concertId) {
-        return ResponseEntity.ok().body(getConcertScheduleDateInfoList(concertId));
-    }
-
-    /**
-     * 콘서트 스케줄 id를 이용하여 예약가능한 모든 좌석을 응답한다.
-     */
-    @GetMapping("/concert-schedules/{concertScheduleId}/available-seat")
-    public ResponseEntity<List<SeatResponse>> selectAvailableSeat(@PathVariable Long concertScheduleId) {
-        return ResponseEntity.ok().body(selectSeatResponseList(concertScheduleId));
-    }
-
-    /**
      * 콘서트 스케줄 id와 자리 id를 받아 예약을 진행한다.
      */
     @PostMapping
