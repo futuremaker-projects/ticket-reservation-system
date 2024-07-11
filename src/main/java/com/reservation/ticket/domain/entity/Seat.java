@@ -4,17 +4,23 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Entity
+@ToString(of = {"id", "seatNumber", "occupiedAt", "occupied"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private int seatNumber;
+    private LocalDateTime occupiedAt;
+    private boolean occupied;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -23,15 +29,6 @@ public class Seat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Reservation reservation;
-
-    private LocalDateTime occupiedAt;
-
-    private boolean occupied;
-
-    @PrePersist
-    public void occupiedAt() {
-        this.occupiedAt = LocalDateTime.now();
-    }
 
     @Override
     public boolean equals(Object o) {
