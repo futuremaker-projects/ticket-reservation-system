@@ -27,4 +27,15 @@ class SeatRepositoryImplTest {
         System.out.println("found = " + found);
     }
 
+    @Test
+    void gogogo() {
+        // given
+
+        // when
+        List<Seat> all = seatJpaRepository.findAllByReservationIdIn(List.of(1L, 2L));
+
+        // then
+        System.out.println("all = " + all);
+    }
+
 }

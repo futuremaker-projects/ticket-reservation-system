@@ -22,4 +22,9 @@ public class SeatRepositoryImpl implements SeatRepository {
     public List<Seat> findByIdIn(List<Long> seatIds) {
         return seatJpaRepository.findByIdIn(seatIds);
     }
+
+    @Override
+    public List<Seat> findAllByReservationIdIn(List<Long> reservationIds) {
+        return seatJpaRepository.findAllByReservationIdIn(reservationIds);
+    }
 }

@@ -11,4 +11,5 @@ public interface SeatJpaRepository extends JpaRepository<Seat, Long> {
 
     List<Seat> findByIdIn(List<Long> seatIds);
 
+    List<Seat> findAllByReservationIdIn(List<Long> reservationIds);
 }

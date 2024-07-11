@@ -10,4 +10,6 @@ public interface SeatRepository {
 
     List<Seat> findByIdIn(List<Long> seatIds);
 
+    List<Seat> findAllByReservationIdIn(List<Long> reservationIds);
+
 }

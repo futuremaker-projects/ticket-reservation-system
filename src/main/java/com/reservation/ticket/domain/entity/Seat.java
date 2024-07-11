@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Getter
 @Entity
-@ToString(of = {"id", "seatNumber", "occupiedAt", "occupied"})
+@ToString(of = {"id", "reservationId", "concertScheduleId", "seatNumber", "occupiedAt", "occupied"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
 
@@ -22,15 +22,8 @@ public class Seat {
     private LocalDateTime occupiedAt;
     private boolean occupied;
 
+    private Long reservationId;
     private Long concertScheduleId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    private ConcertSchedule concertSchedule;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "reservation_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    private Reservation reservation;
 
     @Override
     public boolean equals(Object o) {
@@ -44,8 +37,15 @@ public class Seat {
         return Objects.hash(id);
     }
 
-    public void changeOccupiedStatus() {
+    public void changeToOccupiedAndSaveReservationId(Long reservationId) {
+        this.reservationId = reservationId;
         this.occupied = true;
         this.occupiedAt = LocalDateTime.now();
+    }
+
+    public void releaseOccupiedSeat() {
+        this.reservationId = null;
+        this.occupied = false;
+        this.occupiedAt = null;
     }
 }
