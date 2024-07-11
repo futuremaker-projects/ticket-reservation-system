@@ -1,6 +1,8 @@
 package com.reservation.ticket.domain.entity;
 
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -104,8 +106,12 @@ public class Queue {
 
     public void extendShouldExpiredAt() {
         int extendMin = 5;
-        if (this.queueStatus == QueueStatus.ACTIVE) {
-            this.shouldExpiredAt = this.shouldExpiredAt.plusMinutes(extendMin);
+        this.shouldExpiredAt = this.shouldExpiredAt.plusMinutes(extendMin);
+    }
+
+    public void verifyQueueStatus() {
+        if (!(this.queueStatus == QueueStatus.ACTIVE)) {
+            throw new ApplicationException(ErrorCode.UNAUTHORIZED);
         }
     }
 }

@@ -26,8 +26,6 @@ public class QueueService {
     public QueueCommand.Get createQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
         Queue queue = Queue.of(userAccount, generateToken(), QueueStatus.WAIT);
-        queue.saveData(userAccount, generateToken(), QueueStatus.WAIT);
-
         return QueueCommand.Get.from(queueRepository.save(queue));
     }
 
@@ -46,24 +44,39 @@ public class QueueService {
     }
 
     public QueueCommand.Get getQueueByUserId(Long userId) {
-        UserAccount userAccount = userAccountRepository.findById(userId);
-        Queue queue = queueRepository.findByToken(userAccount.getToken());
+        Queue queue = getQueue(userId);
         return QueueCommand.Get.from(queue);
     }
 
     @Transactional
     public void expireQueueByChangingStatus(Long userId) {
-        UserAccount userAccount = userAccountRepository.findById(userId);
-        Queue queue = queueRepository.findByToken(userAccount.getToken());
+        Queue queue = getQueue(userId);
         queue.changeStatus(QueueStatus.EXPIRED);
     }
 
+//    public boolean verifyQueueByUserId(Long userId) {
+//        Queue queue = getQueue(userId);
+//        queue.verifyQueueStatus();
+//        renewQueueAfterVerification(queue);
+//        return queue.getQueueStatus() == QueueStatus.ACTIVE;
+//    }
+//
+//    @Transactional
+//    public void renewQueueAfterVerification(Queue queue) {
+//        queue.extendShouldExpiredAt();
+//    }
+
     @Transactional
     public QueueCommand.Get renewExpirationDate(Long userId) {
-        UserAccount userAccount = userAccountRepository.findById(userId);
-        Queue queue = queueRepository.findByToken(userAccount.getToken());
+        Queue queue = getQueue(userId);
+        queue.verifyQueueStatus();
         queue.extendShouldExpiredAt();
         return QueueCommand.Get.from(queue);
+    }
+
+    private Queue getQueue(Long userId) {
+        UserAccount userAccount = userAccountRepository.findById(userId);
+        return queueRepository.findByToken(userAccount.getToken());
     }
 
     /**

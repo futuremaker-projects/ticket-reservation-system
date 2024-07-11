@@ -13,6 +13,8 @@ public enum ErrorCode {
 
     USER_EXISTED(HttpStatus.CONFLICT, "USER_EXISTED"),
 
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED")
+
     ;
 
     public final HttpStatus httpStatus;
