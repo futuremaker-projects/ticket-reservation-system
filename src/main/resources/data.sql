@@ -1,6 +1,7 @@
 INSERT INTO user_account (`username`, `token`, `point`)
-VALUES ('Catie', '6f8f504681f9', 0),
-       ('Star', '734488355d85', 0),
+VALUES
+    ('Star', '734488355d85', 0),
+    ('Catie', '6f8f504681f9', 0),
        ('Petronella', 'b02567dca468', 0),
        ('Ellie', '66b40f8df234', 0),
        ('Lutero', '2ff449c014be', 0),
@@ -130,7 +131,7 @@ insert into schedule_seat (`reservation_id`, `concert_schedule_id`, `seat_id`, `
        (3, 3, 1, '2024-07-09 07:38:29');
 
 insert into queue (`user_id`, `token`, `queue_status`, `should_expired_at`, `created_at`)
-values (1, '734488355d85', 'EXPIRED', '2024-07-10 13:20:00', '2024-07-10 13:10:00'),
+values (1, '734488355d85', 'ACTIVE', '2024-07-10 13:20:00', '2024-07-10 13:10:00'),
        (2, 'b02567dca468', 'EXPIRED', '2024-07-10 13:20:00', '2024-07-10 13:10:00'),
        (3, '66b40f8df234', 'ACTIVE', '2024-07-10 13:20:00', '2024-07-10 13:10:00'),
        (4, '2ff449c014be', 'ACTIVE', '2024-07-10 13:20:00', '2024-07-10 13:10:00'),
