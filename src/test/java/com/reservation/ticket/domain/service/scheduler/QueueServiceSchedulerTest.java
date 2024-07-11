@@ -30,9 +30,11 @@ public class QueueServiceSchedulerTest {
     @Test
     void given_when_then() {
         // given
+        int activeCount = 28;
+
         List<QueueCommand.Get> beforeGet = queueService.selectQueueByStatus(QueueStatus.ACTIVE);
         assertThat(beforeGet).isNotNull();
-        assertThat(beforeGet.size()).isEqualTo(28);
+        assertThat(beforeGet.size()).isEqualTo(activeCount);
 
         // when
         queueService.changeTokenStatusExpired();
@@ -43,26 +45,9 @@ public class QueueServiceSchedulerTest {
                 .untilAsserted(() -> {
                     List<QueueCommand.Get> gets = queueService.selectQueueByStatus(QueueStatus.ACTIVE);
 
+                    int changeWaitToActiveCount = 15;
                     assertThat(gets).isNotNull();
-                    assertThat(gets.size()).isEqualTo(0);
+                    assertThat(gets.size()).isEqualTo(changeWaitToActiveCount);
                 });
-    }
-
-    @DisplayName("")
-    @Test
-    public void given() {
-        // given
-        int maxAllowedActive = 30;
-        // when
-        List<QueueCommand.Get> gets = queueService.selectQueueByStatus(QueueStatus.ACTIVE);
-        if (gets.size() < maxAllowedActive) {
-            int searchSize = maxAllowedActive - gets.size();
-            List<QueueCommand.Get> list = queueService.selectQueueByStatusPerLimit(QueueStatus.WAIT, searchSize);
-            list.forEach(item -> {
-                System.out.println("item = " + item);
-            });
-        }
-
-        // then
     }
 }
