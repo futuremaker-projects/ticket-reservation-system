@@ -15,8 +15,11 @@ public class SeatRepositoryImpl implements SeatRepository {
 
     @Override
     public List<Seat> findAllByConcertScheduleId(Long concertScheduleId) {
-
         return seatJpaRepository.findAllByConcertScheduleId(concertScheduleId);
+    }
 
+    @Override
+    public List<Seat> findByIdIn(List<Long> seatIds) {
+        return seatJpaRepository.findByIdIn(seatIds);
     }
 }

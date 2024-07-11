@@ -22,10 +22,12 @@ public class Seat {
     private LocalDateTime occupiedAt;
     private boolean occupied;
 
+    private Long concertScheduleId;
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 //    private ConcertSchedule concertSchedule;
-//
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "reservation_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 //    private Reservation reservation;
@@ -42,4 +44,8 @@ public class Seat {
         return Objects.hash(id);
     }
 
+    public void changeOccupiedStatus() {
+        this.occupied = true;
+        this.occupiedAt = LocalDateTime.now();
+    }
 }

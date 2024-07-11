@@ -8,4 +8,6 @@ public interface SeatRepository {
 
     List<Seat> findAllByConcertScheduleId(Long concertScheduleId);
 
+    List<Seat> findByIdIn(List<Long> seatIds);
+
 }
