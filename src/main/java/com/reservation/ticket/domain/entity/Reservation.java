@@ -22,9 +22,9 @@ public class Reservation {
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserAccount userAccount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private ConcertSchedule concertSchedule;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "concert_schedule_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private ConcertSchedule concertSchedule;
 
     private Integer price;
     private LocalDateTime reservedAt;
