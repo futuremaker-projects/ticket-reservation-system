@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class ScheduleSeatRepositoryImpl implements ScheduleSeatRepository {
@@ -16,5 +18,10 @@ public class ScheduleSeatRepositoryImpl implements ScheduleSeatRepository {
     @Transactional
     public ScheduleSeat save(ScheduleSeat scheduleSeat) {
         return scheduleSeatJpaRepository.save(scheduleSeat);
+    }
+
+    @Override
+    public List<ScheduleSeat> findAllByReservationIdIn(List<Long> reservationIds) {
+        return scheduleSeatJpaRepository.findAllByReservationIdIn(reservationIds);
     }
 }
