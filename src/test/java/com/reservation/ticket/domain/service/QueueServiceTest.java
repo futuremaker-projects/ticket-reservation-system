@@ -28,50 +28,10 @@ class QueueServiceTest {
     @Mock QueueRepository queueRepository;
     @Mock UserAccountRepository userAccountRepository;
 
-    @DisplayName("토큰 생성 - 활서화 상태의 사용자가 제한된 사용자(30명)보다 적을때")
-    @Test
-    public void givenUserId_whenActiveQueueIsUnder30_thenSaveQueueAsActiveStatus() {
-        // given
-        // userId로 user 검색
-        Long userId = 1L;
-        UserAccount userAccount = UserAccount.of(userId, "Sofia");
-        given(userAccountRepository.findById(userId)).willReturn(userAccount);
-
-        // 대기열 상태값 - Active(티켓 구매가능) 상태의 대기자가 30명(제한된 인원)보다 적다면
-        // 대기열의 데이터를 Active 로 저장
-        int underCount = 20;
-        given(queueRepository.countByStatus(QueueStatus.ACTIVE)).willReturn(underCount);
-
-        // 대기열 데이터 생성
-        Long queueId = 21L;
-        String token = generateToken();
-
-        Queue queue = Queue.of();
-        queue.saveStatusInQueue(underCount);
-        queue.saveData(userAccount, token);
-        Queue savedQueue = Queue.of(queueId, userAccount, token, QueueStatus.ACTIVE);
-
-        given(queueRepository.save(any(Queue.class))).willReturn(savedQueue);
-
-        // when
-        QueueCommand.Get getQueue = sut.createQueue(userId);
-
-        // then
-        assertThat(getQueue).isNotNull();
-        assertThat(getQueue.id()).isEqualTo(savedQueue.getId());
-        assertThat(getQueue.status()).isEqualTo(QueueStatus.ACTIVE);
-        assertThat(getQueue.token()).isEqualTo(queue.getToken());
-
-        then(userAccountRepository).should().findById(userId);
-        then(queueRepository).should().countByStatus(QueueStatus.ACTIVE);
-        then(queueRepository).should().save(any(Queue.class));
-    }
-
-
     /**
      * 토큰 생성 -
      */
-    @DisplayName("토큰 생성 - 활서화 상태의 사용자가 제한된 사용자보다 만을때")
+    @DisplayName("토큰 생성 - 대기열 생성시에 `대기상태(WAIT)로 저장")
     @Test
     void givenUserId_whenActiveQueueIsOver30_thenSaveQueueAsWaitStatus() {
         // given
@@ -80,18 +40,10 @@ class QueueServiceTest {
         UserAccount userAccount = UserAccount.of(userId, "Sofia");
         given(userAccountRepository.findById(userId)).willReturn(userAccount);
 
-        // 대기열 상태값 - Active(티켓 구매가능) 상태의 대기자가 30명(제한된 인원)보다 많다면
-        // 대기열의 데이터를 Wait 로 저장
-        int overCount = 30;
-        given(queueRepository.countByStatus(QueueStatus.ACTIVE)).willReturn(overCount);
-
         // 대기열 데이터 생성
         Long queueId = 21L;
         String token = generateToken();
 
-        Queue queue = Queue.of();
-        queue.saveStatusInQueue(overCount);
-        queue.saveData(userAccount, token);
         Queue savedQueue = Queue.of(queueId, userAccount, token, QueueStatus.WAIT);
 
         given(queueRepository.save(any(Queue.class))).willReturn(savedQueue);
@@ -103,10 +55,9 @@ class QueueServiceTest {
         assertThat(getQueue).isNotNull();
         assertThat(getQueue.id()).isEqualTo(savedQueue.getId());
         assertThat(getQueue.status()).isEqualTo(QueueStatus.WAIT);
-        assertThat(getQueue.token()).isEqualTo(queue.getToken());
+        assertThat(getQueue.token()).isEqualTo(savedQueue.getToken());
 
         then(userAccountRepository).should().findById(userId);
-        then(queueRepository).should().countByStatus(QueueStatus.ACTIVE);
         then(queueRepository).should().save(any(Queue.class));
     }
 
@@ -140,7 +91,7 @@ class QueueServiceTest {
     }
 
     /**
-     * 토큰 만료 - 직접만료 -> 구매가 끝남
+     * 토큰 만료 - 직접만료 -> 구매가 끝남       // 테스트하는 목적이 부정확함 -> 테스트하면 당연히 통과되야되는 구조
      */
     @DisplayName("")
     @Test
@@ -170,7 +121,7 @@ class QueueServiceTest {
     /**
      *
      */
-    @DisplayName("`ACTIVE` 상태의 대기열이 30개 이하일 때 변경할 `WAIT`의 데이터 조회")
+    @DisplayName("`ACTIVE` 상태의 대기열이 30개 이하일 때 변경할 대기상태(`WAIT`)의 데이터 목록조회")
     @Test
     public void given_when() {
         // given

@@ -64,11 +64,7 @@ public class Queue {
 
     @PrePersist
     public void setDates() {
-        LocalDateTime now = LocalDateTime.now();
-        int expiredMin = 10;
-
-        this.createdAt = now;
-        this.shouldExpiredAt = now.plusMinutes(expiredMin);
+        this.createdAt = LocalDateTime.now();
     }
 
     @Override
@@ -93,13 +89,17 @@ public class Queue {
         }
     }
 
-    public void saveData(UserAccount userAccount, String token) {
+    public void saveData(UserAccount userAccount, String token, QueueStatus queueStatus) {
         this.userAccount = userAccount;
         this.token = token;
+        this.queueStatus = queueStatus;
     }
 
     public void changeStatus(QueueStatus queueStatus) {
         this.queueStatus = queueStatus;
+        if (queueStatus == QueueStatus.ACTIVE) {
+            this.shouldExpiredAt = LocalDateTime.now();
+        }
     }
 
     public void extendShouldExpiredAt() {

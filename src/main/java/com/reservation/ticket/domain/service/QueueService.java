@@ -25,12 +25,8 @@ public class QueueService {
     @Transactional
     public QueueCommand.Get createQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
-
-        int countActiveStatus = queueRepository.countByStatus(QueueStatus.ACTIVE);
-
-        Queue queue = Queue.of();
-        queue.saveStatusInQueue(countActiveStatus);
-        queue.saveData(userAccount, generateToken());
+        Queue queue = Queue.of(userAccount, generateToken(), QueueStatus.WAIT);
+        queue.saveData(userAccount, generateToken(), QueueStatus.WAIT);
 
         return QueueCommand.Get.from(queueRepository.save(queue));
     }
@@ -62,10 +58,7 @@ public class QueueService {
         queue.changeStatus(QueueStatus.EXPIRED);
     }
 
-    public boolean verifyToken(Queue queue) {
-        return queue.getQueueStatus() == QueueStatus.ACTIVE;
-    }
-
+    @Transactional
     public QueueCommand.Get renewExpirationDate(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
         Queue queue = queueRepository.findByToken(userAccount.getToken());
@@ -74,50 +67,37 @@ public class QueueService {
     }
 
     /**
-     * 대기열 생성 시에 모두 WAIT으로 만들고 줄을 세운다
-     *  스케줄러를 돌려서 ACTIVE 로 변경시키는 작업을 해준다.
+     *  스케줄러 작업
+     *   - ACTIVE 상태인 대기열을 검색하여 만료시간을 현재시간과 비교하여 5분이 초과했다면 EXPIRED 로 상태를 변경
+     *   - 제한된 인원(30명)을 기준으로 현재 ACTIVE 상태인 대기열 목록과 비교하여
+     *      WAIT 상태인 대기열을 ACTIVE 로 변경
      */
     @Transactional
     @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
     public void changeTokenStatusExpired() {
+        // ACTIVE 상태의 대기열을 EXPIRED 로 변경하는 작업
         List<Queue> queuesAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
-        // 사용자가 들어오기 전에
+        // ACTIVE 상태의 사용자가 한명도 없을때 리스트 확인
         if (!queuesAsActive.isEmpty()) {
             queuesAsActive.forEach(queue -> {
-                if (queue.getCreatedAt().plusMinutes(5).isBefore(LocalDateTime.now())) {
+                // 만료시간이 현재시간 기준 5분 초과시 `EXPIRED` 로 변경
+                if (queue.getShouldExpiredAt().plusMinutes(5).isBefore(LocalDateTime.now())) {
                     queue.changeStatus(QueueStatus.EXPIRED);
                 }
             });
         }
 
-        // 1 안. ACTIVE -> EXPIRED 로 변경된 수 만큼의 WAIT 사용자를 ACTIVE 로 변경 시킨다.
-        // 2 안. ACTIVE 사용자를 다시 검색해서 30에서 뺀후 들어간다.
-//        int maxAllowedActive = 30;
-//        List<Queue> queuesAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
-//        if (queuesAsActive.size() < maxAllowedActive) {
-//            int searchSize = maxAllowedActive - queuesAsActive.size();
-//            List<Queue> queuesAsWait = queueRepository.findAllByQueueStatusPerLimit(QueueStatus.WAIT, searchSize);
-//            queuesAsWait.forEach(queue -> {
-//                queue.changeStatus(QueueStatus.ACTIVE);
-//            });
-//        }
+        // ACTIVE 상태의 대기열을 EXPIRED 로 변경하는 작업
+        // 30명으로 인원 제한
+        int maxAllowedActive = 30;
+        List<Queue> newQueueAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
+        if (newQueueAsActive.size() < maxAllowedActive) {
+            // 제한된 인원(30명)과 ACTIVE 대기열 목록을 비교하여 `ACTIVE`로 변경
+            int searchLimit = maxAllowedActive - newQueueAsActive.size();
+            List<Queue> queuesAsWait = queueRepository.findAllByQueueStatusPerLimit(QueueStatus.WAIT, searchLimit);
+            queuesAsWait.forEach(queue -> queue.changeStatus(QueueStatus.ACTIVE));
+        }
     }
-
-
-
-//    @Transactional
-//    @Scheduled(cron = "8 * * * * *", zone = "Asia/Seoul")
-//    public void changeTokenStatusActive() {
-//        int maxAllowedActive = 30;
-//        List<QueueCommand.Get> queuesAsActive = selectQueueByStatus(QueueStatus.ACTIVE);
-//        if (queuesAsActive.size() < maxAllowedActive) {
-//            int searchSize = maxAllowedActive - queuesAsActive.size();
-//            List<Queue> queuesAsWait = queueRepository.findAllByQueueStatusPerLimit(QueueStatus.WAIT, searchSize);
-//            queuesAsWait.forEach(queue -> {
-//                queue.changeStatus(QueueStatus.ACTIVE);
-//            });
-//        }
-//    }
 
     private String generateToken() {
         String uuid = UUID.randomUUID().toString();
