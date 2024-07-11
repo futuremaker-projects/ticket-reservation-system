@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/queue")
+@RequestMapping("/api/queue")
 public class QueueController {
 
     @PostMapping("/token")
