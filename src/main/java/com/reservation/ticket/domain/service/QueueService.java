@@ -66,7 +66,6 @@ public class QueueService {
         queue.extendShouldExpiredAt();
     }
 
-    @Transactional
     public QueueCommand.Get renewExpirationDate(Long userId) {
         Queue queue = getQueue(userId);
         queue.verifyQueueStatus();
