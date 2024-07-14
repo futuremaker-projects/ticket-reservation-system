@@ -74,8 +74,7 @@ public class QueueService {
     }
 
     private Queue getQueue(Long userId) {
-        UserAccount userAccount = userAccountRepository.findById(userId);
-        return queueRepository.findByToken(userAccount.getToken());
+        return queueRepository.findQueueByUserId(userId);
     }
 
     /**

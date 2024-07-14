@@ -72,13 +72,12 @@ class QueueServiceTest {
         // given
         Long userId = 1L;
         UserAccount userAccount = UserAccount.of(userId, "Sofia");
-        given(userAccountRepository.findById(userId)).willReturn(userAccount);
 
         String token = userAccount.getToken();
 
         Long queueId = 21L;
         Queue queue = Queue.of(queueId, userAccount, token, QueueStatus.ACTIVE);
-        given(queueRepository.findByToken(token)).willReturn(queue);
+        given(queueRepository.findQueueByUserId(userId)).willReturn(queue);
 
         // when
         QueueCommand.Get getQueue = sut.getQueueByUserId(userId);
@@ -89,8 +88,7 @@ class QueueServiceTest {
         assertThat(getQueue.token()).isEqualTo(token);
         assertThat(getQueue.status()).isEqualTo(QueueStatus.ACTIVE);
 
-        then(userAccountRepository).should().findById(userId);
-        then(queueRepository).should().findByToken(token);
+        then(queueRepository).should().findQueueByUserId(userId);
     }
 
     /**
@@ -102,12 +100,11 @@ class QueueServiceTest {
         // given
         Long userId = 1L;
         UserAccount userAccount = UserAccount.of(userId, "Sofia", generateToken());
-        given(userAccountRepository.findById(userId)).willReturn(userAccount);
 
         Long queueId = 21L;
         String token = userAccount.getToken();
         Queue queue = Queue.of(queueId, userAccount, token, QueueStatus.ACTIVE);
-        given(queueRepository.findByToken(token)).willReturn(queue);
+        given(queueRepository.findQueueByUserId(userId)).willReturn(queue);
 
         queue.changeStatus(QueueStatus.EXPIRED);
 
@@ -117,8 +114,7 @@ class QueueServiceTest {
         // then
         assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
 
-        then(userAccountRepository).should().findById(userId);
-        then(queueRepository).should().findByToken(token);
+        then(queueRepository).should().findQueueByUserId(userId);
     }
 
     /**
@@ -143,7 +139,6 @@ class QueueServiceTest {
         // 사용자를 검색하여 토큰을 찾음
         Long userId = 1L;
         UserAccount userAccount = UserAccount.of(userId, "Sofia", generateToken());
-        given(userAccountRepository.findById(userId)).willReturn(userAccount);
 
         // 찾은 토큰으로 대기열 데이터를 가져옴
         Long queueId = 21L;
@@ -151,7 +146,9 @@ class QueueServiceTest {
         LocalDateTime createdAt = LocalDateTime.of(2024, 7, 10, 10, 5, 5);
 
         Queue queue = Queue.of(queueId, userAccount.getToken(), QueueStatus.ACTIVE, shouldExpiredAt, createdAt);
-        given(queueRepository.findByToken(queue.getToken())).willReturn(queue);
+        given(queueRepository.findQueueByUserId(userId)).willReturn(queue);
+
+
 
         LocalDateTime renewedExpiredAt = LocalDateTime.of(2024, 7, 10, 10, 15, 5);
         Queue renewedQueue = Queue.of(queueId, userAccount.getToken(), QueueStatus.ACTIVE, renewedExpiredAt, createdAt);
