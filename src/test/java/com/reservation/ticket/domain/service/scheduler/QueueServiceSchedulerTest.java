@@ -37,7 +37,7 @@ public class QueueServiceSchedulerTest {
         assertThat(beforeGet.size()).isEqualTo(activeCount);
 
         // when
-        queueService.changeTokenStatusExpired();
+        queueService.changeTokenStatusExpiredOrActive();
 
         // then
         Awaitility.await()

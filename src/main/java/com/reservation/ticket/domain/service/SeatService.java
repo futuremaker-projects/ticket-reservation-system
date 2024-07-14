@@ -33,7 +33,6 @@ public class SeatService {
         seats.forEach(seat -> seat.changeToOccupiedAndSaveReservationId(reservationId));
     }
 
-    @Transactional
     public void recoverSeatOccupiedStatus(List<Long> cancelledReservationIds) {
         List<Seat> occupiedSeats = seatRepository.findAllByReservationIdIn(cancelledReservationIds);
         occupiedSeats.forEach(seat -> seat.releaseOccupiedSeat());

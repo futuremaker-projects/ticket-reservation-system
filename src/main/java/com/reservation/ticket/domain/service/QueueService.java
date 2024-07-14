@@ -87,8 +87,7 @@ public class QueueService {
      *      WAIT 상태인 대기열을 ACTIVE 로 변경
      */
     @Transactional
-    @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
-    public void changeTokenStatusExpired() {
+    public void changeTokenStatusExpiredOrActive() {
         // ACTIVE 상태의 대기열을 EXPIRED 로 변경하는 작업
         List<Queue> queuesAsActive = queueRepository.findAllByQueueStatus(QueueStatus.ACTIVE);
         // ACTIVE 상태의 사용자가 한명도 없을때 리스트 확인

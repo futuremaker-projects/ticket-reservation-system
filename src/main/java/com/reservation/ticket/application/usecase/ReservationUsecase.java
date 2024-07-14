@@ -32,7 +32,6 @@ public class ReservationUsecase {
     }
 
     @Transactional
-    @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
     public void releaseOccupiedSeats() {
         /**
          *  `ACTIVE` 상태인 상위 10개의 예약을 가져와 미결재이며 현재시간과 비교하여 5분차이 시
