@@ -3,6 +3,8 @@ package com.reservation.ticket.infrastructure.repository.queue;
 import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.repository.QueueRepository;
+import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -18,6 +20,13 @@ public class QueueRepositoryImpl implements QueueRepository {
     @Override
     public Queue save(Queue queue) {
         return queueJpaRepository.save(queue);
+    }
+
+    @Override
+    public Queue findQueueByUserId(Long userId) {
+        return queueJpaRepository.findByUserAccount_Id(userId).orElseThrow(
+                () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND,
+                        "Queue not found by userId : %d".formatted(userId)));
     }
 
     @Override

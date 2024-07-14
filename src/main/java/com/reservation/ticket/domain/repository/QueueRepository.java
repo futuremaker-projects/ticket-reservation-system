@@ -16,4 +16,6 @@ public interface QueueRepository {
     int countByStatus(QueueStatus status);
 
     Queue save(Queue queue);
+
+    Queue findQueueByUserId(Long userId);
 }

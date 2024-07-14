@@ -3,11 +3,13 @@ package com.reservation.ticket.infrastructure.repository.queue;
 import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
 
@@ -21,4 +23,7 @@ public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
 
     @Query("select q from Queue q where q.queueStatus = :queueStatus order by q.id asc")
     List<Queue> findAllByQueueStatusOrderByIdAsc(@Param("queueStatus") QueueStatus queueStatus, Pageable pageable);
+
+    @EntityGraph(attributePaths = "userAccount")
+    Optional<Queue> findByUserAccount_Id(Long userId);
 }

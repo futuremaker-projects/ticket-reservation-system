@@ -59,4 +59,17 @@ class QueueRepositoryImplTest {
         // then
     }
 
+    @Test
+    void eoeoeo() {
+        // given
+        Long userId = 1L;
+
+        // when
+        Queue queueByUserId = repository.findQueueByUserId(userId);
+        System.out.println("queueByUserId = " + queueByUserId);
+        System.out.println("queueByUserId = " + queueByUserId.getUserAccount());
+
+        // then
+    }
+
 }
