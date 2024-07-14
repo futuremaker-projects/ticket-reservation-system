@@ -6,6 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@ComponentScan("com.reservation.ticket")
+@ComponentScan("com.reservation.ticket.interfaces.scheduler")
 public class ScheduledConfig {
 }
