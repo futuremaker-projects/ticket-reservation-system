@@ -23,6 +23,15 @@ public class UserAccount {
     private String token;
     private int point;
 
+    public UserAccount(Long id) {
+        this.id = id;
+    }
+
+    public UserAccount(Long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     public UserAccount(Long id, String username, String token, int point) {
         this.id = id;
         this.username = username;
@@ -30,9 +39,8 @@ public class UserAccount {
         this.point = point;
     }
 
-    public UserAccount(Long id, String username) {
-        this.id = id;
-        this.username = username;
+    public static UserAccount of(Long id) {
+        return new UserAccount(id);
     }
 
     public static UserAccount of(Long id, String username) {

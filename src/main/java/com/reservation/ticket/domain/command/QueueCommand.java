@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class QueueCommand {
     public record Get(Long id,
-                      UserCommand.Get user,
+                      UserCommand.Get userAccount,
                       String token,
                       QueueStatus status,
                       LocalDateTime shouldExpiredAt,

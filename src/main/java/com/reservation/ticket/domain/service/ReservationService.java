@@ -60,5 +60,10 @@ public class ReservationService {
         return reservationRepository.findAllByReservationStatus(reservationStatus);
     }
 
+    public Reservation changePaymentStatusAsPaid(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId);
+        reservation.changePaymentStatus(PaymentStatus.PAID);
+        return reservation;
+    }
 }
 
