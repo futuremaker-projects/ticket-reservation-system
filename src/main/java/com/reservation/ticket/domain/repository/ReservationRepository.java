@@ -12,4 +12,6 @@ public interface ReservationRepository {
     List<Reservation> findAllByReservationStatusOrderByIdAsc(ReservationStatus reservationStatus, int limit);
 
     List<Reservation> findAllByReservationStatus(ReservationStatus reservationStatus);
+
+    Reservation findById(Long reservationId);
 }

@@ -22,6 +22,13 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserAccountRepository userAccountRepository;
 
+    /**
+     *  예약 id를 이용하여 예약 정보를 가져온다.
+     */
+    public ReservationCommand.Get getReservationById(Long reservationId) {
+        return ReservationCommand.Get.from(reservationRepository.findById(reservationId));
+    }
+
     @Transactional
     public ReservationCommand.Get save(ReservationCommand.Create create, Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
