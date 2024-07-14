@@ -33,7 +33,7 @@ public class ReservationService {
      * 예약된 상위 10개의 목록을 조회하여 결재상태가 NOT_PAID 이며, 현재시간보다 5분 초과된 상태면
      * `ACTIVE`(예약중) 인 상태를 `CANCELLED`(취소) 로 변경한다.
      */
-    public List<Long> changeReservationStatusWhenNotPaidOnTime() {
+    public List<Long> changeReservationStatusIfNotPaidOnTime() {
         int limit = 10;
         List<Long> cancelledIds = new ArrayList<>();
         List<Reservation> reservations =

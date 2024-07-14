@@ -6,7 +6,6 @@ import com.reservation.ticket.domain.service.QueueService;
 import com.reservation.ticket.domain.service.ReservationService;
 import com.reservation.ticket.domain.service.SeatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +36,7 @@ public class ReservationUsecase {
          *  `ACTIVE` 상태인 상위 10개의 예약을 가져와 미결재이며 현재시간과 비교하여 5분차이 시
          *  상태값을 `CANCELLED` 로 변경
          */
-        List<Long> cancelledReservationIds = reservationService.changeReservationStatusWhenNotPaidOnTime();
+        List<Long> cancelledReservationIds = reservationService.changeReservationStatusIfNotPaidOnTime();
         /**
          *  예약으로 선점된 좌석을 다시 원상복구 한다.
          */

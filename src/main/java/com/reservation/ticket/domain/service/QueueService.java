@@ -7,7 +7,6 @@ import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.repository.QueueRepository;
 import com.reservation.ticket.domain.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
