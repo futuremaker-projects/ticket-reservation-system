@@ -2,7 +2,7 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.reservation.ticket.interfaces.controller.dto.concert.ConcertDto;
 import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleDto;
-import com.reservation.ticket.interfaces.controller.dto.point.PointRequest;
+import com.reservation.ticket.interfaces.controller.dto.point.PointDto;
 import com.reservation.ticket.interfaces.controller.dto.reservation.ReservationRequest;
 import com.reservation.ticket.interfaces.controller.dto.seat.SeatResponse;
 import com.reservation.ticket.interfaces.controller.dto.userAccount.UserAccountResponse;
@@ -30,7 +30,7 @@ public class ReservationController {
      * 날짜와 자리 선정이 완료되면 포인트를 이용하여 결재한다.
      */
     @PostMapping("/payment")
-    public ResponseEntity<Void> makePaymentByPoint(@RequestBody PointRequest requestDto) {
+    public ResponseEntity<Void> makePaymentByPoint(@RequestBody PointDto.Request requestDto) {
         UserAccountResponse userAccountResponse = UserAccountResponse.of(requestDto.userId(), "name", 1000);
         int subtractedPoint = userAccountResponse.point() - requestDto.point();
         UserAccountResponse saveUserAccountResponse = UserAccountResponse.of(userAccountResponse.id(), userAccountResponse.name(), subtractedPoint);

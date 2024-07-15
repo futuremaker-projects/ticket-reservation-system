@@ -1,5 +1,6 @@
 package com.reservation.ticket.domain.service;
 
+import com.reservation.ticket.domain.command.PointCommand;
 import com.reservation.ticket.domain.entity.PointHistory;
 import com.reservation.ticket.domain.entity.Reservation;
 import com.reservation.ticket.domain.entity.UserAccount;
@@ -16,6 +17,10 @@ public class PointService {
 
     private final PointHistoryRepository pointHistoryRepository;
 
+//    public PointCommand.Get getPoint() {
+//
+//    }
+
     public void usePoint(Reservation reservation, UserAccount userAccount) {
         if (reservation.getPrice() > userAccount.getPoint()) {
             throw new ApplicationException(ErrorCode.NOT_ENOUGH_POINT,
@@ -29,5 +34,9 @@ public class PointService {
         // 포인트 히스토리 저장
         PointHistory pointHistory = PointHistory.of(userAccount, TransactionType.USE);
         pointHistoryRepository.save(pointHistory);
+    }
+
+    public void chargePoint() {
+
     }
 }
