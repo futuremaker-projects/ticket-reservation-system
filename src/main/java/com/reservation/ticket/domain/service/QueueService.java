@@ -35,13 +35,6 @@ public class QueueService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
-    public List<QueueCommand.Get> selectQueueByStatusPerLimit(QueueStatus status, int limit) {
-        return queueRepository.findAllByQueueStatusPerLimit(status, limit).stream()
-                .map(QueueCommand.Get::from)
-                .toList();
-    }
-
     public QueueCommand.Get getQueueByUserId(Long userId) {
         Queue queue = getQueue(userId);
         return QueueCommand.Get.from(queue);
@@ -73,7 +66,19 @@ public class QueueService {
         return QueueCommand.Get.from(queue);
     }
 
+    public QueueCommand.Get renewExpirationDate(String token) {
+        Queue queue = queueRepository.findByToken(token);
+        queue.verifyQueueStatus();
+        queue.extendShouldExpiredAt();
+        return QueueCommand.Get.from(queue);
+    }
+
     private Queue getQueue(Long userId) {
+        /**
+         *  TODO : 결국 토큰으로 대기열 데이터를 검색해야한다.
+         *      대기열 데이터는 같은 사용자의 데이터가 여러게 있을수 있다.
+         *      그것을 비교하는 방법은 토큰의 고유값이다.
+          */
         return queueRepository.findQueueByUserId(userId);
     }
 

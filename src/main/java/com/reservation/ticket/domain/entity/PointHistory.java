@@ -1,5 +1,6 @@
 package com.reservation.ticket.domain.entity;
 
+import com.reservation.ticket.domain.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,11 +21,24 @@ public class PointHistory {
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserAccount userAccount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(10) NOT NULL COMMENT '포인트 타입 : 충전, 사용'")
+    private TransactionType transactionType;
+
     private LocalDateTime createdAt;
 
     @PrePersist
     public void createdAt() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public PointHistory(UserAccount userAccount, TransactionType transactionType) {
+        this.userAccount = userAccount;
+        this.transactionType = transactionType;
+    }
+
+    public static PointHistory of(UserAccount userAccount, TransactionType transactionType) {
+        return new PointHistory(userAccount, transactionType);
     }
 
     @Override

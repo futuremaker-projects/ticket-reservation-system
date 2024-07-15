@@ -13,9 +13,11 @@ public enum ErrorCode {
 
     USER_EXISTED(HttpStatus.CONFLICT, "USER_EXISTED"),
 
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED")
+    // queue
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED"),
 
-    ;
+    // point
+    NOT_ENOUGH_POINT(HttpStatus.NOT_ACCEPTABLE, "NOT_ENOUGH_POINT");
 
     public final HttpStatus httpStatus;
     public final String message;

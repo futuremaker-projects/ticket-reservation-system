@@ -1,6 +1,5 @@
 package com.reservation.ticket.domain.entity;
 
-import com.reservation.ticket.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class Payment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserAccount userAccount;
 
@@ -25,18 +24,20 @@ public class Payment {
     @JoinColumn(name = "reservation_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Reservation reservation;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(10) default 'NOT_PAID' comment '지불상태'")
-    private PaymentStatus paymentStatus;
-
     private LocalDateTime paidAt;
 
-    public Payment(Long id, UserAccount userAccount, Reservation reservation, PaymentStatus paymentStatus, LocalDateTime paidAt) {
-        this.id = id;
+    @PrePersist
+    public void paidAt() {
+        this.paidAt = LocalDateTime.now();
+    }
+
+    public Payment(UserAccount userAccount, Reservation reservation) {
         this.userAccount = userAccount;
         this.reservation = reservation;
-        this.paymentStatus = paymentStatus;
-        this.paidAt = paidAt;
+    }
+
+    public static Payment of(UserAccount userAccount, Reservation reservation) {
+        return new Payment(userAccount, reservation);
     }
 
     @Override
