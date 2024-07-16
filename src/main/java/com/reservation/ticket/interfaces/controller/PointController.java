@@ -17,7 +17,7 @@ public class PointController {
     /**
      *  사용자 id를 이용하여 사용자가 가진 포인트를 조회한다.
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<PointDto.Response> getPoint(@PathVariable Long userId) {
         UserAccountResponse userAccountResponse = UserAccountResponse.of(userId, "name", 1000);
         PointDto.Response pointResponse = PointDto.Response.of(userAccountResponse.point());
