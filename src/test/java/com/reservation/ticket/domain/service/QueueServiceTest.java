@@ -80,7 +80,7 @@ class QueueServiceTest {
         given(queueRepository.findQueueByUserId(userId)).willReturn(queue);
 
         // when
-        QueueCommand.Get getQueue = sut.getQueueByUserId(userId);
+        QueueCommand.Get getQueue = sut.getQueueCommandByUserId(userId);
 
         // then
         assertThat(getQueue).isNotNull();
@@ -113,26 +113,13 @@ class QueueServiceTest {
 
         // then
         assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
-
         then(queueRepository).should().findQueueByUserId(userId);
-    }
-
-    /**
-     *
-     */
-    @DisplayName("`ACTIVE` 상태의 대기열이 30개 이하일 때 변경할 대기상태(`WAIT`)의 데이터 목록조회")
-    @Test
-    public void given_when() {
-        // given
-
-        // when
-
-        // then
     }
 
     /**
      * 대기열 만료시간 갱신
      */
+    @DisplayName("사용자 토큰으로 대기열의 만료일을 갱신한다.")
     @Test
     void givenTokenInUser_whenRequestingRenewExpireDate_thenRenewExpireDate() {
         // given
@@ -148,8 +135,6 @@ class QueueServiceTest {
         Queue queue = Queue.of(queueId, userAccount.getToken(), QueueStatus.ACTIVE, shouldExpiredAt, createdAt);
         given(queueRepository.findQueueByUserId(userId)).willReturn(queue);
 
-
-
         LocalDateTime renewedExpiredAt = LocalDateTime.of(2024, 7, 10, 10, 15, 5);
         Queue renewedQueue = Queue.of(queueId, userAccount.getToken(), QueueStatus.ACTIVE, renewedExpiredAt, createdAt);
 
@@ -159,6 +144,23 @@ class QueueServiceTest {
         // then
         assertThat(queueCommand).isNotNull();
         assertThat(queueCommand.shouldExpiredAt()).isEqualTo(renewedQueue.getShouldExpiredAt());
+    }
+
+    @DisplayName("사용자 토큰을 이용하여 대기열을 만료상태로 변경한다.")
+    @Test
+    public void givenTokenInUser_whenRequestingExpireQueue_thenChangeQueueStatusAsExpired() {
+        // given
+        Long queueId = 1L;
+        String token = generateToken();
+        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueRepository.findByToken(token)).willReturn(queue);
+
+        // when
+        sut.expireQueueAfterValidation(token);
+
+        // then
+        assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
+        then(queueRepository).should().findByToken(token);
     }
 
 
