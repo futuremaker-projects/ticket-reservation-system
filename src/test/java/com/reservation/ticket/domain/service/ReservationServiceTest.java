@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
@@ -49,6 +50,9 @@ class ReservationServiceTest {
         assertThat(savedReservation.price()).isEqualTo(reservation.getPrice());
         assertThat(savedReservation.paymentStatus()).isEqualTo(reservation.getPaymentStatus());
         assertThat(savedReservation.reservationStatus()).isEqualTo(reservation.getReservationStatus());
+
+        then(userAccountRepository).should().findById(userId);
+        then(reservationRepository).should().save(reservation);
     }
 
     @DisplayName("에약 id로 예약을 조회하여 결재상태를 `PAID`로 변경한다.")
@@ -65,6 +69,8 @@ class ReservationServiceTest {
 
         // then
         assertThat(changedReservation.getPaymentStatus()).isEqualTo(PaymentStatus.PAID);
+
+        then(reservationRepository).should().findById(reservationId);
     }
 
 }
