@@ -30,9 +30,9 @@ public class ReservationService {
     }
 
     @Transactional
-    public ReservationCommand.Get save(ReservationCommand.Create create, Long userId) {
+    public ReservationCommand.Get save(int price, Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
-        Reservation reservation = Reservation.of(userAccount, create.price());
+        Reservation reservation = Reservation.of(userAccount, price);
         return ReservationCommand.Get.from(reservationRepository.save(reservation));
     }
 

@@ -23,7 +23,7 @@ public class ReservationUsecase {
     public ReservationCommand.Get makeReservation(ReservationCommand.Create create, Long userId) {
         QueueCommand.Get queue = queueService.verifyQueueByUserId(userId);
         // 예약을 진행한다.
-        ReservationCommand.Get reservation = reservationService.save(create, userId);
+        ReservationCommand.Get reservation = reservationService.save(create.price(), userId);
         // 예약시 선택한 자리를 점유한다.
         seatService.changeSeatOccupiedStatus(reservation.id(), create.seatIds());
         queueService.renewQueueExpirationDate(queue.token());

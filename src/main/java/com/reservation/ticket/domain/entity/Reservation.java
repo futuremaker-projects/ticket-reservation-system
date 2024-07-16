@@ -42,13 +42,28 @@ public class Reservation {
         this.reservationStatus = ReservationStatus.ACTIVE;
     }
 
-    public Reservation(UserAccount userAccount, Integer price) {
+    public Reservation(Long id, UserAccount userAccount, Integer price, PaymentStatus paymentStatus, ReservationStatus reservationStatus) {
+        this.id = id;
         this.userAccount = userAccount;
         this.price = price;
+        this.paymentStatus = paymentStatus;
+        this.reservationStatus = reservationStatus;
+    }
+
+    public static Reservation of(Long id, UserAccount userAccount, Integer price) {
+        return new Reservation(id, userAccount, price, null, null);
     }
 
     public static Reservation of(UserAccount userAccount, Integer price) {
-        return new Reservation(userAccount, price);
+        return new Reservation(null, userAccount, price, null, null);
+    }
+
+    public static Reservation of(UserAccount userAccount, Integer price, PaymentStatus paymentStatus) {
+        return new Reservation(null, userAccount, price, paymentStatus, null);
+    }
+
+    public static Reservation of(UserAccount userAccount, Integer price, PaymentStatus paymentStatus, ReservationStatus reservationStatus) {
+        return new Reservation(null, userAccount, price, paymentStatus, reservationStatus);
     }
 
     @Override
