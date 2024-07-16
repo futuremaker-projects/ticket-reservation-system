@@ -61,12 +61,12 @@ class ReservationUsecaseTest {
         int price = 4000;
         Long concertScheduleId = 1L;
         List<Long> seats = List.of(1L, 2L, 5L, 8L);
-        ReservationCommand.Create create = ReservationCommand.Create.of(price, concertScheduleId, seats);
-
         Long userId = 1L;
+        ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seats, userId, price);
+
 
         // when
-        ReservationCommand.Get reservation = reservationUsecase.makeReservation(create, userId);
+        ReservationCommand.Get reservation = reservationUsecase.makeReservation(create);
 
         // then
         assertThat(reservation).isNotNull();

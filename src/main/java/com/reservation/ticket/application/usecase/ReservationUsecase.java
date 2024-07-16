@@ -20,10 +20,10 @@ public class ReservationUsecase {
     private final SeatService seatService;
 
     @Transactional
-    public ReservationCommand.Get makeReservation(ReservationCommand.Create create, Long userId) {
-        QueueCommand.Get queue = queueService.verifyQueueByUserId(userId);
+    public ReservationCommand.Get makeReservation(ReservationCommand.Create create) {
+        QueueCommand.Get queue = queueService.verifyQueueByUserId(create.userId());
         // 예약을 진행한다.
-        ReservationCommand.Get reservation = reservationService.save(create.price(), userId);
+        ReservationCommand.Get reservation = reservationService.save(create.price(), create.userId());
         // 예약시 선택한 자리를 점유한다.
         seatService.changeSeatOccupiedStatus(reservation.id(), create.seatIds());
         queueService.renewQueueExpirationDate(queue.token());
