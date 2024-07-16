@@ -25,6 +25,8 @@ public class PointHistory {
     @Column(columnDefinition = "VARCHAR(10) NOT NULL COMMENT '포인트 타입 : 충전, 사용'")
     private TransactionType transactionType;
 
+    private int point;
+
     private LocalDateTime createdAt;
 
     @PrePersist
@@ -32,13 +34,19 @@ public class PointHistory {
         this.createdAt = LocalDateTime.now();
     }
 
-    public PointHistory(UserAccount userAccount, TransactionType transactionType) {
+    public PointHistory(Long id, UserAccount userAccount, TransactionType transactionType, int point) {
+        this.id = id;
         this.userAccount = userAccount;
         this.transactionType = transactionType;
+        this.point = point;
     }
 
-    public static PointHistory of(UserAccount userAccount, TransactionType transactionType) {
-        return new PointHistory(userAccount, transactionType);
+    public static PointHistory of(Long id, UserAccount userAccount, TransactionType transactionType, int point) {
+        return new PointHistory(id, userAccount, transactionType, point);
+    }
+
+    public static PointHistory of(UserAccount userAccount, TransactionType transactionType, int point) {
+        return new PointHistory(null, userAccount, transactionType, point);
     }
 
     @Override

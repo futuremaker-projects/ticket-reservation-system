@@ -27,7 +27,7 @@ public class PaymentUsecase {
         // 예약의 결제 상태값을 PAID로 변경
         Reservation reservation = reservationService.changePaymentStatusAsPaid(reservationId);
         // 포인트 차감 -> 잔액부족이면 예외처리
-        pointService.usePoint(reservation, userAccount);
+        pointService.usePoint(reservation.getPrice(), userAccount);
         // 결재 생성
         paymentService.createPayment(reservation, userAccount);
     }
