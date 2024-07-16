@@ -31,13 +31,19 @@ public class Payment {
         this.paidAt = LocalDateTime.now();
     }
 
-    public Payment(UserAccount userAccount, Reservation reservation) {
+    public Payment(Long id, UserAccount userAccount, Reservation reservation, LocalDateTime paidAt) {
+        this.id = id;
         this.userAccount = userAccount;
         this.reservation = reservation;
+        this.paidAt = paidAt;
+    }
+
+    public static Payment of(Long id, UserAccount userAccount, Reservation reservation, LocalDateTime paidAt) {
+        return new Payment(id, userAccount, reservation, paidAt);
     }
 
     public static Payment of(UserAccount userAccount, Reservation reservation) {
-        return new Payment(userAccount, reservation);
+        return new Payment(null, userAccount, reservation, null);
     }
 
     @Override

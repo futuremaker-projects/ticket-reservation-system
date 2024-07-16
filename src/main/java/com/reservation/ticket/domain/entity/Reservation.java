@@ -50,6 +50,10 @@ public class Reservation {
         this.reservationStatus = reservationStatus;
     }
 
+    public static Reservation of(Long id) {
+        return new Reservation(id, null, null, null, null);
+    }
+
     public static Reservation of(Long id, UserAccount userAccount, Integer price) {
         return new Reservation(id, userAccount, price, null, null);
     }
