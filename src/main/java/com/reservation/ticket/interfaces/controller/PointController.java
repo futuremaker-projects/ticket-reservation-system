@@ -29,7 +29,7 @@ public class PointController {
      */
     @PostMapping
     public ResponseEntity<Void> chargePoint(@RequestBody PointDto.Request requestDto) {
-        pointService.chargePoint(requestDto);
+        pointService.chargePoint(requestDto.toPointCommandUpdate());
         return ResponseEntity.ok().build();
     }
 

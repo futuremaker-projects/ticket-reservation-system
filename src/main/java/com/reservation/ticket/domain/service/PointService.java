@@ -1,10 +1,11 @@
 package com.reservation.ticket.domain.service;
 
+import com.reservation.ticket.domain.command.PointCommand;
 import com.reservation.ticket.domain.entity.PointHistory;
-import com.reservation.ticket.domain.entity.Reservation;
 import com.reservation.ticket.domain.entity.UserAccount;
 import com.reservation.ticket.domain.enums.TransactionType;
 import com.reservation.ticket.domain.repository.PointHistoryRepository;
+import com.reservation.ticket.domain.repository.UserAccountRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import com.reservation.ticket.interfaces.controller.dto.point.PointDto;
@@ -15,12 +16,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PointService {
 
+    private final UserAccountRepository userAccountRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
-//    public PointCommand.Get getPoint() {
-//
-//    }
+    /**
+     * 포인트 조회
+     */
+    public PointCommand.Get getPoint(Long userId) {
+        UserAccount user = userAccountRepository.findById(userId);
+        return PointCommand.Get.of(user.getPoint());
+    }
 
+    /**
+     * 포인트 사용 - 포인트가 결제할 금액보다 작을 경우 예외발생
+     */
     public void usePoint(int reservedPrice, UserAccount userAccount) {
         if (reservedPrice > userAccount.getPoint()) {
             throw new ApplicationException(ErrorCode.NOT_ENOUGH_POINT,
@@ -36,7 +45,16 @@ public class PointService {
         pointHistoryRepository.save(pointHistory);
     }
 
-    public void chargePoint(PointDto.Request requestDto) {
-
+    /**
+     * 포인트 충전 - 포인트가 0이거나 0이하면 예외 발생
+     */
+    public void chargePoint(PointCommand.Update request) {
+        if (request.point() <= 0) {
+            throw new ApplicationException(ErrorCode.INVALID_POINT,
+                    "Invalid chargeable point : %d".formatted(request.point()));
+        }
+        UserAccount userAccount = userAccountRepository.findById(request.userId());
+        int chargeablePoint = userAccount.getPoint() + request.point();
+        userAccount.savePoint(chargeablePoint);
     }
 }

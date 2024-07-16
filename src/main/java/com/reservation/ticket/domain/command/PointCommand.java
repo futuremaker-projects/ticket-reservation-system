@@ -6,4 +6,10 @@ public class PointCommand {
             return new Get(point);
         }
     }
+
+    public record Update(Long userId, int point) {
+        public static Update of(Long userId, Integer point) {
+            return new Update(userId, point);
+        }
+    }
 }

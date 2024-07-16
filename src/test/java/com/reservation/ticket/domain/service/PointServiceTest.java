@@ -1,14 +1,13 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.entity.Payment;
+import com.reservation.ticket.domain.command.PointCommand;
 import com.reservation.ticket.domain.entity.PointHistory;
 import com.reservation.ticket.domain.entity.UserAccount;
 import com.reservation.ticket.domain.enums.TransactionType;
 import com.reservation.ticket.domain.repository.PointHistoryRepository;
+import com.reservation.ticket.domain.repository.UserAccountRepository;
 import com.reservation.ticket.dummy.DummyData;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -29,13 +28,14 @@ class PointServiceTest {
     @InjectMocks PointService sut;
 
     @Mock PointHistoryRepository pointHistoryRepository;
+    @Mock UserAccountRepository userAccountRepository;
 
     /**
      * 포인트 사용
      */
-    @DisplayName("예약 금액과 사용자의 포인트를 이용하여 사용자 포인트를 차감한다.")
+    @DisplayName("예약_금액과_사용자의_포인트를_이용하여_사용자_포인트를_차감한다.")
     @Test
-    public void givenReservationPriceAndUserPoint_whenCalculatePrice_then() {
+    public void 예약_금액과_사용자의_포인트를_이용하여_사용자_포인트를_차감한다() {
         // given
         int reservedPrice = 1000;
         Long userId = 1L;
@@ -87,9 +87,79 @@ class PointServiceTest {
     /**
      * 포인트 충전
      */
+    @DisplayName("사용자 id와 충전할 포인트를 이용하여 포인트를 충전하다.")
+    @Test
+    void 사용자id와_충전할_포인트를_이용하여_포인트를_충전하다() {
+        // given
+        Long userId = 1L;
+        int chargeablePoint = 1000;
+        PointCommand.Update update = PointCommand.Update.of(userId, chargeablePoint);
+
+        int userPoint = 100;
+        UserAccount userAccount = UserAccount.of(userId, "noah", DummyData.generateToken(), userPoint);
+        given(userAccountRepository.findById(userId)).willReturn(userAccount);
+
+        // when
+        sut.chargePoint(update);
+
+        // then
+        assertThat(userAccount.getPoint()).isEqualTo(chargeablePoint + userPoint);
+    }
+
+    /**
+     * 포인트 충전시 예외 - 충전할 포인트가 `0`일때
+     */
+    @Test
+    void 충전할_포인트가_0이면_예외를_발생한다() {
+        // given
+        Long userId = 1L;
+        int chargeablePoint = 0;
+        PointCommand.Update update = PointCommand.Update.of(userId, chargeablePoint);
+
+        // when
+        Throwable t = catchThrowable(() -> sut.chargePoint(update));
+
+        // then
+        assertThat(t)
+                .isInstanceOf(ApplicationException.class)
+                .hasMessage("Invalid chargeable point : %d".formatted(chargeablePoint));
+    }
+
+    /**
+     * 포인트 충전 예외 - 포인트 충전시 예외 - 충전할 포인트가 `0`이하일떄
+     */
+    @Test
+    void 충전할_포인트가_0이하면_예외를_발생한다() {
+        // given
+        Long userId = 1L;
+        int chargeablePoint = -100;
+        PointCommand.Update update = PointCommand.Update.of(userId, chargeablePoint);
+
+        // when
+        Throwable t = catchThrowable(() -> sut.chargePoint(update));
+
+        // then
+        assertThat(t)
+                .isInstanceOf(ApplicationException.class)
+                .hasMessage("Invalid chargeable point : %d".formatted(chargeablePoint));
+    }
 
     /**
      * 포인트 조회
      */
+    @Test
+    void 사용자의_포인트를_조회한다() {
+        // given
+        Long userId = 1L;
+        int userPoint = 100;
+        UserAccount userAccount = UserAccount.of(userId, "noah", DummyData.generateToken(), userPoint);
+        given(userAccountRepository.findById(userId)).willReturn(userAccount);
 
+        // when
+        PointCommand.Get point = sut.getPoint(userId);
+
+        // then
+        assertThat(point).isNotNull();
+        assertThat(point.point()).isEqualTo(userPoint);
+    }
 }
