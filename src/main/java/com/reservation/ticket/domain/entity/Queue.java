@@ -52,6 +52,10 @@ public class Queue {
         return new Queue();
     }
 
+    public static Queue of(Long id, String token, QueueStatus status) {
+        return new Queue(id, null, token, status);
+    }
+
     public static Queue of(Long id, UserAccount userAccount, String token, QueueStatus status) {
         return new Queue(id, userAccount, token, status);
     }

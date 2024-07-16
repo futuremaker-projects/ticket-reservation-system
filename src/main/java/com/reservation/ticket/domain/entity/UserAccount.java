@@ -51,6 +51,10 @@ public class UserAccount {
         return new UserAccount(id, username, token, 0);
     }
 
+    public static UserAccount of(Long id, String username, String token, int point) {
+        return new UserAccount(id, username, token, point);
+    }
+
     public void saveToken(String token) {
         this.token = token;
     }

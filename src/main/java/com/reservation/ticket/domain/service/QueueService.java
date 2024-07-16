@@ -35,19 +35,19 @@ public class QueueService {
                 .toList();
     }
 
-    public QueueCommand.Get getQueueByUserId(Long userId) {
-        Queue queue = getQueue(userId);
+    public QueueCommand.Get getQueueCommandByUserId(Long userId) {
+        Queue queue = getQueueByUserId(userId);
         return QueueCommand.Get.from(queue);
     }
 
     @Transactional
     public void expireQueueByChangingStatus(Long userId) {
-        Queue queue = getQueue(userId);
+        Queue queue = getQueueByUserId(userId);
         queue.changeStatus(QueueStatus.EXPIRED);
     }
 
     public QueueCommand.Get verifyQueueByUserId(Long userId) {
-        Queue queue = getQueue(userId);
+        Queue queue = getQueueByUserId(userId);
         // ACTIVE 가 아니면 예외발생
         queue.verifyQueueStatus();
         return QueueCommand.Get.from(queue);
@@ -60,26 +60,26 @@ public class QueueService {
     }
 
     public QueueCommand.Get renewExpirationDate(Long userId) {
-        Queue queue = getQueue(userId);
+        Queue queue = getQueueByUserId(userId);
         queue.verifyQueueStatus();
         queue.extendShouldExpiredAt();
         return QueueCommand.Get.from(queue);
     }
 
-    public QueueCommand.Get renewExpirationDate(String token) {
+    /**
+     * 결재시 대기열 검증 후 만료
+     *   - 대기열 토큰 유효성 검증
+     *   - 대기열 만료
+     */
+    public void expireQueueAfterValidation(String token) {
         Queue queue = queueRepository.findByToken(token);
         queue.verifyQueueStatus();
-        queue.extendShouldExpiredAt();
-        return QueueCommand.Get.from(queue);
+        queue.changeStatus(QueueStatus.EXPIRED);
     }
 
-    private Queue getQueue(Long userId) {
-        /**
-         *  TODO : 결국 토큰으로 대기열 데이터를 검색해야한다.
-         *      대기열 데이터는 같은 사용자의 데이터가 여러게 있을수 있다.
-         *      그것을 비교하는 방법은 토큰의 고유값이다.
-          */
-        return queueRepository.findQueueByUserId(userId);
+    private Queue getQueueByUserId(Long userId) {
+        UserAccount userAccount = userAccountRepository.findById(userId);
+        return queueRepository.findByToken(userAccount.getToken());
     }
 
     /**
