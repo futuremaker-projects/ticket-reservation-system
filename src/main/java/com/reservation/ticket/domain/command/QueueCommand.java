@@ -2,6 +2,7 @@ package com.reservation.ticket.domain.command;
 
 import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.interfaces.controller.dto.queue.QueueDto;
 
 import java.time.LocalDateTime;
 
@@ -29,6 +30,10 @@ public class QueueCommand {
                     queue.getShouldExpiredAt(),
                     queue.getCreatedAt()
             );
+        }
+
+        public QueueDto.Response toResponse() {
+            return QueueDto.Response.of(id, token, status, shouldExpiredAt, createdAt);
         }
     }
 }

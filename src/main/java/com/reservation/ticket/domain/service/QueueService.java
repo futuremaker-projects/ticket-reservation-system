@@ -24,7 +24,11 @@ public class QueueService {
     @Transactional
     public QueueCommand.Get createQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
-        Queue queue = Queue.of(userAccount, generateToken(), QueueStatus.WAIT);
+        String token = generateToken();
+        // 생성된 토큰을 사용자 정보에 저장
+        userAccount.saveToken(token);
+        // 새로운 대기열 데이터에 토큰 저장하여 생성
+        Queue queue = Queue.of(userAccount, token, QueueStatus.WAIT);
         return QueueCommand.Get.from(queueRepository.save(queue));
     }
 
