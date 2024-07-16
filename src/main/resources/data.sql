@@ -1,6 +1,6 @@
 INSERT INTO user_account (`username`, `token`, `point`)
 VALUES
-    ('Star', '734488355d85', 0),
+    ('Star', '734488355d85', 10000),
     ('Catie', '6f8f504681f9', 0),
        ('Petronella', 'b02567dca468', 0),
        ('Ellie', '66b40f8df234', 0),
@@ -101,17 +101,17 @@ VALUES
        ('Jervis', '61de1348970b', 0),
        ('Avrit', 'ef81caca55ae', 0);
 
-insert into concert (`name`)
-values ('Ravenous'),
-       ('Louie Bluie'),
-       ('Three Musketeers, The'),
-       ('The Big Flame'),
-       ('Corbeau, Le (Raven, The)'),
-       ('After Earth'),
-       ('Private Property (Nue propriété)'),
-       ('Fall of the House of Usher, The (Zánik domu Usheru)'),
-       ('Killjoy Goes to Hell'),
-       ('Judy Berlin');
+insert into concert (`name`, `created_at`)
+values ('Ravenous', '2024-07-09 09:33:40'),
+       ('Louie Bluie', '2024-07-09 09:33:40'),
+       ('Three Musketeers, The', '2024-07-09 09:33:40'),
+       ('The Big Flame', '2024-07-09 09:33:40'),
+       ('Corbeau, Le (Raven, The)', '2024-07-09 09:33:40'),
+       ('After Earth', '2024-07-09 09:33:40'),
+       ('Private Property (Nue propriété)', '2024-07-09 09:33:40'),
+       ('Fall of the House of Usher, The (Zánik domu Usheru)', '2024-07-09 09:33:40'),
+       ('Killjoy Goes to Hell', '2024-07-09 09:33:40'),
+       ('Judy Berlin', '2024-07-09 09:33:40');
 
 insert into concert_schedule (`concert_id`, `limit_seat`, `opened_at`)
 values (1, 50, '2024-07-09 09:33:40'),
@@ -178,7 +178,7 @@ values (1, '734488355d85', 'ACTIVE', '2024-07-10 13:20:00', '2024-07-10 13:10:00
        (45, 'a9426d7e1826', 'WAIT', '2024-07-10 13:25:00', '2024-07-10 13:10:00');
 
 insert into reservation (`user_id`, `price`, `payment_status`, `reservation_status`, `reserved_at`) values
-            (1, 1, 'NOT_PAID', 'ACTIVE', '2024-07-10 13:25:00'),
+            (1, 1000, 'NOT_PAID', 'ACTIVE', '2024-07-10 13:25:00'),
             (2, 1, 'NOT_PAID', 'ACTIVE', '2024-07-10 13:25:00'),
             (3, 1, 'NOT_PAID', 'ACTIVE', '2024-07-10 13:25:00'),
             (4, 1, 'NOT_PAID', 'ACTIVE', '2024-07-10 13:25:00'),

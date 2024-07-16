@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  mysql_local:
+    container_name: mysql_local
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: futuremaker019/mysql_local
+    environment:
+      - MYSQL_DATABASE=concert
+      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
