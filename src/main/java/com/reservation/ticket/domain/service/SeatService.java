@@ -35,7 +35,7 @@ public class SeatService {
 
     public void recoverSeatOccupiedStatus(List<Long> cancelledReservationIds) {
         List<Seat> occupiedSeats = seatRepository.findAllByReservationIdIn(cancelledReservationIds);
-        occupiedSeats.forEach(seat -> seat.releaseOccupiedSeat());
+        occupiedSeats.forEach(Seat::releaseOccupiedSeat);
     }
 
     public List<SeatCommand.Get> selectSeatsByIds(List<Long> seatIds) {

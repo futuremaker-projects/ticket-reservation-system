@@ -25,16 +25,17 @@ public class Seat {
     private Long reservationId;
     private Long concertScheduleId;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Seat seat)) return false;
-        return id != null && id.equals(seat.id);
+    public Seat(Long id, int seatNumber, Long reservationId, Long concertScheduleId, boolean occupied, LocalDateTime occupiedAt) {
+        this.id = id;
+        this.seatNumber = seatNumber;
+        this.reservationId = reservationId;
+        this.concertScheduleId = concertScheduleId;
+        this.occupied = occupied;
+        this.occupiedAt = occupiedAt;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public static Seat of(Long id) {
+        return new Seat(id, 0, null, null, false, null);
     }
 
     public void changeToOccupiedAndSaveReservationId(Long reservationId) {
@@ -47,5 +48,17 @@ public class Seat {
         this.reservationId = null;
         this.occupied = false;
         this.occupiedAt = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Seat seat)) return false;
+        return id != null && id.equals(seat.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
