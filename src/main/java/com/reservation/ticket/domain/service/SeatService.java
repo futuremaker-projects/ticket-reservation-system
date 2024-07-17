@@ -26,7 +26,6 @@ public class SeatService {
 
     /**
      *  예약을 기준으로 좌석이 점유되면 occupied 를 false -> ture 변경 및 점유일을 현재시간으로 등록
-     *
      */
     @Transactional
     public void changeSeatOccupiedStatus(Long reservationId, List<Long> seatIds) {
@@ -34,6 +33,9 @@ public class SeatService {
         seats.forEach(seat -> seat.changeToOccupiedAndSaveReservationId(reservationId));
     }
 
+    /**
+     * 예약 id로 찾은 좌석들을 모두 점유 해제한다.
+     */
     public void recoverSeatOccupiedStatus(List<Long> cancelledReservationIds) {
         List<Seat> occupiedSeats = seatRepository.findAllByReservationIdIn(cancelledReservationIds);
         occupiedSeats.forEach(Seat::releaseOccupiedSeat);
