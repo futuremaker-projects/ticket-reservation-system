@@ -26,6 +26,7 @@ public class SeatService {
 
     /**
      *  예약을 기준으로 좌석이 점유되면 occupied 를 false -> ture 변경 및 점유일을 현재시간으로 등록
+     *
      */
     @Transactional
     public void changeSeatOccupiedStatus(Long reservationId, List<Long> seatIds) {

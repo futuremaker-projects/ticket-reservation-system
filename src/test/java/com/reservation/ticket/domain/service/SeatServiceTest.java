@@ -37,4 +37,23 @@ class SeatServiceTest {
         Assertions.assertThat(seatCommands.size()).isEqualTo(seats.size());
     }
 
+    @DisplayName("예약 id를 이용하여 좌석의 점유상태를 false에서 true로 변경한다. 점유 시간도 등록한다..")
+    @Test
+    public void given_when_then() {
+        // given
+
+
+        // when
+
+        // then
+    }
+
+    /**
+     * 예약한 자리가 이미 점유중이면 예외를 발생한다.
+     */
+
+    /**
+     * 점유된 자리를 예약된 자리의 시간이 만료됬을때 점유해제 시킨다.
+     */
+
 }

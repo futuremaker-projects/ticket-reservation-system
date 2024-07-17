@@ -1,5 +1,7 @@
 package com.reservation.ticket.domain.entity;
 
+import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -39,6 +41,9 @@ public class Seat {
     }
 
     public void changeToOccupiedAndSaveReservationId(Long reservationId) {
+        if (this.reservationId != null) {
+            throw new ApplicationException(ErrorCode.CONFLICT, "Seat already occupied : %d".formatted(this.id));
+        }
         this.reservationId = reservationId;
         this.occupied = true;
         this.occupiedAt = LocalDateTime.now();
