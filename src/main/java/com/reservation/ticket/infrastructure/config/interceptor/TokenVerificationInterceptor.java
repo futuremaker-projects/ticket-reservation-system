@@ -24,9 +24,7 @@ public class TokenVerificationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         Queue queue = queueService.getQueueByToken(token);
-        if (queue.getQueueStatus() != QueueStatus.ACTIVE) {
-            throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token status is not Active : %s".formatted(queue.getQueueStatus()));
-        }
+        queue.verifyQueueStatus();
         return true;
     }
 
