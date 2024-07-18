@@ -115,7 +115,7 @@ public class Queue {
 
     public void verifyQueueStatus() {
         if (!(this.queueStatus == QueueStatus.ACTIVE)) {
-            throw new ApplicationException(ErrorCode.UNAUTHORIZED);
+            throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token status is not Active : %s".formatted(this.queueStatus));
         }
     }
 }
