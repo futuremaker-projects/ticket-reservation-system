@@ -20,4 +20,10 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
         return userAccountJpaRepository.findById(id).orElseThrow(
                 () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND, "user not found: id - %d".formatted(id)));
     }
+
+    @Override
+    public UserAccount findByToken(String token) {
+        return userAccountJpaRepository.findByToken(token).orElseThrow(
+                () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND, "user not found"));
+    }
 }

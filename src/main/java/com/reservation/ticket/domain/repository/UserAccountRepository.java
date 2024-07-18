@@ -8,4 +8,5 @@ public interface UserAccountRepository {
 
     UserAccount findById(Long id);
 
+    UserAccount findByToken(String token);
 }

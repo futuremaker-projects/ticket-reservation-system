@@ -15,4 +15,7 @@ public class UserAccountService {
         return userAccountRepository.findById(userId);
     }
 
+    public UserAccount getUserAccountByToken(String token) {
+        return userAccountRepository.findByToken(token);
+    }
 }
