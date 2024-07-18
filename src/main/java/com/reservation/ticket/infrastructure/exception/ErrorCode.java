@@ -8,17 +8,17 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
-    CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CONTENT_NOT_FOUND"),
-    CONFLICT(HttpStatus.CONFLICT, "CONFLICT"),
+    CONTENT_NOT_FOUND(HttpStatus.OK, "CONTENT_NOT_FOUND"),
+    CONFLICT(HttpStatus.OK, "CONFLICT"),
 
-    USER_EXISTED(HttpStatus.CONFLICT, "USER_EXISTED"),
+    USER_EXISTED(HttpStatus.OK, "USER_EXISTED"),
 
     // queue
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED"),
+    UNAUTHORIZED(HttpStatus.OK, "UNAUTHORIZED"),
 
     // point
-    NOT_ENOUGH_POINT(HttpStatus.NOT_ACCEPTABLE, "NOT_ENOUGH_POINT"),
-    INVALID_POINT(HttpStatus.NOT_ACCEPTABLE, "INVALID_POINT"),
+    NOT_ENOUGH_POINT(HttpStatus.OK, "NOT_ENOUGH_POINT"),
+    INVALID_POINT(HttpStatus.OK, "INVALID_POINT"),
 
     ;
 
