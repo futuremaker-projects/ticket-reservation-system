@@ -26,9 +26,9 @@ public class ReservationCommand {
     /**
      * usecase 에서 사용
      */
-    public record Create(Long concertScheduleId, List<Long> seatIds, Long userId, int price) {
-        public static Create of(Long concertScheduleId, List<Long> seatIds, Long userId, int price) {
-            return new Create(concertScheduleId, seatIds, userId, price);
+    public record Create(Long concertScheduleId, List<Long> seatIds, int price) {
+        public static Create of(Long concertScheduleId, List<Long> seatIds, int price) {
+            return new Create(concertScheduleId, seatIds, price);
         }
     }
 }

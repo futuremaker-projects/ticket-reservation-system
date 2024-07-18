@@ -1,12 +1,18 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.application.usecase.ReservationUsecase;
+import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.enums.PaymentStatus;
+import com.reservation.ticket.domain.enums.ReservationStatus;
 import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleDto;
+import com.reservation.ticket.interfaces.controller.dto.reservation.ReservationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,7 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -22,34 +30,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class ReservationControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired ObjectMapper objectMapper;
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper objectMapper;
 
-    @DisplayName("")
+    @MockBean
+    ReservationUsecase reservationUsecase;
+
+    @DisplayName("콘서트 스케줄 id와 자리 id를 받아 예약 생성한다.")
     @Test
     void given_when_then() throws Exception {
         // given
-        List<LocalDateTime> concertDateList = List.of(
-                LocalDateTime.of(2022, 5, 10, 2, 10),
-                LocalDateTime.of(2022, 5, 20, 2, 10),
-                LocalDateTime.of(2022, 5, 25, 2, 10)
-        );
+        Long concertScheduleId = 1L;
+        List<Long> seatIds = List.of(1L, 2L, 3L);
+        int price = 1000;
+        String token = "734488355d85";
+        ReservationDto.Request request = ReservationDto.Request.of(concertScheduleId, seatIds, price);
+
+        Long reservationId = 1L;
+        ReservationCommand.Get reservationCommand =
+                ReservationCommand.Get.of(reservationId, price, PaymentStatus.NOT_PAID, ReservationStatus.ACTIVE, LocalDateTime.now());
+
+        given(reservationUsecase.makeReservation(request.toCreate(), token)).willReturn(reservationCommand);
 
         // when
-        mockMvc.perform(get("/reservation/concert-schedule/{concertScheduleId}/available-date")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(content().bytes(objectMapper.writeValueAsBytes(selectConcertScheduleResponseDtoList())));
+        mockMvc.perform(post("/api/reservation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(request))
+                )
+                .andDo(print());
 
         // then
+        then(reservationUsecase).should().makeReservation(request.toCreate(), token);
     }
 
-    public static List<ConcertScheduleDto.Response> selectConcertScheduleResponseDtoList() {
-        return List.of(
-                ConcertScheduleDto.Response.of(
-                        1L, 50, LocalDateTime.of(2022, 5, 10, 2, 10)),
-                ConcertScheduleDto.Response.of(
-                        2L, 50, LocalDateTime.of(2022, 5, 20, 2, 10))
-        );
-    }
 }

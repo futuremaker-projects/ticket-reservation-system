@@ -44,7 +44,7 @@ class ReservationServiceTest {
         given(reservationRepository.save(any(Reservation.class))).willReturn(reservation);
 
         // when
-        ReservationCommand.Get savedReservation = sut.save(price, userId);
+        ReservationCommand.Get savedReservation = sut.save(price, userAccount);
 
         // then
         assertThat(savedReservation.price()).isEqualTo(reservation.getPrice());
