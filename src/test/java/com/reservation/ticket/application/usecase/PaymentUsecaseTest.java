@@ -2,6 +2,7 @@ package com.reservation.ticket.application.usecase;
 
 import com.reservation.ticket.domain.command.QueueCommand;
 import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.service.*;
@@ -43,14 +44,15 @@ class PaymentUsecaseTest {
         // given
         Long reservationId = 1L;
         Long userId = 1L;
+        String token = "734488355d85";
 
         // when
-        sut.makePaymentForReservationDone(reservationId, userId);
+        sut.makePayment(reservationId, token);
 
         // then
         // 대기열의 상태값이 `ACTIVE` -> `EXPIRED` 변경확인
-        QueueCommand.Get queue = queueService.getQueueCommandByUserId(userId);
-        assertThat(queue.status()).isEqualTo(QueueStatus.EXPIRED);
+        Queue queue = queueService.getQueueByToken(token);
+        assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
 
         // 예약 상태값 `NOT_PAID` -> `PAID` 변경확인
         ReservationCommand.Get reservation = reservationService.getReservationById(reservationId);

@@ -1,6 +1,5 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.Reservation;
 import com.reservation.ticket.domain.entity.UserAccount;
 import com.reservation.ticket.domain.service.*;
@@ -19,13 +18,12 @@ public class PaymentUsecase {
     private final PointService pointService;
 
     @Transactional
-    public void makePaymentForReservationDone(Long reservationId, Long userId) {
-        UserAccount userAccount = userAccountService.getUserAccountById(userId);
-
+    public void makePayment(Long reservationId, String token) {
         // 대기열 토큰 검증 및 만료
-        queueService.expireQueueAfterValidation(userAccount.getToken());
+        queueService.expireQueue(token);
         // 예약의 결제 상태값을 PAID로 변경
         Reservation reservation = reservationService.changePaymentStatusAsPaid(reservationId);
+        UserAccount userAccount = userAccountService.getUserAccountByToken(token);
         // 포인트 차감 -> 잔액부족이면 예외처리
         pointService.usePoint(reservation.getPrice(), userAccount);
         // 결재 생성
