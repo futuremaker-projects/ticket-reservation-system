@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.tuple;
  *  콘서트 스케줄 통합 테스트
  */
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ConcertScheduleUsecaseTest {
 
     @Autowired
@@ -40,9 +42,9 @@ class ConcertScheduleUsecaseTest {
         assertThat(concertSchedules)
                 .extracting("openedAt")
                 .containsExactlyInAnyOrder(
-                        tuple(LocalDateTime.of(2024, 7, 9, 9, 33, 40)),
-                        tuple(LocalDateTime.of(2024, 7, 9, 12, 54, 40)),
-                        tuple(LocalDateTime.of(2024, 7, 9, 18, 6, 50))
+                        LocalDateTime.of(2024, 7, 9, 9, 33, 40),
+                        LocalDateTime.of(2024, 7, 9, 12, 54, 40),
+                        LocalDateTime.of(2024, 7, 9, 18, 6, 50)
                 );
     }
 

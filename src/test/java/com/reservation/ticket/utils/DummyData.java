@@ -1,4 +1,4 @@
-package com.reservation.ticket.dummy;
+package com.reservation.ticket.utils;
 
 import java.util.UUID;
 

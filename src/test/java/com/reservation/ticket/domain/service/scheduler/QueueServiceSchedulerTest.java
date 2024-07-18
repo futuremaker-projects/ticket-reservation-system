@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -18,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Import({ScheduledConfig.class})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class QueueServiceSchedulerTest {
 
-    @Autowired
-    private QueueService queueService;
+    @Autowired QueueService queueService;
 
     /**
      * 토큰 만료 - 만료시간이 경과하여 만료 (스케줄러 테스트)

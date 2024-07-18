@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 예약 통합 테스트
  */
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ReservationUsecaseTest {
 
     @Autowired
@@ -63,7 +65,6 @@ class ReservationUsecaseTest {
         List<Long> seats = List.of(1L, 2L, 5L, 8L);
         Long userId = 1L;
         ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seats, userId, price);
-
 
         // when
         ReservationCommand.Get reservation = reservationUsecase.makeReservation(create);
