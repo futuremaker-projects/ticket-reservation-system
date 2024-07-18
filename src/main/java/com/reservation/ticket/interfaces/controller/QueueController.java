@@ -22,7 +22,7 @@ public class QueueController {
     private final QueueService queueService;
 
     /**
-     * 대기열 생성
+     * 사용자의 정보를 이용하여 최초 대기열 데이터 생성한다.
      */
     @PostMapping("/token")
     public ResponseEntity<QueueDto.Response> createToken(@RequestBody QueueDto.Request request) {
