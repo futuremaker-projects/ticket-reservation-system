@@ -86,6 +86,10 @@ public class QueueService {
         return queueRepository.findByToken(userAccount.getToken());
     }
 
+    public Queue getQueueByToken(String token) {
+        return queueRepository.findByToken(token);
+    }
+
     /**
      *  스케줄러 작업
      *   - ACTIVE 상태인 대기열을 검색하여 만료시간을 현재시간과 비교하여 5분이 초과했다면 EXPIRED 로 상태를 변경
