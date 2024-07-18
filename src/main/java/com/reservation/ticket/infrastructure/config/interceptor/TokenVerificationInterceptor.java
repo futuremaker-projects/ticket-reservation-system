@@ -23,6 +23,11 @@ public class TokenVerificationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (token == null) {
+            // throw 시 500 에러남
+//             throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token is required");
+            return false;
+        }
         Queue queue = queueService.getQueueByToken(token);
         queue.verifyQueueStatus();
         return true;
