@@ -67,6 +67,7 @@ class QueueServiceTest {
     /**
      * 토큰 검색
      */
+    @DisplayName("토큰을 이용하여 대기열을 검색한다.")
     @Test
     void givenToken_whenRequestingQueue_thenReturnQueue() {
         // given
@@ -77,6 +78,12 @@ class QueueServiceTest {
 
         Long queueId = 21L;
         Queue queue = Queue.of(queueId, userAccount, token, QueueStatus.ACTIVE);
+
+        /**
+         *   TODO : 토큰으로 대기열을 검색할 수 있도록 변경필요
+         *          토큰은 request header 나 쿠키에 들어있어야 함
+          */
+
         given(queueRepository.findQueueByUserId(userId)).willReturn(queue);
 
         // when
@@ -94,7 +101,7 @@ class QueueServiceTest {
     /**
      * 토큰 만료 - 직접만료 -> 구매가 끝남       // 테스트하는 목적이 부정확함 -> 테스트하면 당연히 통과되야되는 구조
      */
-    @DisplayName("")
+    @DisplayName("구매가 끝난 사용자의 대기열 토큰을 만료시킨다.")
     @Test
     void givenUserId_whenSearchingQueue_thenExpiredQueueStatus() {
         // given
