@@ -27,9 +27,9 @@ public class ConcertScheduleService {
     /**
      * 콘서트 스케줄 id로 스케줄 단건조회
      */
-    public ConcertScheduleCommand.Get getConcertScheduleById(Long concertScheduleId) {
+    public ConcertSchedule getConcertScheduleById(Long concertScheduleId) {
         ConcertSchedule concertSchedule = concertScheduleRepository.findById(concertScheduleId);
-        return ConcertScheduleCommand.Get.from(concertSchedule);
+        return concertSchedule;
     }
 
     /**

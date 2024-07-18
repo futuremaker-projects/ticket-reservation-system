@@ -1,6 +1,7 @@
 package com.reservation.ticket.application.usecase;
 
 import com.reservation.ticket.domain.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.command.SeatCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,16 +54,16 @@ class ConcertScheduleUsecaseTest {
     void givenUserIdAndConcertScheduleId_whenRequestingSeats_thenReturnConcertInfoAndSeats() {
         // given
         // 토큰 검증을 위한 userId
-        Long userId = 1L;
+        String token = "734488355d85";
         Long concertId = 1L;
 
         // when
-        ConcertScheduleCommand.GetForSeats getForSeats = concertScheduleUsecase.selectSeatsByConcertScheduleId(userId, concertId);
+        List<SeatCommand.Get> seats = concertScheduleUsecase.selectSeatsByConcertScheduleId(concertId, token);
 
         // then
         int availableSeats = 50;
-        assertThat(getForSeats.seats()).isNotEmpty();
-        assertThat(getForSeats.seats().size()).isEqualTo(availableSeats);
+        assertThat(seats).isNotEmpty();
+        assertThat(seats.size()).isEqualTo(availableSeats);
     }
 
 }
