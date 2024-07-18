@@ -163,7 +163,7 @@ class QueueServiceTest {
         given(queueRepository.findByToken(token)).willReturn(queue);
 
         // when
-        sut.expireQueueAfterValidation(token);
+        sut.expireQueue(token);
 
         // then
         assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);

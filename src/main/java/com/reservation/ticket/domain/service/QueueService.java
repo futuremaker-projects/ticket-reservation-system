@@ -75,7 +75,7 @@ public class QueueService {
      *   - 대기열 토큰 유효성 검증
      *   - 대기열 만료
      */
-    public void expireQueueAfterValidation(String token) {
+    public void expireQueue(String token) {
         Queue queue = queueRepository.findByToken(token);
         queue.verifyQueueStatus();
         queue.changeStatus(QueueStatus.EXPIRED);
