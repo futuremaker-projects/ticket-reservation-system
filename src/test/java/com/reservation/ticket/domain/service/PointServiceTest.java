@@ -93,14 +93,15 @@ class PointServiceTest {
         // given
         Long userId = 1L;
         int chargeablePoint = 1000;
+        String token = "734488355d85";
         PointCommand.Update update = PointCommand.Update.of(userId, chargeablePoint);
 
         int userPoint = 100;
-        UserAccount userAccount = UserAccount.of(userId, "noah", DummyData.generateToken(), userPoint);
-        given(userAccountRepository.findById(userId)).willReturn(userAccount);
+        UserAccount userAccount = UserAccount.of(userId, "noah", token, userPoint);
+        given(userAccountRepository.findByToken(token)).willReturn(userAccount);
 
         // when
-        sut.chargePoint(update);
+        sut.chargePoint(chargeablePoint, token);
 
         // then
         assertThat(userAccount.getPoint()).isEqualTo(chargeablePoint + userPoint);
@@ -114,10 +115,10 @@ class PointServiceTest {
         // given
         Long userId = 1L;
         int chargeablePoint = 0;
-        PointCommand.Update update = PointCommand.Update.of(userId, chargeablePoint);
+        String token = "734488355d85";
 
         // when
-        Throwable t = catchThrowable(() -> sut.chargePoint(update));
+        Throwable t = catchThrowable(() -> sut.chargePoint(chargeablePoint, token));
 
         // then
         assertThat(t)
@@ -131,12 +132,11 @@ class PointServiceTest {
     @Test
     void 충전할_포인트가_0이하면_예외를_발생한다() {
         // given
-        Long userId = 1L;
         int chargeablePoint = -100;
-        PointCommand.Update update = PointCommand.Update.of(userId, chargeablePoint);
+        String token = "734488355d85";
 
         // when
-        Throwable t = catchThrowable(() -> sut.chargePoint(update));
+        Throwable t = catchThrowable(() -> sut.chargePoint(chargeablePoint, token));
 
         // then
         assertThat(t)
@@ -152,11 +152,13 @@ class PointServiceTest {
         // given
         Long userId = 1L;
         int userPoint = 100;
-        UserAccount userAccount = UserAccount.of(userId, "noah", DummyData.generateToken(), userPoint);
+        String token = "734488355d85";
+
+        UserAccount userAccount = UserAccount.of(userId, "noah", token, userPoint);
         given(userAccountRepository.findById(userId)).willReturn(userAccount);
 
         // when
-        PointCommand.Get point = sut.getPoint(userId);
+        PointCommand.Get point = sut.getPoint(token);
 
         // then
         assertThat(point).isNotNull();

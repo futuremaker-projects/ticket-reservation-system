@@ -7,11 +7,15 @@ public class PointDto {
         public static Response of(int point) {
             return new Response(point);
         }
+
+        public static Response from(PointCommand.Get point) {
+            return Response.of(point.point());
+        }
     }
 
-    public record Request(Long userId, int point) {
-        public PointCommand.Update toPointCommandUpdate() {
-            return PointCommand.Update.of(userId, point);
-        };
+    public record Request(int point) {
+        public static Request of(int point) {
+            return new Request(point);
+        }
     }
 }
