@@ -29,12 +29,12 @@ class ConcertScheduleUsecaseTest {
     void given_when_then() {
         // given
         // 토큰 검증을 위한 userId
-        Long userId = 1L;
+        String token = "734488355d85";
         Long concertId = 1L;
 
         // when
         List<ConcertScheduleCommand.Get> concertSchedules =
-                concertScheduleUsecase.selectConcertSchedulesByConcertId(userId, concertId);
+                concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token);
 
         // then
         assertThat(concertSchedules).isNotEmpty();

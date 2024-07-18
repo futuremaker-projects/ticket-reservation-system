@@ -31,6 +31,7 @@ public class ConcertScheduleController {
     public ResponseEntity<List<ConcertScheduleDto.Response>> getAllConcertSchedules(
             @PathVariable Long concertId, HttpServletRequest request
     ) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         List<ConcertScheduleCommand.Get> concertSchedules =
                 concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token);
         List<ConcertScheduleDto.Response> concertSchedulesResponse =
