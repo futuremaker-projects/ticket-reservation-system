@@ -15,25 +15,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenVerificationInterceptor)
-                .addPathPatterns(
+                .addPathPatterns(       // 토큰검증이 필요한 URI
                         "/api/concertSchedules/**", "/api/payment/**",
                         "/api/queue/**", "/api/reservation/**"
                 )
-                .excludePathPatterns(
+                .excludePathPatterns(   // swagger는 ignore
                         "/swagger-ui/**", "/v3/api-docs/**", "/error"
                 );
-
-//        registry.addInterceptor(new LogInterceptor())
-//                .order(1)
-//                .addPathPatterns("/**")
-//        .excludePathPatterns("/css/**", "/*.ico", "/error");
-//        registry.addInterceptor(new LoginCheckInterceptor())
-//                .order(2)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns(
-//                        "/", "/members/add", "/login", "/logout",
-//                        "/css/**", "/*.ico", "/error"
-//                );
-
     }
 }
