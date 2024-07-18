@@ -7,8 +7,6 @@ import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 @RequiredArgsConstructor
 public class UserAccountRepositoryImpl implements UserAccountRepository {

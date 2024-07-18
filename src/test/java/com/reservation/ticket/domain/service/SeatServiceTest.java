@@ -4,7 +4,6 @@ import com.reservation.ticket.domain.command.SeatCommand;
 import com.reservation.ticket.domain.entity.Seat;
 import com.reservation.ticket.domain.repository.SeatRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

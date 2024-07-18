@@ -8,7 +8,6 @@ import com.reservation.ticket.domain.repository.PointHistoryRepository;
 import com.reservation.ticket.domain.repository.UserAccountRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import com.reservation.ticket.infrastructure.exception.ErrorCode;
-import com.reservation.ticket.interfaces.controller.dto.point.PointDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
