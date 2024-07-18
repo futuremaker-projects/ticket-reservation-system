@@ -1,8 +1,13 @@
 package com.reservation.ticket.infrastructure.config;
 
+import com.reservation.ticket.infrastructure.config.filter.LogFilter;
 import com.reservation.ticket.infrastructure.config.interceptor.TokenVerificationInterceptor;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,5 +27,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(   // swagger는 ignore
                         "/swagger-ui/**", "/v3/api-docs/**", "/error"
                 );
+    }
+
+    @Bean
+    public FilterRegistrationBean logFilter() {
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(new LogFilter());
+        filterRegistrationBean.addUrlPatterns("/*");
+        return filterRegistrationBean;
     }
 }
