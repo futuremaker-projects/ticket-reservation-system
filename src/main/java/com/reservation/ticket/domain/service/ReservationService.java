@@ -29,7 +29,6 @@ public class ReservationService {
         return ReservationCommand.Get.from(reservationRepository.findById(reservationId));
     }
 
-    @Transactional
     public ReservationCommand.Get save(int price, UserAccount userAccount) {
         Reservation reservation = Reservation.of(userAccount, price);
         return ReservationCommand.Get.from(reservationRepository.save(reservation));

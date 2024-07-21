@@ -155,7 +155,7 @@ class PointServiceTest {
         String token = "734488355d85";
 
         UserAccount userAccount = UserAccount.of(userId, "noah", token, userPoint);
-        given(userAccountRepository.findById(userId)).willReturn(userAccount);
+        given(userAccountRepository.findByToken(token)).willReturn(userAccount);
 
         // when
         PointCommand.Get point = sut.getPoint(token);
