@@ -2,6 +2,7 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.domain.command.QueueCommand;
+import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.service.QueueService;
 import com.reservation.ticket.interfaces.controller.dto.queue.QueueDto;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -40,8 +43,14 @@ class QueueControllerTest {
     @Test
     void given_when_then() throws Exception {
         // given
-        Long userId = 1L;
         String token = "734488355d85";
+        Long queueId = 1L;
+        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queue);
+
+        Long userId = 1L;
+        QueueDto.Request request = QueueDto.Request.of(userId);
+
         QueueCommand.Get queueCommand = QueueCommand.Get.of(1L, token, QueueStatus.WAIT,
                 LocalDateTime.of(2022, 5, 20, 2, 10),
                 LocalDateTime.of(2022, 5, 20, 2, 10));
@@ -50,7 +59,11 @@ class QueueControllerTest {
         QueueDto.Response response = QueueDto.Response.from(queueCommand);
 
         // when
-        mockMvc.perform(post("/queue/token"))
+        mockMvc.perform(post("/api/queue/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .header(HttpHeaders.AUTHORIZATION, token)
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(objectMapper.writeValueAsBytes(response)));

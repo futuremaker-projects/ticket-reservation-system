@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.domain.command.ConcertCommand;
 import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.PaymentStatus;
+import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
 import com.reservation.ticket.domain.service.ConcertService;
 import com.reservation.ticket.domain.service.QueueService;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,15 +46,21 @@ class ReservationControllerTest {
 
     @MockBean
     ReservationUsecase reservationUsecase;
+    @MockBean
+    QueueService queueService;
 
     @DisplayName("콘서트 스케줄 id와 자리 id를 받아 예약 생성한다.")
     @Test
     void given_when_then() throws Exception {
         // given
+        String token = "734488355d85";
+        Long queueId = 1L;
+        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queue);
+
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(1L, 2L, 3L);
         int price = 1000;
-        String token = "734488355d85";
         ReservationDto.Request request = ReservationDto.Request.of(concertScheduleId, seatIds, price);
 
         Long reservationId = 1L;
@@ -64,6 +73,7 @@ class ReservationControllerTest {
         mockMvc.perform(post("/api/reservation")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(request))
+                        .header(HttpHeaders.AUTHORIZATION, token)
                 )
                 .andDo(print());
 

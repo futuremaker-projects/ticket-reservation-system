@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 
 public class QueueDto {
     public record Request(Long userId) {
-
+        public static Request of(Long userId) {
+            return new Request(userId);
+        }
     }
 
     public record Response(Long id,
