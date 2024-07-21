@@ -2,7 +2,7 @@ package com.reservation.ticket.domain.command;
 
 import com.reservation.ticket.domain.entity.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.interfaces.controller.dto.queue.QueueDto;
+import com.reservation.ticket.interfaces.controller.dto.QueueDto;
 
 import java.time.LocalDateTime;
 

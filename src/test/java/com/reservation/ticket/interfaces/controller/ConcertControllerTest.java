@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.domain.command.ConcertCommand;
 import com.reservation.ticket.domain.service.ConcertService;
 import com.reservation.ticket.domain.service.QueueService;
-import com.reservation.ticket.interfaces.controller.dto.concert.ConcertDto;
+import com.reservation.ticket.interfaces.controller.dto.ConcertDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

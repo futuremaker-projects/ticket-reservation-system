@@ -1,4 +1,4 @@
-package com.reservation.ticket.interfaces.controller.dto.point;
+package com.reservation.ticket.interfaces.controller.dto;
 
 import com.reservation.ticket.domain.command.PointCommand;
 

@@ -1,4 +1,4 @@
-package com.reservation.ticket.interfaces.controller.dto.concert;
+package com.reservation.ticket.interfaces.controller.dto;
 
 import com.reservation.ticket.domain.command.ConcertCommand;
 

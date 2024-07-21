@@ -39,7 +39,6 @@ public class QueueService {
                 .toList();
     }
 
-    @Transactional
     public void renewQueueExpirationDate(String token) {
         Queue queue = queueRepository.findByToken(token);
         queue.extendShouldExpiredAt();

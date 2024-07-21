@@ -1,4 +1,4 @@
-package com.reservation.ticket.interfaces.controller.dto.queue;
+package com.reservation.ticket.interfaces.controller.dto;
 
 import com.reservation.ticket.domain.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
