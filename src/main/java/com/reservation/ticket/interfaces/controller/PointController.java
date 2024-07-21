@@ -22,8 +22,7 @@ public class PointController {
     @GetMapping
     public ResponseEntity<PointDto.Response> getPoint(HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        PointCommand.Get point = pointService.getPoint(token);
-        PointDto.Response response = PointDto.Response.from(point);
+        PointDto.Response response = PointDto.Response.from(pointService.getPoint(token));
         return ResponseEntity.ok().body(response);
     }
 

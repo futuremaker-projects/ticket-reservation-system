@@ -1,5 +1,7 @@
 package com.reservation.ticket.infrastructure.config;
 
+import com.reservation.ticket.infrastructure.config.filter.LogFilter;
+import com.reservation.ticket.infrastructure.config.interceptor.TokenVerificationInterceptor;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -10,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
     private final TokenVerificationInterceptor tokenVerificationInterceptor;
 

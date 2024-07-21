@@ -39,35 +39,10 @@ public class QueueService {
                 .toList();
     }
 
-    public QueueCommand.Get getQueueCommandByUserId(Long userId) {
-        Queue queue = getQueueByUserId(userId);
-        return QueueCommand.Get.from(queue);
-    }
-
-    @Transactional
-    public void expireQueueByChangingStatus(Long userId) {
-        Queue queue = getQueueByUserId(userId);
-        queue.changeStatus(QueueStatus.EXPIRED);
-    }
-
-    public QueueCommand.Get verifyQueueByUserId(Long userId) {
-        Queue queue = getQueueByUserId(userId);
-        // ACTIVE 가 아니면 예외발생
-        queue.verifyQueueStatus();
-        return QueueCommand.Get.from(queue);
-    }
-
     @Transactional
     public void renewQueueExpirationDate(String token) {
         Queue queue = queueRepository.findByToken(token);
         queue.extendShouldExpiredAt();
-    }
-
-    public QueueCommand.Get renewExpirationDate(Long userId) {
-        Queue queue = getQueueByUserId(userId);
-        queue.verifyQueueStatus();
-        queue.extendShouldExpiredAt();
-        return QueueCommand.Get.from(queue);
     }
 
     /**
@@ -79,11 +54,6 @@ public class QueueService {
         Queue queue = queueRepository.findByToken(token);
         queue.verifyQueueStatus();
         queue.changeStatus(QueueStatus.EXPIRED);
-    }
-
-    private Queue getQueueByUserId(Long userId) {
-        UserAccount userAccount = userAccountRepository.findById(userId);
-        return queueRepository.findByToken(userAccount.getToken());
     }
 
     public Queue getQueueByToken(String token) {
