@@ -5,8 +5,6 @@ import com.reservation.ticket.domain.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.service.QueueService;
 import com.reservation.ticket.interfaces.controller.dto.queue.QueueDto;
-import com.reservation.ticket.interfaces.controller.dto.queue.QueueResponse;
-import com.reservation.ticket.interfaces.controller.dto.queue.TokenStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,10 +28,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class QueueControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired ObjectMapper objectMapper;
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper objectMapper;
 
-    @MockBean QueueService queueService;
+    @MockBean
+    QueueService queueService;
 
     @DisplayName("사용자의 정보를 이용하여 최초 대기열 데이터 생성한다.")
     @Test

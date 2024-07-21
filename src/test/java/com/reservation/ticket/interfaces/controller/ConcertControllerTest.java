@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,11 +29,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 class ConcertControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired ObjectMapper objectMapper;
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper objectMapper;
 
-    @MockBean ConcertService concertService;
-    @MockBean QueueService queueService;
+    @MockBean
+    ConcertService concertService;
+    @MockBean
+    QueueService queueService;
 
     @DisplayName("콘서트 일정 목록을 조회한다.")
     @Test
@@ -48,7 +53,7 @@ class ConcertControllerTest {
 
         // when
         mockMvc.perform(get("/api/concerts")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().bytes(objectMapper.writeValueAsBytes(responses)));
@@ -58,3 +63,4 @@ class ConcertControllerTest {
     }
 
 }
+

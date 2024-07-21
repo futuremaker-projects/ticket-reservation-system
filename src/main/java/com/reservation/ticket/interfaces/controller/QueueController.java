@@ -3,16 +3,12 @@ package com.reservation.ticket.interfaces.controller;
 import com.reservation.ticket.domain.command.QueueCommand;
 import com.reservation.ticket.domain.service.QueueService;
 import com.reservation.ticket.interfaces.controller.dto.queue.QueueDto;
-import com.reservation.ticket.interfaces.controller.dto.queue.TokenStatus;
-import com.reservation.ticket.interfaces.controller.dto.queue.QueueResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/queue")
@@ -31,3 +27,4 @@ public class QueueController {
     }
 
 }
+

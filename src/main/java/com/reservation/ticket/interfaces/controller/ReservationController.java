@@ -3,7 +3,6 @@ package com.reservation.ticket.interfaces.controller;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.interfaces.controller.dto.reservation.ReservationDto;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -33,3 +32,4 @@ public class ReservationController {
     }
 
 }
+

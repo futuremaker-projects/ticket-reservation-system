@@ -2,10 +2,13 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
+import com.reservation.ticket.domain.command.ConcertCommand;
 import com.reservation.ticket.domain.command.ReservationCommand;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.interfaces.controller.dto.concertSchedule.ConcertScheduleDto;
+import com.reservation.ticket.domain.service.ConcertService;
+import com.reservation.ticket.domain.service.QueueService;
+import com.reservation.ticket.interfaces.controller.dto.concert.ConcertDto;
 import com.reservation.ticket.interfaces.controller.dto.reservation.ReservationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,11 +23,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.BDDMockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReservationController.class)
 @ExtendWith(SpringExtension.class)
