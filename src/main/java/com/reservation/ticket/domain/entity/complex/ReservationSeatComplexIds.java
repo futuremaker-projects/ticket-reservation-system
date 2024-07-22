@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Embeddable
 @Getter
-@ToString(of = {"concertScheduleId", "seatId"})
+@ToString(of = {"concertScheduleId", "seatId", "reservationId"})
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReservationSeatComplexIds implements Serializable {
@@ -21,18 +21,22 @@ public class ReservationSeatComplexIds implements Serializable {
     private Long concertScheduleId;
     @Column(name = "seat_id")
     private Long seatId;
+    @Column(name = "reservation_id")
+    private Long reservationId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
         if (!(o instanceof ReservationSeatComplexIds ids)) return false;
-        return Objects.equals(concertScheduleId, ids.concertScheduleId) && Objects.equals(seatId, ids.seatId);
+        return Objects.equals(concertScheduleId, ids.concertScheduleId)
+                && Objects.equals(seatId, ids.seatId)
+                && Objects.equals(reservationId, ids.reservationId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(concertScheduleId, seatId);
+        return Objects.hash(concertScheduleId, seatId, reservationId);
     }
 
 

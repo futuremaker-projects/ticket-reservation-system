@@ -8,6 +8,6 @@ public interface ReservationSeatRepository {
 
     ReservationSeat save(ReservationSeat reservationSeat);
 
-    List<ReservationSeat> findAllByReservationIdIn(List<Long> reservationIds);
+    List<ReservationSeat> findAllByIdReservationIdIn(List<Long> reservationIds);
 
 }

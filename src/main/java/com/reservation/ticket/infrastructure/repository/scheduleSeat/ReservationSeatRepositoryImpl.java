@@ -21,7 +21,7 @@ public class ReservationSeatRepositoryImpl implements ReservationSeatRepository 
     }
 
     @Override
-    public List<ReservationSeat> findAllByReservationIdIn(List<Long> reservationIds) {
-        return reservationSeatJpaRepository.findAllByReservationIdIn(reservationIds);
+    public List<ReservationSeat> findAllByIdReservationIdIn(List<Long> reservationIds) {
+        return reservationSeatJpaRepository.findAllByIdReservationIdIn(reservationIds);
     }
 }

@@ -17,7 +17,8 @@ public class ReservationSeatService {
     public void save(Long reservationId, Long concertScheduleId, List<Long> seatIds) {
         seatIds.forEach(seatId -> {
             ReservationSeat reservationSeat = ReservationSeat.of(
-                    new ReservationSeatComplexIds(concertScheduleId, seatId), reservationId);
+                    new ReservationSeatComplexIds(concertScheduleId, seatId, reservationId));
+
             reservationSeatRepository.save(reservationSeat);
         });
     }

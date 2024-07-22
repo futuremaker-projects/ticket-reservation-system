@@ -20,7 +20,7 @@ class ReservationSeatRepositoryImplTest {
         List<Long> list = List.of(1L, 2L);
 
         // when
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.findAllByReservationIdIn(list);
+        List<ReservationSeat> reservationSeats = reservationSeatRepository.findAllByIdReservationIdIn(list);
 
         // then
         for (ReservationSeat reservationSeat : reservationSeats) {

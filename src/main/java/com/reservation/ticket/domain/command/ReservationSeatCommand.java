@@ -7,7 +7,7 @@ public class ReservationSeatCommand {
 
     public record Create(Long reservationId, Long concertScheduleId, Long seatId) {
         public ReservationSeat to() {
-            return ReservationSeat.of(new ReservationSeatComplexIds(concertScheduleId, seatId), reservationId);
+            return ReservationSeat.of(new ReservationSeatComplexIds(concertScheduleId, seatId, reservationId));
         }
 
         public Create of(Long reservationId, Long concertScheduleId, Long seatId) {
@@ -24,7 +24,7 @@ public class ReservationSeatCommand {
             return Get.of(
                     reservationSeat.getId().getConcertScheduleId(),
                     reservationSeat.getId().getSeatId(),
-                    reservationSeat.getReservationId()
+                    reservationSeat.getId().getReservationId()
             );
         }
     }
