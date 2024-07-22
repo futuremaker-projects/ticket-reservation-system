@@ -86,9 +86,9 @@ class ConcertScheduleControllerTest {
 
         Long concertScheduleId = 1L;
         List<SeatCommand.Get> commandSeats = List.of(
-                SeatCommand.Get.of(1L, 1L, null, null, false),
-                SeatCommand.Get.of(2L, 1L, null, null, false),
-                SeatCommand.Get.of(3L, 1L, null, null, false)
+                SeatCommand.Get.of(1L, 1L, null, false),
+                SeatCommand.Get.of(2L, 1L, null, false),
+                SeatCommand.Get.of(3L, 1L, null, false)
         );
         List<SeatDto.Response> responses = commandSeats.stream().map(SeatDto.Response::from).toList();
         given(concertScheduleUsecase.selectSeatsByConcertScheduleId(concertScheduleId, token)).willReturn(commandSeats);

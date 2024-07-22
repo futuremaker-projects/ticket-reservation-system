@@ -32,14 +32,6 @@ public class SeatService {
         seats.forEach(seat -> seat.changeToOccupiedAndSaveReservationId(reservationId));
     }
 
-    /**
-     * 예약 id로 찾은 좌석들을 모두 점유 해제한다.
-     */
-    public void recoverSeatOccupiedStatus(List<Long> cancelledReservationIds) {
-        List<Seat> occupiedSeats = seatRepository.findAllByReservationIdIn(cancelledReservationIds);
-        occupiedSeats.forEach(Seat::releaseOccupiedSeat);
-    }
-
     public List<SeatCommand.Get> selectSeatsByIds(List<Long> seatIds) {
         return seatRepository.findByIdIn(seatIds).stream()
                 .map(SeatCommand.Get::from)

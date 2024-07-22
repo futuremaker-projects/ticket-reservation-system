@@ -69,7 +69,7 @@ class SeatServiceTest {
         Long reservationId = 1L;
         Long reservedId = 2L;
         List<Long> seatIds = List.of(1L, 2L, 3L, 4L);
-        List<Seat> seats = List.of(Seat.of(1L), Seat.of(2L, reservedId), Seat.of(3L), Seat.of(4L));
+        List<Seat> seats = List.of(Seat.of(1L), Seat.of(2L), Seat.of(3L), Seat.of(4L));
         given(seatRepository.findByIdIn(seatIds)).willReturn(seats);
 
         // when
@@ -80,37 +80,6 @@ class SeatServiceTest {
         assertThat(t)
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("Seat already occupied : %d".formatted(reservedId));
-    }
-
-    @DisplayName("점유된 자리를 예약된 자리의 시간이 만료됬을때 점유해제 시킨다.")
-    @Test
-    void 점유된_자리를_예약된_자리의_시간이_만료됬을때_점유해제_시킨다() {
-        // given
-        List<Long> reservationIds = List.of(1L, 2L, 3L, 4L);
-        Long reservationId = 1L;
-        Long concertScheduleId = 1L;
-        boolean occupied = true;
-        LocalDateTime occupiedAt = LocalDateTime.now();
-        List<Seat> seats = List.of(
-                Seat.of(1L, reservationId, concertScheduleId, occupied, occupiedAt),
-                Seat.of(2L, reservationId, concertScheduleId, occupied, occupiedAt),
-                Seat.of(3L, reservationId, concertScheduleId, occupied, occupiedAt),
-                Seat.of(4L, reservationId, concertScheduleId, occupied, occupiedAt)
-        );
-        given(seatRepository.findAllByReservationIdIn(reservationIds)).willReturn(seats);
-
-        // when
-        sut.recoverSeatOccupiedStatus(reservationIds);
-
-        // then
-        assertThat(seats)
-                .extracting("id", "reservationId", "occupied", "occupiedAt")
-                .containsExactlyInAnyOrder(
-                        tuple(1L, null, false, null),
-                        tuple(2L, null, false, null),
-                        tuple(3L, null, false, null),
-                        tuple(4L, null, false, null)
-                );
     }
 
 }
