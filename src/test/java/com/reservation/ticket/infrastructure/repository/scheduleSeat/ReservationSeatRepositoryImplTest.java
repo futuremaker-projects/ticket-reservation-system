@@ -17,15 +17,18 @@ class ReservationSeatRepositoryImplTest {
     @Test
     void given_when_then() {
         // given
-        List<Long> list = List.of(1L, 2L);
+        Long concertScheduleId = 1L;
+        List<Long> list = List.of(1L);
 
         // when
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.findAllByIdReservationIdIn(list);
+        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectReservedSeats(concertScheduleId, list);
 
         // then
         for (ReservationSeat reservationSeat : reservationSeats) {
             System.out.println("scheduleSeat.getId().getConcertScheduleId() = " + reservationSeat.getId().getConcertScheduleId());
             System.out.println("scheduleSeat.getId().getSeatId() = " + reservationSeat.getId().getSeatId());
+            System.out.println("reservationSeat.getId().getReservationId() = " + reservationSeat.getId().getReservationId());
+            System.out.println();
         }
     }
 

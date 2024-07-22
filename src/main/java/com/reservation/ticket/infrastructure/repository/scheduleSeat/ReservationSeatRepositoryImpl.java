@@ -21,7 +21,12 @@ public class ReservationSeatRepositoryImpl implements ReservationSeatRepository 
     }
 
     @Override
-    public List<ReservationSeat> findAllByIdReservationIdIn(List<Long> reservationIds) {
-        return reservationSeatJpaRepository.findAllByIdReservationIdIn(reservationIds);
+    public List<ReservationSeat> selectReservedSeatsByConcertScheduleId(Long concertScheduleId) {
+        return reservationSeatJpaRepository.findAllByIdConcertScheduleId(concertScheduleId);
+    }
+
+    @Override
+    public List<ReservationSeat> selectReservedSeats(Long concertScheduleId, List<Long> reservationIds) {
+        return reservationSeatJpaRepository.findAllByIdConcertScheduleIdAndIdReservationIdIn(concertScheduleId, reservationIds);
     }
 }

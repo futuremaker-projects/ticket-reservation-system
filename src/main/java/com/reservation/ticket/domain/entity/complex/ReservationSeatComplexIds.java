@@ -38,8 +38,4 @@ public class ReservationSeatComplexIds implements Serializable {
     public int hashCode() {
         return Objects.hash(concertScheduleId, seatId, reservationId);
     }
-
-
-
-
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ReservationSeatJpaRepository extends JpaRepository<ReservationSeat, ReservationSeatComplexIds> {
 
-    List<ReservationSeat> findAllByIdReservationIdIn(List<Long> reservationIds);
+    List<ReservationSeat> findAllByIdConcertScheduleIdAndIdReservationIdIn(Long concertScheduleId, List<Long> reservationIds);
+    List<ReservationSeat> findAllByIdConcertScheduleId(Long concertScheduleId);
 
 }
