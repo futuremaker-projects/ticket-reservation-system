@@ -8,7 +8,9 @@ public interface ReservationSeatRepository {
 
     ReservationSeat save(ReservationSeat reservationSeat);
 
-    List<ReservationSeat> selectReservedSeatsByConcertScheduleId(Long concertScheduleId);
+    List<ReservationSeat> selectAllSeats();
+    List<ReservationSeat> selectSeatsByScheduleId(Long concertScheduleId);
     List<ReservationSeat> selectReservedSeats(Long concertScheduleId, List<Long> reservationIds);
 
+    void removeSeats(List<Long> reservationIds);
 }

@@ -4,7 +4,6 @@ import com.reservation.ticket.domain.entity.complex.ReservationSeat;
 import com.reservation.ticket.domain.entity.complex.ReservationSeatComplexIds;
 import com.reservation.ticket.domain.repository.ReservationSeatRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ class ReservationSeatServiceTest {
         Long concertScheduleId = 1L;
         Long seatId = 2L;
         List<Long> seatIds = List.of(1L, 2L, 3L);
-        given(reservationSeatRepository.selectReservedSeatsByConcertScheduleId(concertScheduleId)).willReturn(reservationSeats());
+        given(reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
 
         ReservationSeat reservationSeat = ReservationSeat.of(new ReservationSeatComplexIds(concertScheduleId, seatId, reservationId));
         given(reservationSeatRepository.save(any(ReservationSeat.class))).willReturn(reservationSeat);
@@ -44,7 +43,7 @@ class ReservationSeatServiceTest {
         sut.save(reservationId, concertScheduleId, seatIds);
 
         // then
-        then(reservationSeatRepository).should().selectReservedSeatsByConcertScheduleId(concertScheduleId);
+        then(reservationSeatRepository).should().selectSeatsByScheduleId(concertScheduleId);
         then(reservationSeatRepository).should(times(3)).save(any(ReservationSeat.class));
     }
 
@@ -58,7 +57,7 @@ class ReservationSeatServiceTest {
         // given
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(5L, 6L, 7L);
-        given(reservationSeatRepository.selectReservedSeatsByConcertScheduleId(concertScheduleId)).willReturn(reservationSeats());
+        given(reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
 
         List<Long> reservedSeatIds = reservationSeats().stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
         ArrayList<Long> copiedSeatIds = new ArrayList<>(seatIds);

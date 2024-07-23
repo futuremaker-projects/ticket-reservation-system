@@ -28,7 +28,6 @@ public class ReservationUsecase {
         ReservationCommand.Get reservation = reservationService.save(create.price(), userAccount);
         // 예약시 선택한 자리를 점유한다.
         reservationSeatService.save(reservation.id(), create.concertScheduleId(), create.seatIds());
-//        seatService.changeSeatOccupiedStatus(reservation.id(), create.seatIds());
 
         queueService.renewQueueExpirationDate(token);
         return reservation;
@@ -44,9 +43,8 @@ public class ReservationUsecase {
         /**
          *  예약으로 선점된 좌석을 다시 원상복구 한다.
          */
+        reservationSeatService.releaseSeats(cancelledReservationIds);
 
-
-//        seatService.recoverSeatOccupiedStatus(cancelledReservationIds);
     }
 }
 

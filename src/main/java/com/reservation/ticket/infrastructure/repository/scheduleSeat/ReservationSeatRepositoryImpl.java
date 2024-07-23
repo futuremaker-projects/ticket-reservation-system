@@ -15,18 +15,28 @@ public class ReservationSeatRepositoryImpl implements ReservationSeatRepository 
     private final ReservationSeatJpaRepository reservationSeatJpaRepository;
 
     @Override
-    @Transactional
     public ReservationSeat save(ReservationSeat reservationSeat) {
         return reservationSeatJpaRepository.save(reservationSeat);
     }
 
     @Override
-    public List<ReservationSeat> selectReservedSeatsByConcertScheduleId(Long concertScheduleId) {
+    public List<ReservationSeat> selectAllSeats() {
+        return reservationSeatJpaRepository.findAll();
+    }
+
+    @Override
+    public List<ReservationSeat> selectSeatsByScheduleId(Long concertScheduleId) {
         return reservationSeatJpaRepository.findAllByIdConcertScheduleId(concertScheduleId);
     }
 
     @Override
     public List<ReservationSeat> selectReservedSeats(Long concertScheduleId, List<Long> reservationIds) {
         return reservationSeatJpaRepository.findAllByIdConcertScheduleIdAndIdReservationIdIn(concertScheduleId, reservationIds);
+    }
+
+    @Override
+    @Transactional
+    public void removeSeats(List<Long> reservationIds) {
+        reservationSeatJpaRepository.deleteByIdReservationIdIn(reservationIds);
     }
 }
