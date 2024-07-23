@@ -18,13 +18,7 @@ public class ReservationSeatService {
     private final ReservationSeatRepository reservationSeatRepository;
 
     public void save(Long reservationId, Long concertScheduleId, List<Long> seatIds) {
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectReservedSeatsByConcertScheduleId(concertScheduleId);
-        List<Long> reservedSeatIds = reservationSeats.stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
-        ArrayList<Long> copiedSeatIds = new ArrayList<>(seatIds);
-        copiedSeatIds.retainAll(reservedSeatIds);       // 이미 예약된 좌석이면 예외처리 한다.
-        if (!copiedSeatIds.isEmpty()) {
-            throw new ApplicationException(ErrorCode.SEAT_ALREADY_OCCUPIED, "seat already occupied : %s".formatted(copiedSeatIds));
-        }
+        checkIfSeatsAvailable(concertScheduleId, seatIds);
 
         seatIds.forEach(seatId -> {
             ReservationSeat reservationSeat = ReservationSeat.of(
@@ -32,6 +26,16 @@ public class ReservationSeatService {
 
             reservationSeatRepository.save(reservationSeat);
         });
+    }
+
+    public void checkIfSeatsAvailable(Long concertScheduleId, List<Long> seatIds) {
+        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectReservedSeatsByConcertScheduleId(concertScheduleId);
+        List<Long> reservedSeatIds = reservationSeats.stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
+        ArrayList<Long> copiedSeatIds = new ArrayList<>(seatIds);
+        copiedSeatIds.retainAll(reservedSeatIds);       // 이미 예약된 좌석이면 예외처리 한다.
+        if (!copiedSeatIds.isEmpty()) {
+            throw new ApplicationException(ErrorCode.SEAT_ALREADY_OCCUPIED, "seat already occupied : %s".formatted(copiedSeatIds));
+        }
     }
 
 }
