@@ -12,9 +12,12 @@ import java.util.List;
 public interface ReservationSeatJpaRepository extends JpaRepository<ReservationSeat, ReservationSeatComplexIds> {
 
     List<ReservationSeat> findAllByIdConcertScheduleIdAndIdReservationIdIn(Long concertScheduleId, List<Long> reservationIds);
-    List<ReservationSeat> findAllByIdConcertScheduleId(Long concertScheduleId);
+
+    @Query("select rs from ReservationSeat rs where rs.id.concertScheduleId = :concertScheduleId")
+    List<ReservationSeat> findReservationSeatsByIdConcertScheduleId(@Param("concertScheduleId") Long concertScheduleId);
 
     @Modifying
     @Query("DELETE FROM ReservationSeat rs WHERE rs.id.reservationId IN :reservationIds")
     void deleteByIdReservationIdIn(@Param("reservationIds") List<Long> reservationIds);
+
 }

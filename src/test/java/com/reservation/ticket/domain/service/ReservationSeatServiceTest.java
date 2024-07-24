@@ -4,6 +4,7 @@ import com.reservation.ticket.domain.entity.complex.ReservationSeat;
 import com.reservation.ticket.domain.entity.complex.ReservationSeatComplexIds;
 import com.reservation.ticket.domain.repository.ReservationSeatRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import jakarta.persistence.LockModeType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,7 @@ class ReservationSeatServiceTest {
         given(reservationSeatRepository.save(any(ReservationSeat.class))).willReturn(reservationSeat);
 
         // when
-        sut.save(reservationId, concertScheduleId, seatIds);
+        sut.save(reservationId, concertScheduleId, seatIds, LockModeType.NONE);
 
         // then
         then(reservationSeatRepository).should().selectSeatsByScheduleId(concertScheduleId);

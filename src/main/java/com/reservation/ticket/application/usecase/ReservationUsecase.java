@@ -2,8 +2,8 @@ package com.reservation.ticket.application.usecase;
 
 import com.reservation.ticket.domain.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.UserAccount;
-import com.reservation.ticket.domain.entity.complex.ReservationSeat;
 import com.reservation.ticket.domain.service.*;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,6 @@ public class ReservationUsecase {
 
     private final ReservationService reservationService;
     private final QueueService queueService;
-    private final SeatService seatService;
     private final UserAccountService userAccountService;
 
     private final ReservationSeatService reservationSeatService;
@@ -27,8 +26,8 @@ public class ReservationUsecase {
         // 예약을 진행한다.
         ReservationCommand.Get reservation = reservationService.save(create.price(), userAccount);
         // 예약시 선택한 자리를 점유한다.
-        reservationSeatService.save(reservation.id(), create.concertScheduleId(), create.seatIds());
-
+        reservationSeatService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.NONE);
+        // 대기열 토큰의 만료일을 연장한다.
         queueService.renewQueueExpirationDate(token);
         return reservation;
     }
@@ -44,7 +43,6 @@ public class ReservationUsecase {
          *  예약으로 선점된 좌석을 다시 원상복구 한다.
          */
         reservationSeatService.releaseSeats(cancelledReservationIds);
-
     }
 }
 
