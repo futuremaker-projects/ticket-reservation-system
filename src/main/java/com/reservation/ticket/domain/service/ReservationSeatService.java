@@ -21,6 +21,7 @@ public class ReservationSeatService {
     public void save(Long reservationId, Long concertScheduleId, List<Long> seatIds, LockModeType lockModeType) {
         switch (lockModeType) {
             case NONE -> checkIfSeatsAvailable(concertScheduleId, seatIds);
+            case PESSIMISTIC_READ -> checkIfSeatsAvailableWithPessimisticLock(concertScheduleId, seatIds);
         }
 
         seatIds.forEach(seatId -> {
@@ -32,6 +33,11 @@ public class ReservationSeatService {
 
     public void checkIfSeatsAvailable(Long concertScheduleId, List<Long> seatIds) {
         List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId);
+        checkSeats(reservationSeats, seatIds);
+    }
+
+    public void checkIfSeatsAvailableWithPessimisticLock(Long concertScheduleId, List<Long> seatIds) {
+        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleIdWithPessimisticLock(concertScheduleId);
         checkSeats(reservationSeats, seatIds);
     }
 

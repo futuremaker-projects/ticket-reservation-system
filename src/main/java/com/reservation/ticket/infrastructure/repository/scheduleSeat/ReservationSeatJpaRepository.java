@@ -2,9 +2,9 @@ package com.reservation.ticket.infrastructure.repository.scheduleSeat;
 
 import com.reservation.ticket.domain.entity.complex.ReservationSeat;
 import com.reservation.ticket.domain.entity.complex.ReservationSeatComplexIds;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.QueryHint;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -15,6 +15,12 @@ public interface ReservationSeatJpaRepository extends JpaRepository<ReservationS
 
     @Query("select rs from ReservationSeat rs where rs.id.concertScheduleId = :concertScheduleId")
     List<ReservationSeat> findReservationSeatsByIdConcertScheduleId(@Param("concertScheduleId") Long concertScheduleId);
+
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    @QueryHints({
+            @QueryHint(name = "jakarta.persistence.lock.timeout", value = "1500")
+    })
+    List<ReservationSeat> findAllByIdConcertScheduleId(Long concertScheduleId);
 
     @Modifying
     @Query("DELETE FROM ReservationSeat rs WHERE rs.id.reservationId IN :reservationIds")

@@ -25,6 +25,11 @@ public class ReservationSeatRepositoryImpl implements ReservationSeatRepository 
     }
 
     @Override
+    public List<ReservationSeat> selectSeatsByScheduleIdWithPessimisticLock(Long concertScheduleId) {
+        return reservationSeatJpaRepository.findAllByIdConcertScheduleId(concertScheduleId);
+    }
+
+    @Override
     public List<ReservationSeat> selectSeatsByScheduleId(Long concertScheduleId) {
         return reservationSeatJpaRepository.findReservationSeatsByIdConcertScheduleId(concertScheduleId);
     }
