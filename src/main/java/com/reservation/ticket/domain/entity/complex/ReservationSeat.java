@@ -3,6 +3,7 @@ package com.reservation.ticket.domain.entity.complex;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Version;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,9 @@ public class ReservationSeat {
     private ReservationSeatComplexIds id;
 
     private LocalDateTime createdAt;
+
+    @Version
+    private Long version;
 
     @PrePersist
     public void createdAt() {

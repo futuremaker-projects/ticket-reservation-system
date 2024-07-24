@@ -17,10 +17,13 @@ public interface ReservationSeatJpaRepository extends JpaRepository<ReservationS
     List<ReservationSeat> findReservationSeatsByIdConcertScheduleId(@Param("concertScheduleId") Long concertScheduleId);
 
     @Lock(LockModeType.PESSIMISTIC_READ)
-    @QueryHints({
-            @QueryHint(name = "jakarta.persistence.lock.timeout", value = "1500")
-    })
-    List<ReservationSeat> findAllByIdConcertScheduleId(Long concertScheduleId);
+    @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = "1500"))
+    @Query("select rs from ReservationSeat rs where rs.id.concertScheduleId = :concertScheduleId")
+    List<ReservationSeat> findAllByIdConcertScheduleIdWithPessimisticLock(Long concertScheduleId);
+
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("select rs from ReservationSeat rs where rs.id.concertScheduleId = :concertScheduleId")
+    List<ReservationSeat> findAllByIdConcertScheduleIdWithOptimisticLock(@Param("concertScheduleId") Long concertScheduleId);
 
     @Modifying
     @Query("DELETE FROM ReservationSeat rs WHERE rs.id.reservationId IN :reservationIds")

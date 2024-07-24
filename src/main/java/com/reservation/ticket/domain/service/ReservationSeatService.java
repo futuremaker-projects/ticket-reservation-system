@@ -22,6 +22,7 @@ public class ReservationSeatService {
         switch (lockModeType) {
             case NONE -> checkIfSeatsAvailable(concertScheduleId, seatIds);
             case PESSIMISTIC_READ -> checkIfSeatsAvailableWithPessimisticLock(concertScheduleId, seatIds);
+            case OPTIMISTIC -> checkIfSeatsAvailableWithOptimisticLock(concertScheduleId, seatIds);
         }
 
         seatIds.forEach(seatId -> {
@@ -38,6 +39,11 @@ public class ReservationSeatService {
 
     public void checkIfSeatsAvailableWithPessimisticLock(Long concertScheduleId, List<Long> seatIds) {
         List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleIdWithPessimisticLock(concertScheduleId);
+        checkSeats(reservationSeats, seatIds);
+    }
+
+    private void checkIfSeatsAvailableWithOptimisticLock(Long concertScheduleId, List<Long> seatIds) {
+        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleIdWithOptimisticLock(concertScheduleId);
         checkSeats(reservationSeats, seatIds);
     }
 

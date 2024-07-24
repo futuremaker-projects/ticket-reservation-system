@@ -10,7 +10,9 @@ public interface ReservationSeatRepository {
 
     List<ReservationSeat> selectAllSeats();
     List<ReservationSeat> selectSeatsByScheduleIdWithPessimisticLock(Long concertScheduleId);
+    List<ReservationSeat> selectSeatsByScheduleIdWithOptimisticLock(Long concertScheduleId);
     List<ReservationSeat> selectSeatsByScheduleId(Long concertScheduleId);
+
     List<ReservationSeat> selectReservedSeats(Long concertScheduleId, List<Long> reservationIds);
 
     void removeSeats(List<Long> reservationIds);
