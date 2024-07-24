@@ -1,4 +1,4 @@
-package com.reservation.ticket.interfaces.controller.dto.response;
+package com.reservation.ticket.interfaces.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -6,10 +6,8 @@ import com.reservation.ticket.domain.entity.UserAccount;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
 import com.reservation.ticket.domain.repository.ReservationRepository;
-import com.reservation.ticket.domain.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +18,6 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final UserAccountRepository userAccountRepository;
 
     /**
      *  예약 id를 이용하여 예약 정보를 가져온다.

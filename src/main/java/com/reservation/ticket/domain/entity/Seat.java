@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Getter
 @Entity
-@ToString(of = {"id", "reservationId", "concertScheduleId", "occupiedAt", "occupied"})
+@ToString(of = {"id", "concertScheduleId", "occupiedAt", "occupied"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Seat {
 
@@ -23,40 +23,29 @@ public class Seat {
     private LocalDateTime occupiedAt;
     private boolean occupied;
 
-    private Long reservationId;
     private Long concertScheduleId;
 
-    public Seat(Long id, Long reservationId, Long concertScheduleId, boolean occupied, LocalDateTime occupiedAt) {
+    public Seat(Long id, Long concertScheduleId, boolean occupied, LocalDateTime occupiedAt) {
         this.id = id;
-        this.reservationId = reservationId;
         this.concertScheduleId = concertScheduleId;
         this.occupied = occupied;
         this.occupiedAt = occupiedAt;
     }
 
     public static Seat of(Long id) {
-        return new Seat(id, null, null, false, null);
+        return new Seat(id, null, false, null);
     }
 
-    public static Seat of(Long id, Long reservationId) {
-        return new Seat(id, reservationId, null, false, null);
-    }
-
-    public static Seat of(Long id, Long reservationId, Long concertScheduleId, boolean occupied, LocalDateTime occupiedAt) {
-        return new Seat(id, reservationId, concertScheduleId, occupied, occupiedAt);
+    public static Seat of(Long id, Long concertScheduleId, boolean occupied, LocalDateTime occupiedAt) {
+        return new Seat(id, concertScheduleId, occupied, occupiedAt);
     }
 
     public void changeToOccupiedAndSaveReservationId(Long reservationId) {
-        if (this.reservationId != null) {
-            throw new ApplicationException(ErrorCode.CONFLICT, "Seat already occupied : %d".formatted(this.reservationId));
-        }
-        this.reservationId = reservationId;
         this.occupied = true;
         this.occupiedAt = LocalDateTime.now();
     }
 
     public void releaseOccupiedSeat() {
-        this.reservationId = null;
         this.occupied = false;
         this.occupiedAt = null;
     }

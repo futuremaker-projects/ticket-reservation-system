@@ -20,6 +20,9 @@ public enum ErrorCode {
     NOT_ENOUGH_POINT(HttpStatus.OK, "NOT_ENOUGH_POINT"),
     INVALID_POINT(HttpStatus.OK, "INVALID_POINT"),
 
+    // seat
+    SEAT_ALREADY_OCCUPIED(HttpStatus.OK, "SEAT_ALREADY_OCCUPIED"),
+
     ;
 
     public final HttpStatus httpStatus;

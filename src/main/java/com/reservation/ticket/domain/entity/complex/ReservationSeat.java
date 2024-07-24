@@ -9,15 +9,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"reservationId", "createdAt"})
+@ToString(of = {"createdAt"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ScheduleSeat {
+public class ReservationSeat {
 
     @EmbeddedId
-    private ScheduleSeatComplexIds id;
+    private ReservationSeatComplexIds id;
 
-    private Long reservationId;
     private LocalDateTime createdAt;
 
     @PrePersist
@@ -25,13 +24,12 @@ public class ScheduleSeat {
         createdAt = LocalDateTime.now();
     }
 
-    public ScheduleSeat(ScheduleSeatComplexIds id, Long reservationId) {
+    public ReservationSeat(ReservationSeatComplexIds id) {
         this.id = id;
-        this.reservationId = reservationId;
     }
 
-    public static ScheduleSeat of(ScheduleSeatComplexIds id, Long reservationId) {
-        return new ScheduleSeat(id, reservationId);
+    public static ReservationSeat of(ReservationSeatComplexIds id) {
+        return new ReservationSeat(id);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.reservation.ticket.interfaces.controller.dto.payment;
+package com.reservation.ticket.interfaces.controller.dto;
 
 public class PaymentDto {
     public record Request(Long reservationId) {
