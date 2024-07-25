@@ -49,7 +49,6 @@ public class PointService {
     /**
      * 포인트 충전 - 포인트가 0이거나 0이하면 예외 발생
      */
-    @Transactional
     public void chargePoint(int point, String token) {
         if (point <= 0) {
             throw new ApplicationException(ErrorCode.INVALID_POINT,
@@ -58,5 +57,6 @@ public class PointService {
         UserAccount userAccount = userAccountRepository.findByToken(token);
         int chargeablePoint = userAccount.getPoint() + point;
         userAccount.savePoint(chargeablePoint);
+        userAccountRepository.save(userAccount);
     }
 }

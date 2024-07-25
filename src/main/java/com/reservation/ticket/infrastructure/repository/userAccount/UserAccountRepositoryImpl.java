@@ -6,6 +6,7 @@ import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     }
 
     @Override
+    @Transactional
     public UserAccount findByToken(String token) {
         return userAccountJpaRepository.findByToken(token).orElseThrow(
                 () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND, "user not found"));
@@ -32,6 +34,7 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     }
 
     @Override
+    @Transactional
     public UserAccount save(UserAccount userAccount) {
         return userAccountJpaRepository.save(userAccount);
     }

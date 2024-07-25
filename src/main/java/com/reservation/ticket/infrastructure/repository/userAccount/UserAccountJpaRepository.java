@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface UserAccountJpaRepository extends JpaRepository<UserAccount, Long> {
 
     @Lock(LockModeType.OPTIMISTIC)
-    Optional<UserAccount> findByToken(String token);
+    @Query("select u from UserAccount u where u.token = :token")
+    Optional<UserAccount> findByToken(@Param("token") String token);
 
     @Query("select u from UserAccount u where u.token = :token")
     Optional<UserAccount> findUserAccount(@Param("token") String token);

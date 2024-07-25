@@ -24,7 +24,7 @@ public class ReservationConcurrencyTest {
     @Autowired
     TicketRepository ticketRepository;
 
-    @DisplayName("락을 적용하지 않고 예약후 좌석을 선점하는 기능 테스트")
+    @DisplayName("락을 적용하지 않고 예약후 좌석선점 기능 테스트")
     @Test
     public void test01() throws InterruptedException {
         // given
@@ -33,7 +33,7 @@ public class ReservationConcurrencyTest {
         int price = 100;
         ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seatIds, price);
 
-        int threadCount = 600;
+        int threadCount = 1000;
         ExecutorService executorService = Executors.newFixedThreadPool(30);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
 
@@ -55,12 +55,6 @@ public class ReservationConcurrencyTest {
 
         // then
         List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
-        /**
-         * 예약과 예약자리 테이블이 서로 맞는지도 확인해야 함
-         *
-         * 예약 7개
-         * 예약자리 - 14개
-         */
 
         /**
          * 총 2개의 좌석이 점유되야 한다.
@@ -68,7 +62,7 @@ public class ReservationConcurrencyTest {
         assertThat(tickets.size()).isEqualTo(2);
     }
 
-    @DisplayName("비관적락 적용후 예약후 좌석점유 기능 테스트")
+    @DisplayName("비관적락 적용후 예약후 좌석선점 기능 테스트")
     @Test
     public void test02() throws InterruptedException {
         // given
@@ -77,7 +71,7 @@ public class ReservationConcurrencyTest {
         int price = 100;
         ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seatIds, price);
 
-        int threadCount = 600;
+        int threadCount = 1000;
         ExecutorService executorService = Executors.newFixedThreadPool(30);
         CountDownLatch countDownLatch = new CountDownLatch(threadCount);
 
