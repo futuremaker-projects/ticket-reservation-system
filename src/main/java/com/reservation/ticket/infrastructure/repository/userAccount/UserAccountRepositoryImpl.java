@@ -24,4 +24,15 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
         return userAccountJpaRepository.findByToken(token).orElseThrow(
                 () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND, "user not found"));
     }
+
+    @Override
+    public UserAccount getUserAccount(String token) {
+        return userAccountJpaRepository.findUserAccount(token).orElseThrow(
+                        () -> new ApplicationException(ErrorCode.CONTENT_NOT_FOUND, "user not found"));
+    }
+
+    @Override
+    public UserAccount save(UserAccount userAccount) {
+        return userAccountJpaRepository.save(userAccount);
+    }
 }

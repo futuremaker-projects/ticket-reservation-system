@@ -1,4 +1,4 @@
-package com.reservation.ticket.application.usecase.concurrency;
+package com.reservation.ticket.concurrency;
 
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.domain.command.ReservationCommand;
