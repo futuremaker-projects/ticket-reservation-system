@@ -2,8 +2,8 @@ package com.reservation.ticket.application.usecase.concurrency;
 
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.entity.complex.ReservationSeat;
-import com.reservation.ticket.domain.repository.ReservationSeatRepository;
+import com.reservation.ticket.domain.entity.complex.Ticket;
+import com.reservation.ticket.domain.repository.TicketRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ReservationConcurrencyTest {
 
     @Autowired ReservationUsecase sut;
-    @Autowired ReservationSeatRepository reservationSeatRepository;
+    @Autowired
+    TicketRepository ticketRepository;
 
     @DisplayName("락을 적용하지 않고 예약후 좌석을 선점하는 기능 테스트")
     @Test
@@ -53,7 +54,7 @@ public class ReservationConcurrencyTest {
         executorService.shutdown();
 
         // then
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId);
+        List<Ticket> tickets = ticketRepository.selectSeatsByScheduleId(concertScheduleId);
         /**
          * 예약과 예약자리 테이블이 서로 맞는지도 확인해야 함
          *
@@ -64,7 +65,7 @@ public class ReservationConcurrencyTest {
         /**
          * 총 2개의 좌석이 점유되야 한다.
          */
-        assertThat(reservationSeats.size()).isEqualTo(2);
+        assertThat(tickets.size()).isEqualTo(2);
     }
 
     @DisplayName("비관적락 적용후 예약후 좌석점유 기능 테스트")
@@ -97,12 +98,12 @@ public class ReservationConcurrencyTest {
         executorService.shutdown();
 
         // then
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId);
+        List<Ticket> tickets = ticketRepository.selectSeatsByScheduleId(concertScheduleId);
 
         /**
          * 총 2개의 좌석이 점유되야 한다.
          */
-        assertThat(reservationSeats.size()).isEqualTo(2);
+        assertThat(tickets.size()).isEqualTo(2);
     }
 
     @DisplayName("낙관적락 적용후 예약후 좌석점유 기능 테스트")
@@ -135,12 +136,12 @@ public class ReservationConcurrencyTest {
         executorService.shutdown();
 
         // then
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId);
+        List<Ticket> tickets = ticketRepository.selectSeatsByScheduleId(concertScheduleId);
 
         /**
          * 총 2개의 좌석이 점유되야 한다.
          */
-        assertThat(reservationSeats.size()).isEqualTo(2);
+        assertThat(tickets.size()).isEqualTo(2);
     }
 
 

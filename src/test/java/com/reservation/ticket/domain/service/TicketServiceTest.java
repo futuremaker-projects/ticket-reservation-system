@@ -1,8 +1,8 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.entity.complex.ReservationSeat;
-import com.reservation.ticket.domain.entity.complex.ReservationSeatComplexIds;
-import com.reservation.ticket.domain.repository.ReservationSeatRepository;
+import com.reservation.ticket.domain.entity.complex.Ticket;
+import com.reservation.ticket.domain.entity.complex.TicketComplexIds;
+import com.reservation.ticket.domain.repository.TicketRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import jakarta.persistence.LockModeType;
 import org.junit.jupiter.api.DisplayName;
@@ -22,10 +22,12 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class ReservationSeatServiceTest {
+class TicketServiceTest {
 
-    @InjectMocks ReservationSeatService sut;
-    @Mock ReservationSeatRepository reservationSeatRepository;
+    @InjectMocks
+    TicketService sut;
+    @Mock
+    TicketRepository ticketRepository;
 
     @DisplayName("선점되지 않은 좌석를 예약시 좌석이 선점된다.")
     @Test
@@ -35,17 +37,17 @@ class ReservationSeatServiceTest {
         Long concertScheduleId = 1L;
         Long seatId = 2L;
         List<Long> seatIds = List.of(1L, 2L, 3L);
-        given(reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
+        given(ticketRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
 
-        ReservationSeat reservationSeat = ReservationSeat.of(new ReservationSeatComplexIds(concertScheduleId, seatId, reservationId));
-        given(reservationSeatRepository.save(any(ReservationSeat.class))).willReturn(reservationSeat);
+        Ticket ticket = Ticket.of(new TicketComplexIds(concertScheduleId, seatId, reservationId));
+        given(ticketRepository.save(any(Ticket.class))).willReturn(ticket);
 
         // when
         sut.save(reservationId, concertScheduleId, seatIds, LockModeType.NONE);
 
         // then
-        then(reservationSeatRepository).should().selectSeatsByScheduleId(concertScheduleId);
-        then(reservationSeatRepository).should(times(3)).save(any(ReservationSeat.class));
+        then(ticketRepository).should().selectSeatsByScheduleId(concertScheduleId);
+        then(ticketRepository).should(times(3)).save(any(Ticket.class));
     }
 
     /**
@@ -58,7 +60,7 @@ class ReservationSeatServiceTest {
         // given
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(5L, 6L, 7L);
-        given(reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
+        given(ticketRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
 
         List<Long> reservedSeatIds = reservationSeats().stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
         ArrayList<Long> copiedSeatIds = new ArrayList<>(seatIds);
@@ -73,12 +75,12 @@ class ReservationSeatServiceTest {
                 .hasMessage("seat already occupied : %s".formatted(copiedSeatIds));
     }
 
-    private List<ReservationSeat> reservationSeats() {
+    private List<Ticket> reservationSeats() {
         return List.of(
-                ReservationSeat.of(new ReservationSeatComplexIds(1L, 4L, 1L)),
-                ReservationSeat.of(new ReservationSeatComplexIds(1L, 5L, 1L)),
-                ReservationSeat.of(new ReservationSeatComplexIds(1L, 6L, 1L)),
-                ReservationSeat.of(new ReservationSeatComplexIds(1L, 7L, 1L))
+                Ticket.of(new TicketComplexIds(1L, 4L, 1L)),
+                Ticket.of(new TicketComplexIds(1L, 5L, 1L)),
+                Ticket.of(new TicketComplexIds(1L, 6L, 1L)),
+                Ticket.of(new TicketComplexIds(1L, 7L, 1L))
         );
     }
 

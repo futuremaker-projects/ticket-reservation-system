@@ -1,7 +1,7 @@
 package com.reservation.ticket.infrastructure.repository.scheduleSeat;
 
-import com.reservation.ticket.domain.entity.complex.ReservationSeat;
-import com.reservation.ticket.domain.repository.ReservationSeatRepository;
+import com.reservation.ticket.domain.entity.complex.Ticket;
+import com.reservation.ticket.domain.repository.TicketRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class ReservationSeatRepositoryImplTest {
+class TicketRepositoryImplTest {
 
     @Autowired
-    ReservationSeatRepository reservationSeatRepository;
+    TicketRepository ticketRepository;
 
     @DisplayName("")
     @Test
@@ -25,7 +25,7 @@ class ReservationSeatRepositoryImplTest {
         List<Long> list = List.of(1L);
 
         // when
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectReservedSeats(concertScheduleId, list);
+        List<Ticket> tickets = ticketRepository.selectReservedSeats(concertScheduleId, list);
 
         // then
 
@@ -39,12 +39,12 @@ class ReservationSeatRepositoryImplTest {
         List<Long> reservationIds = List.of(1L, 3L);
 
         // when
-        reservationSeatRepository.removeSeats(reservationIds);
+        ticketRepository.removeSeats(reservationIds);
 
         // then
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectAllSeats();
+        List<Ticket> tickets = ticketRepository.selectAllSeats();
 
-        assertThat(reservationSeats)
+        assertThat(tickets)
                 .extracting(reservationSeat -> reservationSeat.getId().getSeatId())
                 .containsExactlyInAnyOrder(1L, 2L, 1L);
     }

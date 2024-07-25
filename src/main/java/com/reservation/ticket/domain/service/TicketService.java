@@ -1,8 +1,8 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.entity.complex.ReservationSeat;
-import com.reservation.ticket.domain.entity.complex.ReservationSeatComplexIds;
-import com.reservation.ticket.domain.repository.ReservationSeatRepository;
+import com.reservation.ticket.domain.entity.complex.Ticket;
+import com.reservation.ticket.domain.entity.complex.TicketComplexIds;
+import com.reservation.ticket.domain.repository.TicketRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import jakarta.persistence.LockModeType;
@@ -14,9 +14,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ReservationSeatService {
+public class TicketService {
 
-    private final ReservationSeatRepository reservationSeatRepository;
+    private final TicketRepository ticketRepository;
 
     public void save(Long reservationId, Long concertScheduleId, List<Long> seatIds, LockModeType lockModeType) {
         switch (lockModeType) {
@@ -26,29 +26,29 @@ public class ReservationSeatService {
         }
 
         seatIds.forEach(seatId -> {
-            ReservationSeat reservationSeat = ReservationSeat.of(
-                    new ReservationSeatComplexIds(concertScheduleId, seatId, reservationId));
-            reservationSeatRepository.save(reservationSeat);
+            Ticket ticket = Ticket.of(
+                    new TicketComplexIds(concertScheduleId, seatId, reservationId));
+            ticketRepository.save(ticket);
         });
     }
 
     public void checkIfSeatsAvailable(Long concertScheduleId, List<Long> seatIds) {
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleId(concertScheduleId);
-        checkSeats(reservationSeats, seatIds);
+        List<Ticket> tickets = ticketRepository.selectSeatsByScheduleId(concertScheduleId);
+        checkSeats(tickets, seatIds);
     }
 
     public void checkIfSeatsAvailableWithPessimisticLock(Long concertScheduleId, List<Long> seatIds) {
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleIdWithPessimisticLock(concertScheduleId);
-        checkSeats(reservationSeats, seatIds);
+        List<Ticket> tickets = ticketRepository.selectSeatsByScheduleIdWithPessimisticLock(concertScheduleId);
+        checkSeats(tickets, seatIds);
     }
 
     private void checkIfSeatsAvailableWithOptimisticLock(Long concertScheduleId, List<Long> seatIds) {
-        List<ReservationSeat> reservationSeats = reservationSeatRepository.selectSeatsByScheduleIdWithOptimisticLock(concertScheduleId);
-        checkSeats(reservationSeats, seatIds);
+        List<Ticket> tickets = ticketRepository.selectSeatsByScheduleIdWithOptimisticLock(concertScheduleId);
+        checkSeats(tickets, seatIds);
     }
 
-    public void checkSeats(List<ReservationSeat> reservationSeats, List<Long> seatIds) {
-        List<Long> reservedSeatIds = reservationSeats.stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
+    public void checkSeats(List<Ticket> tickets, List<Long> seatIds) {
+        List<Long> reservedSeatIds = tickets.stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
         ArrayList<Long> copiedSeatIds = new ArrayList<>(seatIds);
         copiedSeatIds.retainAll(reservedSeatIds);       // 이미 예약된 좌석이면 예외처리 한다.
         if (!copiedSeatIds.isEmpty()) {
@@ -57,6 +57,6 @@ public class ReservationSeatService {
     }
 
     public void releaseSeats(List<Long> reservationIds) {
-        reservationSeatRepository.removeSeats(reservationIds);
+        ticketRepository.removeSeats(reservationIds);
     }
 }

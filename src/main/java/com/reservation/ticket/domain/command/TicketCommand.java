@@ -1,13 +1,13 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.complex.ReservationSeat;
-import com.reservation.ticket.domain.entity.complex.ReservationSeatComplexIds;
+import com.reservation.ticket.domain.entity.complex.Ticket;
+import com.reservation.ticket.domain.entity.complex.TicketComplexIds;
 
-public class ReservationSeatCommand {
+public class TicketCommand {
 
     public record Create(Long reservationId, Long concertScheduleId, Long seatId) {
-        public ReservationSeat to() {
-            return ReservationSeat.of(new ReservationSeatComplexIds(concertScheduleId, seatId, reservationId));
+        public Ticket to() {
+            return Ticket.of(new TicketComplexIds(concertScheduleId, seatId, reservationId));
         }
 
         public Create of(Long reservationId, Long concertScheduleId, Long seatId) {
@@ -20,11 +20,11 @@ public class ReservationSeatCommand {
             return new Get(reservationId, concertScheduleId, seatId);
         }
 
-        public static Get from(ReservationSeat reservationSeat) {
+        public static Get from(Ticket ticket) {
             return Get.of(
-                    reservationSeat.getId().getConcertScheduleId(),
-                    reservationSeat.getId().getSeatId(),
-                    reservationSeat.getId().getReservationId()
+                    ticket.getId().getConcertScheduleId(),
+                    ticket.getId().getSeatId(),
+                    ticket.getId().getReservationId()
             );
         }
     }

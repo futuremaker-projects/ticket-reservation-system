@@ -18,7 +18,7 @@ public class ReservationUsecase {
     private final QueueService queueService;
     private final UserAccountService userAccountService;
 
-    private final ReservationSeatService reservationSeatService;
+    private final TicketService ticketService;
 
     @Transactional
     public ReservationCommand.Get makeReservation(ReservationCommand.Create create, String token) {
@@ -26,7 +26,7 @@ public class ReservationUsecase {
         // 예약을 진행한다.
         ReservationCommand.Get reservation = reservationService.save(create.price(), userAccount);
         // 예약시 선택한 자리를 점유한다.
-        reservationSeatService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.NONE);
+        ticketService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.NONE);
         // 대기열 토큰의 만료일을 연장한다.
         queueService.renewQueueExpirationDate(token);
         return reservation;
@@ -38,7 +38,7 @@ public class ReservationUsecase {
         // 예약을 진행한다.
         ReservationCommand.Get reservation = reservationService.save(create.price(), userAccount);
         // 예약시 선택한 자리를 점유한다.
-        reservationSeatService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.PESSIMISTIC_READ);
+        ticketService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.PESSIMISTIC_READ);
         // 대기열 토큰의 만료일을 연장한다.
         queueService.renewQueueExpirationDate(token);
         return reservation;
@@ -50,7 +50,7 @@ public class ReservationUsecase {
         // 예약을 진행한다.
         ReservationCommand.Get reservation = reservationService.save(create.price(), userAccount);
         // 예약시 선택한 자리를 점유한다.
-        reservationSeatService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.OPTIMISTIC);
+        ticketService.save(reservation.id(), create.concertScheduleId(), create.seatIds(), LockModeType.OPTIMISTIC);
         // 대기열 토큰의 만료일을 연장한다.
         queueService.renewQueueExpirationDate(token);
         return reservation;
@@ -66,7 +66,7 @@ public class ReservationUsecase {
         /**
          *  예약으로 선점된 좌석을 다시 원상복구 한다.
          */
-        reservationSeatService.releaseSeats(cancelledReservationIds);
+        ticketService.releaseSeats(cancelledReservationIds);
     }
 }
 

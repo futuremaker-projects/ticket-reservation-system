@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @ToString(of = {"createdAt"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReservationSeat {
+public class Ticket {
 
     @EmbeddedId
-    private ReservationSeatComplexIds id;
+    private TicketComplexIds id;
 
     private LocalDateTime createdAt;
 
@@ -28,12 +28,12 @@ public class ReservationSeat {
         createdAt = LocalDateTime.now();
     }
 
-    public ReservationSeat(ReservationSeatComplexIds id) {
+    public Ticket(TicketComplexIds id) {
         this.id = id;
     }
 
-    public static ReservationSeat of(ReservationSeatComplexIds id) {
-        return new ReservationSeat(id);
+    public static Ticket of(TicketComplexIds id) {
+        return new Ticket(id);
     }
 
 }
