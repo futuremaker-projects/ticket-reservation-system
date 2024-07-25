@@ -10,6 +10,7 @@ import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class PointService {
     /**
      * 포인트 조회
      */
+    @Transactional
     public PointCommand.Get getPoint(String token) {
         UserAccount user = userAccountRepository.findByToken(token);
         return PointCommand.Get.of(user.getPoint());
@@ -55,5 +57,6 @@ public class PointService {
         UserAccount userAccount = userAccountRepository.findByToken(token);
         int chargeablePoint = userAccount.getPoint() + point;
         userAccount.savePoint(chargeablePoint);
+        userAccountRepository.save(userAccount);
     }
 }

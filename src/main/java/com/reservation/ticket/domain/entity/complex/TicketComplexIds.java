@@ -15,7 +15,7 @@ import java.util.Objects;
 @ToString(of = {"concertScheduleId", "seatId", "reservationId"})
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationSeatComplexIds implements Serializable {
+public class TicketComplexIds implements Serializable {
 
     @Column(name = "concert_schedule_id")
     private Long concertScheduleId;
@@ -28,7 +28,7 @@ public class ReservationSeatComplexIds implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (!(o instanceof ReservationSeatComplexIds ids)) return false;
+        if (!(o instanceof TicketComplexIds ids)) return false;
         return Objects.equals(concertScheduleId, ids.concertScheduleId)
                 && Objects.equals(seatId, ids.seatId)
                 && Objects.equals(reservationId, ids.reservationId);

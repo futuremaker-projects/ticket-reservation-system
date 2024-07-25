@@ -5,11 +5,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Objects;
 
 @Getter
 @Entity
+@DynamicUpdate
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserAccount {
@@ -22,6 +24,9 @@ public class UserAccount {
 
     private String token;
     private int point;
+
+    @Version
+    private Long version;
 
     public UserAccount(Long id) {
         this.id = id;
