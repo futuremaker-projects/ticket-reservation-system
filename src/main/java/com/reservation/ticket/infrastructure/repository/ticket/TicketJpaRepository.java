@@ -11,22 +11,14 @@ import java.util.List;
 
 public interface TicketJpaRepository extends JpaRepository<Ticket, TicketComplexIds> {
 
-    List<Ticket> findAllByIdConcertScheduleIdAndIdReservationIdIn(Long concertScheduleId, List<Long> reservationIds);
-
-    @Query("select rs from Ticket rs where rs.id.concertScheduleId = :concertScheduleId")
-    List<Ticket> findReservationSeatsByIdConcertScheduleId(@Param("concertScheduleId") Long concertScheduleId);
+    List<Ticket> findAllByIdConcertScheduleIdAndIdSeatIdIn(Long concertScheduleId, List<Long> seats);
 
     @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = "1500"))
-    @Query("select rs from Ticket rs where rs.id.concertScheduleId = :concertScheduleId")
-    List<Ticket> findAllByIdConcertScheduleIdWithPessimisticLock(Long concertScheduleId);
-
-    @Lock(LockModeType.OPTIMISTIC)
-    @Query("select rs from Ticket rs where rs.id.concertScheduleId = :concertScheduleId")
-    List<Ticket> findAllByIdConcertScheduleIdWithOptimisticLock(@Param("concertScheduleId") Long concertScheduleId);
+    @Query("select t from Ticket t where t.id.concertScheduleId = :concertScheduleId and t.id.seatId in :seats")
+    List<Ticket> findAllWithPessimisticLock(@Param("concertScheduleId") Long concertScheduleId, @Param("seats") List<Long> seats);
 
     @Modifying
     @Query("DELETE FROM Ticket rs WHERE rs.id.reservationId IN :reservationIds")
     void deleteByIdReservationIdIn(@Param("reservationIds") List<Long> reservationIds);
-
 }

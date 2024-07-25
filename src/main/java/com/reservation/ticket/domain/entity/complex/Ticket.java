@@ -1,16 +1,13 @@
 package com.reservation.ticket.domain.entity.complex;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"createdAt"})
+@ToString(of = {"createdAt", "id"})
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ticket {
@@ -19,9 +16,6 @@ public class Ticket {
     private TicketComplexIds id;
 
     private LocalDateTime createdAt;
-
-    @Version
-    private Long version;
 
     @PrePersist
     public void createdAt() {

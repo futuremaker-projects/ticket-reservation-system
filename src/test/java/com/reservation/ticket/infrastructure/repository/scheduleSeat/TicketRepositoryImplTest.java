@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,21 +17,6 @@ class TicketRepositoryImplTest {
 
     @Autowired
     TicketRepository ticketRepository;
-
-    @DisplayName("")
-    @Test
-    void given_when_then() {
-        // given
-        Long concertScheduleId = 1L;
-        List<Long> list = List.of(1L);
-
-        // when
-        List<Ticket> tickets = ticketRepository.selectReservedSeats(concertScheduleId, list);
-
-        // then
-
-
-    }
 
     @DisplayName("예약된 점유 좌석을 삭제한다.")
     @Test
@@ -47,6 +33,26 @@ class TicketRepositoryImplTest {
         assertThat(tickets)
                 .extracting(reservationSeat -> reservationSeat.getId().getSeatId())
                 .containsExactlyInAnyOrder(1L, 2L, 1L);
+    }
+
+    @DisplayName("복수의 좌석 id를 이용하여 티켓 목록을 검색한다.")
+    @Test
+    public void select_test() {
+        // given
+        Long concertScheduleId = 1L;
+        List<Long> seats = List.of(1L, 2L);
+
+        // when
+        List<Ticket> selected = ticketRepository.getSeats(concertScheduleId, seats);
+
+        // then
+        assertThat(selected.size()).isEqualTo(2);
+        assertThat(selected)
+                .extracting("createdAt")
+                .containsExactlyInAnyOrder(
+                        LocalDateTime.of(2024, 7, 9, 7,38, 29),
+                        LocalDateTime.of(2024, 7, 10, 7,38, 29)
+                );
     }
 
 }

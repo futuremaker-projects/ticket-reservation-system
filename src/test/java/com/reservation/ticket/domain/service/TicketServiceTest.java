@@ -15,7 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -37,7 +38,7 @@ class TicketServiceTest {
         Long concertScheduleId = 1L;
         Long seatId = 2L;
         List<Long> seatIds = List.of(1L, 2L, 3L);
-        given(ticketRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
+        given(ticketRepository.getSeats(concertScheduleId, seatIds)).willReturn(reservationSeats());
 
         Ticket ticket = Ticket.of(new TicketComplexIds(concertScheduleId, seatId, reservationId));
         given(ticketRepository.save(any(Ticket.class))).willReturn(ticket);
@@ -46,7 +47,7 @@ class TicketServiceTest {
         sut.save(reservationId, concertScheduleId, seatIds, LockModeType.NONE);
 
         // then
-        then(ticketRepository).should().selectSeatsByScheduleId(concertScheduleId);
+        then(ticketRepository).should().getSeats(concertScheduleId, seatIds);
         then(ticketRepository).should(times(3)).save(any(Ticket.class));
     }
 
@@ -60,7 +61,7 @@ class TicketServiceTest {
         // given
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(5L, 6L, 7L);
-        given(ticketRepository.selectSeatsByScheduleId(concertScheduleId)).willReturn(reservationSeats());
+        given(ticketRepository.getSeats(concertScheduleId, seatIds)).willReturn(reservationSeats());
 
         List<Long> reservedSeatIds = reservationSeats().stream().map(reservationSeat -> reservationSeat.getId().getSeatId()).toList();
         ArrayList<Long> copiedSeatIds = new ArrayList<>(seatIds);

@@ -25,23 +25,13 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public List<Ticket> selectSeatsByScheduleIdWithPessimisticLock(Long concertScheduleId) {
-        return ticketJpaRepository.findAllByIdConcertScheduleIdWithPessimisticLock(concertScheduleId);
+    public List<Ticket> getSeats(Long concertScheduleId, List<Long> seats) {
+        return ticketJpaRepository.findAllByIdConcertScheduleIdAndIdSeatIdIn(concertScheduleId, seats);
     }
 
     @Override
-    public List<Ticket> selectSeatsByScheduleIdWithOptimisticLock(Long concertScheduleId) {
-        return ticketJpaRepository.findAllByIdConcertScheduleIdWithOptimisticLock(concertScheduleId);
-    }
-
-    @Override
-    public List<Ticket> selectSeatsByScheduleId(Long concertScheduleId) {
-        return ticketJpaRepository.findReservationSeatsByIdConcertScheduleId(concertScheduleId);
-    }
-
-    @Override
-    public List<Ticket> selectReservedSeats(Long concertScheduleId, List<Long> reservationIds) {
-        return ticketJpaRepository.findAllByIdConcertScheduleIdAndIdReservationIdIn(concertScheduleId, reservationIds);
+    public List<Ticket> getSeatsWithPessimisticLock(Long concertScheduleId, List<Long> seats) {
+        return ticketJpaRepository.findAllWithPessimisticLock(concertScheduleId, seats);
     }
 
     @Override

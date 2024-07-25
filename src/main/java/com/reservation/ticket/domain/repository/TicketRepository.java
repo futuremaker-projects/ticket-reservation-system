@@ -9,11 +9,9 @@ public interface TicketRepository {
     Ticket save(Ticket ticket);
 
     List<Ticket> selectAllSeats();
-    List<Ticket> selectSeatsByScheduleIdWithPessimisticLock(Long concertScheduleId);
-    List<Ticket> selectSeatsByScheduleIdWithOptimisticLock(Long concertScheduleId);
-    List<Ticket> selectSeatsByScheduleId(Long concertScheduleId);
 
-    List<Ticket> selectReservedSeats(Long concertScheduleId, List<Long> reservationIds);
+    List<Ticket> getSeats(Long concertScheduleId, List<Long> seats);
+    List<Ticket> getSeatsWithPessimisticLock(Long concertScheduleId, List<Long> seats);
 
     void removeSeats(List<Long> reservationIds);
 }
