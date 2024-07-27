@@ -38,6 +38,16 @@ public class ReservationUsecase {
         return reservation;
     }
 
+    @Transactional
+    public ReservationCommand.Get makeReservationWithDistributedLock(ReservationCommand.Create create, String token) {
+        UserAccount userAccount = userAccountService.getUserAccountByToken(token);
+        // 예약을 진행한다. (비관적락)
+        ReservationCommand.Get reservation = reservationService.reserve(create, userAccount, LockType.PESSIMISTIC_READ);
+        // 대기열 토큰의 만료일을 연장한다.
+        queueService.renewQueueExpirationDate(token);
+        return reservation;
+    }
+
     public void cancelReservation() {
         reservationService.cancelReservation();
     }

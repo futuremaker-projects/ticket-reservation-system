@@ -103,6 +103,44 @@ public class ReservationConcurrencyTest {
         assertThat(tickets.size()).isEqualTo(2);
     }
 
+    @DisplayName("분산락 적용후 예약후 좌석선점 기능 테스트")
+    @Test
+    void test03() throws InterruptedException {
+        // given
+        Long concertScheduleId = 4L;
+        List<Long> seatIds = List.of(4L, 5L);
+        int price = 100;
+        ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seatIds, price);
+
+        int threadCount = 1000;
+        ExecutorService executorService = Executors.newFixedThreadPool(30);
+        CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            // 선택한 좌석을 서로 차지하도록 해야 한다.
+            executorService.submit(() -> {
+                try {
+                    sut.makeReservationWithDistributedLock(create, getToken());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+        executorService.shutdown();
+
+        // then
+        List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
+
+        /**
+         * 총 2개의 좌석이 점유되야 한다.
+         */
+        assertThat(tickets.size()).isEqualTo(2);
+    }
+
     /**
      * 메서드 호출시 토큰을 랜덤하게 뽑아오도록 만든다.
      */

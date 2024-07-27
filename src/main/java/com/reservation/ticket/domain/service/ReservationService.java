@@ -13,6 +13,7 @@ import com.reservation.ticket.domain.repository.TicketRepository;
 import com.reservation.ticket.infrastructure.exception.ApplicationException;
 import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,7 @@ public class ReservationService {
         switch (lockType) {
             case NONE -> checkIfSeatsAvailable(create.concertScheduleId(), create.seatIds());
             case PESSIMISTIC_READ -> checkIfSeatsAvailableWithPessimisticLock(create.concertScheduleId(), create.seatIds());
+            case DISTRIBUTED_LOCK -> checkIfSeatsAvailableWithDistributedLock(create.concertScheduleId(), create.seatIds());
         }
 
         // 예약시 선택한 자리를 점유한다.
@@ -78,6 +81,28 @@ public class ReservationService {
     public void checkSeats(List<Ticket> tickets) {
         if (!tickets.isEmpty()) {
             throw new ApplicationException(ErrorCode.SEAT_ALREADY_OCCUPIED, "seat already occupied : %s".formatted(tickets));
+        }
+    }
+
+    private void checkIfSeatsAvailableWithDistributedLock(Long concertScheduleId, List<Long> seatIds) {
+        List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
+        checkSeatsWithRedisLock(tickets);
+    }
+
+    public void checkSeatsWithRedisLock(List<Ticket> tickets) {
+        RLock lock = redissonClient.getLock("reservation");
+        try {
+            boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
+            if (!available) {
+                throw new RuntimeException("Lock을 획득하지 못했습니다.");
+            }
+            if (!tickets.isEmpty()) {
+                throw new ApplicationException(ErrorCode.SEAT_ALREADY_OCCUPIED, "seat already occupied : %s".formatted(tickets));
+            }
+        } catch(InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            lock.unlock();
         }
     }
 
