@@ -57,8 +57,8 @@ List<Ticket> findAllWithPessimisticLock(@Param("concertScheduleId") Long concert
 | 사용자수          | 테스트 시간체크     |
 |---------------|--------------|
 | 1000명 동시성 테스트 | 1sec 277 ms  |
-| 1000명 동시성 테스트 | 7sec 133 ms  |
-| 1000명 동시성 테스트 | 15sec 797 ms |
+| 10000명 동시성 테스트 | 7sec 133 ms  |
+| 20000명 동시성 테스트 | 15sec 797 ms |
 
 <img src="image/reservation/10.png" width="380">
 <br>
