@@ -29,7 +29,7 @@ class ReservationUsecaseTest {
         // given
         int price = 4000;
         Long concertScheduleId = 1L;
-        List<Long> seats = List.of(1L, 2L, 5L, 8L);
+        List<Long> seats = List.of(5L, 8L);
         String token = "734488355d85";
         ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seats, price);
 
