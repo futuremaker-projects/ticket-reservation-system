@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.Random;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationConcurrencyTest {
 
     @Autowired
@@ -82,6 +84,44 @@ public class ReservationConcurrencyTest {
             executorService.submit(() -> {
                 try {
                     sut.makeReservationWithPessimisticLock(create, getToken());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+        executorService.shutdown();
+
+        // then
+        List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
+
+        /**
+         * 총 2개의 좌석이 점유되야 한다.
+         */
+        assertThat(tickets.size()).isEqualTo(2);
+    }
+
+    @DisplayName("분산락 적용후 예약후 좌석선점 기능 테스트")
+    @Test
+    void test03() throws InterruptedException {
+        // given
+        Long concertScheduleId = 4L;
+        List<Long> seatIds = List.of(4L, 5L);
+        int price = 100;
+        ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seatIds, price);
+
+        int threadCount = 1000;
+        ExecutorService executorService = Executors.newFixedThreadPool(30);
+        CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+
+        // when
+        for (int i = 0; i < threadCount; i++) {
+            // 선택한 좌석을 서로 차지하도록 해야 한다.
+            executorService.submit(() -> {
+                try {
+                    sut.makeReservationWithDistributedLock(create, getToken());
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {

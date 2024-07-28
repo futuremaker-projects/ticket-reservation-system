@@ -1,6 +1,7 @@
 package com.reservation.ticket.concurrency;
 
 import com.reservation.ticket.domain.repository.UserAccountRepository;
+import com.reservation.ticket.domain.service.PointService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

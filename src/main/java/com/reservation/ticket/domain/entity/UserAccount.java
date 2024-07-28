@@ -1,5 +1,7 @@
 package com.reservation.ticket.domain.entity;
 
+import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.infrastructure.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -64,7 +66,11 @@ public class UserAccount {
         this.token = token;
     }
 
-    public void savePoint(int point) {
+    public void chargePoint(int point) {
+        if (point <= 0) {
+            throw new ApplicationException(ErrorCode.INVALID_POINT,
+                    "Invalid chargeable point : %d".formatted(point));
+        }
         this.point = point;
     }
 

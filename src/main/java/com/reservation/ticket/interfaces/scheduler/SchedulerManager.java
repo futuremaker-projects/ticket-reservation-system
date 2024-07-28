@@ -2,7 +2,6 @@ package com.reservation.ticket.interfaces.scheduler;
 
 import com.reservation.ticket.application.usecase.QueueUsecase;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.domain.service.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ public class SchedulerManager {
 
     @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
     public void activateReservationScheduler() {
-        reservationUsecase.releaseOccupiedSeats();
+        reservationUsecase.cancelReservation();
     }
 
 }

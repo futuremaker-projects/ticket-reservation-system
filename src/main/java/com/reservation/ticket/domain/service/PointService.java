@@ -39,7 +39,7 @@ public class PointService {
 
         // 사용자 포인트 삭감
         int restPoint = userAccount.getPoint() - reservedPrice;
-        userAccount.savePoint(restPoint);
+        userAccount.chargePoint(restPoint);
 
         // 포인트 히스토리 저장
         PointHistory pointHistory = PointHistory.of(userAccount, TransactionType.USE, restPoint);
@@ -50,13 +50,9 @@ public class PointService {
      * 포인트 충전 - 포인트가 0이거나 0이하면 예외 발생
      */
     public void chargePoint(int point, String token) {
-        if (point <= 0) {
-            throw new ApplicationException(ErrorCode.INVALID_POINT,
-                    "Invalid chargeable point : %d".formatted(point));
-        }
         UserAccount userAccount = userAccountRepository.findByToken(token);
         int chargeablePoint = userAccount.getPoint() + point;
-        userAccount.savePoint(chargeablePoint);
+        userAccount.chargePoint(chargeablePoint);
         userAccountRepository.save(userAccount);
     }
 }
