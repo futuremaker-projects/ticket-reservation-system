@@ -1,7 +1,7 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.Concert;
-import com.reservation.ticket.domain.entity.ConcertSchedule;
+import com.reservation.ticket.domain.entity.concert.Concert;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -4,7 +4,7 @@ import com.reservation.ticket.domain.command.ReservationCommand;
 import com.reservation.ticket.domain.command.SeatCommand;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.service.SeatService;
+import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

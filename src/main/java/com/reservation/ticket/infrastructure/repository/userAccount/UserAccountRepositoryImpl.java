@@ -1,9 +1,9 @@
 package com.reservation.ticket.infrastructure.repository.userAccount;
 
-import com.reservation.ticket.domain.entity.UserAccount;
-import com.reservation.ticket.domain.repository.UserAccountRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import com.reservation.ticket.infrastructure.exception.ErrorCode;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
+import com.reservation.ticket.domain.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

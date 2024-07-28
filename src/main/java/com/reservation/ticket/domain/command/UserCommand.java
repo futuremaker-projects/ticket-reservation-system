@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.UserAccount;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 
 public class UserCommand {
     public record Get(Long id, String name, String token, int point) {

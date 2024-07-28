@@ -1,9 +1,9 @@
 package com.reservation.ticket.infrastructure.repository.concertSchedule;
 
-import com.reservation.ticket.domain.entity.ConcertSchedule;
-import com.reservation.ticket.domain.repository.ConcertScheduleRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import com.reservation.ticket.infrastructure.exception.ErrorCode;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
+import com.reservation.ticket.domain.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

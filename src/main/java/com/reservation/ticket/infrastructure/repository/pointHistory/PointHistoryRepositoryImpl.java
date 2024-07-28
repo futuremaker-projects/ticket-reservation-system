@@ -1,7 +1,7 @@
 package com.reservation.ticket.infrastructure.repository.pointHistory;
 
-import com.reservation.ticket.domain.entity.PointHistory;
-import com.reservation.ticket.domain.repository.PointHistoryRepository;
+import com.reservation.ticket.domain.entity.point.pointhistory.PointHistory;
+import com.reservation.ticket.domain.entity.point.pointhistory.PointHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

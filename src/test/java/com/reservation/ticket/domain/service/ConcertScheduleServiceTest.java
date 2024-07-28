@@ -1,8 +1,9 @@
 package com.reservation.ticket.domain.service;
 
 import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.entity.ConcertSchedule;
-import com.reservation.ticket.domain.repository.ConcertScheduleRepository;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleService;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

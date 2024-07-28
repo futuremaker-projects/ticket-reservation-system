@@ -1,7 +1,7 @@
 package com.reservation.ticket.infrastructure.repository.concert;
 
-import com.reservation.ticket.domain.entity.Concert;
-import com.reservation.ticket.domain.repository.ConcertRepository;
+import com.reservation.ticket.domain.entity.concert.Concert;
+import com.reservation.ticket.domain.entity.concert.ConcertRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

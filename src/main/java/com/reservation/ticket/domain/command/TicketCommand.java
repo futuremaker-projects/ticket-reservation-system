@@ -1,7 +1,7 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.complex.Ticket;
-import com.reservation.ticket.domain.entity.complex.TicketComplexIds;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;
 
 public class TicketCommand {
 

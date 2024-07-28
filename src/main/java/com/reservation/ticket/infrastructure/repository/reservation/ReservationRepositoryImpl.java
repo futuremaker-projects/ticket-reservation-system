@@ -1,10 +1,10 @@
 package com.reservation.ticket.infrastructure.repository.reservation;
 
-import com.reservation.ticket.domain.entity.Reservation;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.repository.ReservationRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import com.reservation.ticket.infrastructure.exception.ErrorCode;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
+import com.reservation.ticket.domain.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
 package com.reservation.ticket.infrastructure.repository.ticket;
 
-import com.reservation.ticket.domain.entity.complex.Ticket;
-import com.reservation.ticket.domain.repository.TicketRepository;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

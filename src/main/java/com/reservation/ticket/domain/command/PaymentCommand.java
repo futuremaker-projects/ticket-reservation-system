@@ -1,7 +1,7 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.Reservation;
-import com.reservation.ticket.domain.entity.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 
 public class PaymentCommand {

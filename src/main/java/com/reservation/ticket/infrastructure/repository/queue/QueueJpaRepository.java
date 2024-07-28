@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.domain.entity.Queue;
+import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

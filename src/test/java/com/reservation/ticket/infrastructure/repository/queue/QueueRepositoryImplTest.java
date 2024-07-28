@@ -1,8 +1,8 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.domain.entity.Queue;
+import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.repository.QueueRepository;
+import com.reservation.ticket.domain.entity.queue.QueueRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

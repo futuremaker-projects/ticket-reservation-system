@@ -1,14 +1,13 @@
 package com.reservation.ticket.domain.service;
 
 import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.entity.Reservation;
-import com.reservation.ticket.domain.entity.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.enums.LockType;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.repository.ReservationRepository;
-import com.reservation.ticket.domain.repository.TicketRepository;
-import jakarta.persistence.LockModeType;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

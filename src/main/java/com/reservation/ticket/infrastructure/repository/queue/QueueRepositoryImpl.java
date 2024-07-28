@@ -1,10 +1,10 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.domain.entity.Queue;
+import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.repository.QueueRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import com.reservation.ticket.infrastructure.exception.ErrorCode;
+import com.reservation.ticket.domain.entity.queue.QueueRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
+import com.reservation.ticket.domain.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;

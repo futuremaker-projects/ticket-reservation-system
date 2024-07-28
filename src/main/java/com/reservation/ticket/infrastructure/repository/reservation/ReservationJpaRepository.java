@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.reservation;
 
-import com.reservation.ticket.domain.entity.Reservation;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.enums.ReservationStatus;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

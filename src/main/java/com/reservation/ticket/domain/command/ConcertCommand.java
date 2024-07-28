@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.Concert;
+import com.reservation.ticket.domain.entity.concert.Concert;
 
 public class ConcertCommand {
     public record Get(Long id, String name) {

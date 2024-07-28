@@ -1,8 +1,12 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.entity.Reservation;
-import com.reservation.ticket.domain.entity.UserAccount;
-import com.reservation.ticket.domain.service.*;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
+import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
+import com.reservation.ticket.domain.entity.point.PointService;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
+import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.userAccount.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -2,10 +2,10 @@ package com.reservation.ticket.application.usecase;
 
 import com.reservation.ticket.domain.command.ConcertScheduleCommand;
 import com.reservation.ticket.domain.command.SeatCommand;
-import com.reservation.ticket.domain.entity.ConcertSchedule;
-import com.reservation.ticket.domain.service.ConcertScheduleService;
-import com.reservation.ticket.domain.service.QueueService;
-import com.reservation.ticket.domain.service.SeatService;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleService;
+import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

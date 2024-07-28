@@ -1,6 +1,6 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.service.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

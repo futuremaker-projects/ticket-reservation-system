@@ -2,8 +2,8 @@ package com.reservation.ticket.concurrency;
 
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.entity.complex.Ticket;
-import com.reservation.ticket.domain.repository.TicketRepository;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

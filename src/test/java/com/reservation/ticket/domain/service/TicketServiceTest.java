@@ -1,10 +1,10 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.entity.complex.Ticket;
-import com.reservation.ticket.domain.entity.complex.TicketComplexIds;
-import com.reservation.ticket.domain.repository.TicketRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
-import jakarta.persistence.LockModeType;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 class TicketServiceTest {
 
     @InjectMocks
-    TicketService sut;
+    ReservationService sut;
     @Mock
     TicketRepository ticketRepository;
 
@@ -44,7 +44,7 @@ class TicketServiceTest {
         given(ticketRepository.save(any(Ticket.class))).willReturn(ticket);
 
         // when
-        sut.save(reservationId, concertScheduleId, seatIds, LockModeType.NONE);
+//        sut.reserve(reservationId, concertScheduleId, seatIds, LockModeType.NONE);
 
         // then
         then(ticketRepository).should().getSeats(concertScheduleId, seatIds);

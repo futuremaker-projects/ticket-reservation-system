@@ -1,10 +1,10 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.entity.Payment;
-import com.reservation.ticket.domain.entity.Reservation;
-import com.reservation.ticket.domain.entity.UserAccount;
-import com.reservation.ticket.domain.repository.PaymentRepository;
-import org.assertj.core.api.Assertions;
+import com.reservation.ticket.domain.entity.concert.reservation.payment.Payment;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
+import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,8 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
 
-    @InjectMocks PaymentService sut;
+    @InjectMocks
+    PaymentService sut;
 
     @Mock PaymentRepository paymentRepository;
 

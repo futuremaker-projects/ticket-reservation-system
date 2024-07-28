@@ -1,8 +1,8 @@
 package com.reservation.ticket.infrastructure.repository.ticket;
 
 
-import com.reservation.ticket.domain.entity.complex.Ticket;
-import com.reservation.ticket.domain.entity.complex.TicketComplexIds;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.*;

@@ -2,8 +2,8 @@ package com.reservation.ticket.interfaces.scheduler;
 
 import com.reservation.ticket.domain.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.service.QueueService;
-import com.reservation.ticket.infrastructure.config.ScheduledConfig;
+import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.support.config.ScheduledConfig;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

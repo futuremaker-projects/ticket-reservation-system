@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.Seat;
+import com.reservation.ticket.domain.entity.concert.reservation.Seat;
 
 import java.time.LocalDateTime;
 

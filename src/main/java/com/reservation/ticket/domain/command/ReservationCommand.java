@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.command;
 
-import com.reservation.ticket.domain.entity.Reservation;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
 

@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.domain.service.PointService;
+import com.reservation.ticket.domain.entity.point.PointService;
 import com.reservation.ticket.interfaces.controller.dto.PointDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
