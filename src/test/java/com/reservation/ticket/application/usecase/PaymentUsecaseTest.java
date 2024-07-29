@@ -1,6 +1,6 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
 import com.reservation.ticket.domain.entity.point.PointService;

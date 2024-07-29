@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.domain.command.QueueCommand;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.interfaces.controller.dto.QueueDto;
 import lombok.RequiredArgsConstructor;

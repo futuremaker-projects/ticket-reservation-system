@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 import com.reservation.ticket.domain.entity.concert.reservation.Seat;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatRepository;

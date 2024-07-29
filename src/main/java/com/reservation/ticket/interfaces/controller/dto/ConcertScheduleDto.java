@@ -1,7 +1,8 @@
 package com.reservation.ticket.interfaces.controller.dto;
 
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
+import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,11 +17,11 @@ public class ConcertScheduleDto {
             return new Response(id, limitSeat, openedAt, null);
         }
 
-        public static Response from(ConcertScheduleCommand.Get command) {
+        public static Response from(ConcertScheduleResult result) {
             return Response.of(
-                    command.id(),
-                    command.limitSeat(),
-                    command.openedAt()
+                    result.id(),
+                    result.limitSeat(),
+                    result.openedAt()
             );
         }
     }

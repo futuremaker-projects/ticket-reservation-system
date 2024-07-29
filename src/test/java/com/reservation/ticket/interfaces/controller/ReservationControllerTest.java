@@ -2,7 +2,7 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;

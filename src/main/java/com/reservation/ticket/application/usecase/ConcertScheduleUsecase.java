@@ -1,7 +1,9 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
+import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.ConcertScheduleInfo;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleService;
 import com.reservation.ticket.domain.entity.queue.QueueService;
@@ -23,12 +25,12 @@ public class ConcertScheduleUsecase {
      * 1. 대기열 검증
      * 2. 콘서트가 열리는 예약날자가 포함된 모든 스케줄을 조회한다.
      */
-    public List<ConcertScheduleCommand.Get> selectConcertSchedulesByConcertId(Long concertId, String token) {
+    public List<ConcertScheduleResult> selectConcertSchedulesByConcertId(Long concertId, String token) {
         // 토큰 검증
-        List<ConcertScheduleCommand.Get> concertSchedules =
+        List<ConcertScheduleInfo> concertSchedules =
                 concertScheduleService.selectAllConcertSchedulesByConcertId(concertId);
         queueService.renewQueueExpirationDate(token);
-        return concertSchedules;
+        return concertSchedules.stream().map(ConcertScheduleResult::from).toList();
     }
 
     /**

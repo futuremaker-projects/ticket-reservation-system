@@ -1,6 +1,7 @@
 package com.reservation.ticket.domain.entity.concert.concertSchedule;
 
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.info.ConcertScheduleInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,9 @@ public class ConcertScheduleService {
     /**
      *  콘서트 id로 전체 콘서트 스케줄을 불러온다.
      */
-    public List<ConcertScheduleCommand.Get> selectAllConcertSchedulesByConcertId(Long concertId) {
+    public List<ConcertScheduleInfo> selectAllConcertSchedulesByConcertId(Long concertId) {
         return concertScheduleRepository.findAllByConcertId(concertId).stream()
-                .map(ConcertScheduleCommand.Get::from)
+                .map(ConcertScheduleInfo::from)
                 .toList();
     }
 
@@ -36,12 +37,5 @@ public class ConcertScheduleService {
     public ConcertScheduleCommand.Get getConcertScheduleByOpenedDate(LocalDateTime openedDate) {
         return ConcertScheduleCommand.Get.from(concertScheduleRepository.findByOpenedAt(openedDate));
     }
-
-    /**
-     * 콘서트 스케줄에 등록된 자리를 가져온다.
-     *  자리는 1에서 50자리이다. 자리는 스케줄이 등록시 미리 등록되어야 한다.
-     */
-
-
 
 }

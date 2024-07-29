@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.entity.concert.reservation;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;

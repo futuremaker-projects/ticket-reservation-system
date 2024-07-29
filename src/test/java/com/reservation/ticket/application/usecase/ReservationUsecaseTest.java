@@ -1,7 +1,7 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatService;

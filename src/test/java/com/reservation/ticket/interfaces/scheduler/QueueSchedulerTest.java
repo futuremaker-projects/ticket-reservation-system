@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.scheduler;
 
-import com.reservation.ticket.domain.command.QueueCommand;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.support.config.ScheduledConfig;

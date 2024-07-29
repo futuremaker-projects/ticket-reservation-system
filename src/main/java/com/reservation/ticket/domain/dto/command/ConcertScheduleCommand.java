@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.command;
+package com.reservation.ticket.domain.dto.command;
 
 import com.reservation.ticket.domain.entity.concert.Concert;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
@@ -20,13 +20,6 @@ public class ConcertScheduleCommand {
 
         public static Get of(Long id, int limitSeat, LocalDateTime openedAt) {
             return new Get(id, limitSeat, openedAt, null);
-        }
-
-        public static Get fromWithConcert(ConcertSchedule concertSchedule) {
-            return Get.of(
-                    concertSchedule.getId(), concertSchedule.getLimitSeat(),
-                    concertSchedule.getOpenedAt(), concertSchedule.getConcert()
-            );
         }
     }
 

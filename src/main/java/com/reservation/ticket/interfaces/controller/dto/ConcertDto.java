@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.controller.dto;
 
-import com.reservation.ticket.domain.command.ConcertCommand;
+import com.reservation.ticket.domain.dto.command.ConcertCommand;
 
 public class ConcertDto {
     public record Response(Long id, String name) {

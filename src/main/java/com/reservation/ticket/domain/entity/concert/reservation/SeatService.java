@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.entity.concert.reservation;
 
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

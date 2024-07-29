@@ -1,7 +1,7 @@
 package com.reservation.ticket.concurrency;
 
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.command;
+package com.reservation.ticket.domain.dto.command;
 
 public class PointCommand {
     public record Get(int point) {

@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.controller.dto;
 
-import com.reservation.ticket.domain.command.PointCommand;
+import com.reservation.ticket.domain.dto.command.PointCommand;
 
 public class PointDto {
     public record Response(int point) {

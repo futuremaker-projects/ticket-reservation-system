@@ -1,6 +1,6 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.LockType;
 import com.reservation.ticket.domain.entity.queue.QueueService;

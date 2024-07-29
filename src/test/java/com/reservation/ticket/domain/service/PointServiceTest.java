@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.PointCommand;
+import com.reservation.ticket.domain.dto.command.PointCommand;
 import com.reservation.ticket.domain.entity.point.pointhistory.PointHistory;
 import com.reservation.ticket.domain.entity.point.PointService;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;

@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.controller.dto;
 
-import com.reservation.ticket.domain.command.QueueCommand;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
 
 import java.time.LocalDateTime;

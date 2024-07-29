@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.command;
+package com.reservation.ticket.domain.dto.command;
 
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 

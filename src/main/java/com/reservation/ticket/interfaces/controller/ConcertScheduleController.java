@@ -1,8 +1,9 @@
 package com.reservation.ticket.interfaces.controller;
 
+import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 import com.reservation.ticket.interfaces.controller.dto.ConcertScheduleDto;
 import com.reservation.ticket.interfaces.controller.dto.SeatDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class ConcertScheduleController {
             @PathVariable Long concertId, HttpServletRequest request
     ) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        List<ConcertScheduleCommand.Get> concertSchedules =
+        List<ConcertScheduleResult> concertSchedules =
                 concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token);
         List<ConcertScheduleDto.Response> concertSchedulesResponse =
                 concertSchedules.stream().map(ConcertScheduleDto.Response::from).toList();

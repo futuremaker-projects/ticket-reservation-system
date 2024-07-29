@@ -1,9 +1,10 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueService;
@@ -54,9 +55,9 @@ class ConcertScheduleControllerTest {
         given(queueService.getQueueByToken(token)).willReturn(queue);
 
         Long concertId = 1L;
-        List<ConcertScheduleCommand.Get> concertScheduleCommands = List.of(
-                ConcertScheduleCommand.Get.of(1L, 50, LocalDateTime.now()),
-                ConcertScheduleCommand.Get.of(1L, 50, LocalDateTime.now())
+        List<ConcertScheduleResult> concertScheduleCommands = List.of(
+                ConcertScheduleResult.of(1L, 50, LocalDateTime.now()),
+                ConcertScheduleResult.of(1L, 50, LocalDateTime.now())
         );
         List<ConcertScheduleDto.Response> responses = concertScheduleCommands.stream().map(ConcertScheduleDto.Response::from).toList();
         given(concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token)).willReturn(concertScheduleCommands);

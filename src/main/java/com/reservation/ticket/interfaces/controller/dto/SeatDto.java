@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.controller.dto;
 
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
 
 import java.time.LocalDateTime;
 

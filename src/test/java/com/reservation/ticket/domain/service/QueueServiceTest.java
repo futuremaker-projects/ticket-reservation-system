@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.QueueCommand;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.queue.QueueService;
