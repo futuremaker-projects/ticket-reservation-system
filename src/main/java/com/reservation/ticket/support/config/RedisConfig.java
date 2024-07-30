@@ -6,6 +6,12 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Redisson 설정
@@ -29,6 +35,25 @@ public class RedisConfig {
                 .setAddress("%s://%s:%s".formatted(REDISSON_HOST_PREFIX, host, port))
                 .setPassword(password);
         return Redisson.create(config);
+    }
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName(host);
+        config.setPort(port);
+        config.setPassword(password);
+        return new LettuceConnectionFactory(config);
+    }
+
+    @Bean
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+//        template.setValueSerializer(new GenericToStringSerializer<>(Object.class));
+        template.setKeySerializer(new StringRedisSerializer());//key 깨짐 방지
+        template.setValueSerializer(new StringRedisSerializer());//value 깨짐 방지
+        return template;
     }
 
 }
