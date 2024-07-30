@@ -1,4 +1,4 @@
-package com.reservation.ticket.interfaces.controller.dto;
+package com.reservation.ticket.interfaces.dto;
 
 import com.reservation.ticket.domain.dto.command.ReservationCommand;
 

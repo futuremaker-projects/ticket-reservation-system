@@ -1,7 +1,7 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.interfaces.controller.dto.ReservationDto;
+import com.reservation.ticket.interfaces.dto.ReservationDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

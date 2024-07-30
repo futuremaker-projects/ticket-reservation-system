@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.exception;
 
-import com.reservation.ticket.interfaces.controller.dto.Response;
+import com.reservation.ticket.interfaces.dto.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

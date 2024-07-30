@@ -5,7 +5,7 @@ import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueService;
-import com.reservation.ticket.interfaces.controller.dto.QueueDto;
+import com.reservation.ticket.interfaces.dto.QueueDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

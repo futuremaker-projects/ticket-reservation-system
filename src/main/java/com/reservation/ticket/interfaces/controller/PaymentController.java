@@ -1,8 +1,8 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.reservation.ticket.application.usecase.PaymentUsecase;
-import com.reservation.ticket.interfaces.controller.dto.PaymentDto;
-import com.reservation.ticket.interfaces.controller.dto.Response;
+import com.reservation.ticket.interfaces.dto.PaymentDto;
+import com.reservation.ticket.interfaces.dto.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

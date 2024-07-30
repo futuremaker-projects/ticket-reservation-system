@@ -2,10 +2,9 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
-import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
 import com.reservation.ticket.domain.dto.command.SeatCommand;
-import com.reservation.ticket.interfaces.controller.dto.ConcertScheduleDto;
-import com.reservation.ticket.interfaces.controller.dto.SeatDto;
+import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
+import com.reservation.ticket.interfaces.dto.SeatDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
