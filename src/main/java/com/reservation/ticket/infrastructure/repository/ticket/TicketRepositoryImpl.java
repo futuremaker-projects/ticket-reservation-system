@@ -15,7 +15,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     private final TicketJpaRepository ticketJpaRepository;
 
     @Override
-    public Ticket save(Ticket ticket) {
+    public Ticket issue(Ticket ticket) {
         return ticketJpaRepository.save(ticket);
     }
 

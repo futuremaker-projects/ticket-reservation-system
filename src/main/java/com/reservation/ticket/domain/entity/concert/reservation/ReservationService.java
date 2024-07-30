@@ -1,6 +1,7 @@
 package com.reservation.ticket.domain.entity.concert.reservation;
 
 import com.reservation.ticket.domain.dto.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.info.ReservationInfo;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;
@@ -11,6 +12,7 @@ import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRep
 import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.domain.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
@@ -32,13 +35,13 @@ public class ReservationService {
     /**
      *  예약 id를 이용하여 예약 정보를 가져온다.
      */
-    public ReservationCommand.Get getReservationById(Long reservationId) {
-        return ReservationCommand.Get.from(reservationRepository.findById(reservationId));
+    public ReservationInfo getReservationById(Long reservationId) {
+        return ReservationInfo.from(reservationRepository.findById(reservationId));
     }
 
-    public ReservationCommand.Get reserve(ReservationCommand.Create create, UserAccount userAccount, LockType lockType) {
+    public ReservationInfo reserve(ReservationCommand.Create create, UserAccount userAccount, LockType lockType) {
         Reservation reservation = Reservation.of(userAccount, create.price());
-        Reservation savedReservation = reservationRepository.save(reservation);
+        Reservation savedReservation = reservationRepository.reserve(reservation);
 
         // 좌석의 점유상태를 검증한다.
         switch (lockType) {
@@ -47,13 +50,20 @@ public class ReservationService {
             case DISTRIBUTED_LOCK -> checkIfSeatsAvailableWithDistributedLock(create.concertScheduleId(), create.seatIds());
         }
 
+        occupySeats(create, savedReservation);
+        return ReservationInfo.from(savedReservation);
+    }
+
+    /**
+     * 좌석을 점유한다.
+     */
+    public void occupySeats(ReservationCommand.Create create, Reservation savedReservation) {
         // 예약시 선택한 자리를 점유한다.
         create.seatIds().forEach(seatId -> {
             Ticket ticket = Ticket.of(
                     new TicketComplexIds(create.concertScheduleId(), seatId, savedReservation.getId()));
-            ticketRepository.save(ticket);
+            ticketRepository.issue(ticket);
         });
-        return ReservationCommand.Get.from(savedReservation);
     }
 
     public List<Reservation> selectReservationsByReservationStatus(ReservationStatus reservationStatus) {
@@ -83,17 +93,14 @@ public class ReservationService {
     }
 
     private void checkIfSeatsAvailableWithDistributedLock(Long concertScheduleId, List<Long> seatIds) {
-        List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
-        checkSeatsWithRedisLock(tickets);
-    }
-
-    public void checkSeatsWithRedisLock(List<Ticket> tickets) {
         RLock lock = redissonClient.getLock("reservation");
         try {
             boolean available = lock.tryLock(10, 1, TimeUnit.SECONDS);
             if (!available) {
                 throw new RuntimeException("Lock을 획득하지 못했습니다.");
             }
+            log.info("locked : {}", available);
+            List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
             if (!tickets.isEmpty()) {
                 throw new ApplicationException(ErrorCode.SEAT_ALREADY_OCCUPIED, "seat already occupied : %s".formatted(tickets));
             }
@@ -103,7 +110,6 @@ public class ReservationService {
             lock.unlock();
         }
     }
-
 
     /**
      * 1. 예약된 상위 10개의 목록을 조회하여 결재상태가 NOT_PAID 이며, 현재시간보다 5분 초과된 상태면

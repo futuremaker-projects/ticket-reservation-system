@@ -41,14 +41,14 @@ class TicketServiceTest {
         given(ticketRepository.getSeats(concertScheduleId, seatIds)).willReturn(reservationSeats());
 
         Ticket ticket = Ticket.of(new TicketComplexIds(concertScheduleId, seatId, reservationId));
-        given(ticketRepository.save(any(Ticket.class))).willReturn(ticket);
+        given(ticketRepository.issue(any(Ticket.class))).willReturn(ticket);
 
         // when
 //        sut.reserve(reservationId, concertScheduleId, seatIds, LockModeType.NONE);
 
         // then
         then(ticketRepository).should().getSeats(concertScheduleId, seatIds);
-        then(ticketRepository).should(times(3)).save(any(Ticket.class));
+        then(ticketRepository).should(times(3)).issue(any(Ticket.class));
     }
 
     /**

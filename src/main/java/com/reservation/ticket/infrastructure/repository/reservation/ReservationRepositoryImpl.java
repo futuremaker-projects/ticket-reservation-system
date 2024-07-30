@@ -18,7 +18,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private final ReservationJpaRepository reservationJpaRepository;
 
     @Override
-    public Reservation save(Reservation reservation) {
+    public Reservation reserve(Reservation reservation) {
         return reservationJpaRepository.save(reservation);
     }
 
@@ -31,6 +31,11 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     @Override
     public List<Reservation> findAllByReservationStatus(ReservationStatus reservationStatus) {
         return reservationJpaRepository.findAllByReservationStatus(reservationStatus);
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        return reservationJpaRepository.findAll();
     }
 
     @Override

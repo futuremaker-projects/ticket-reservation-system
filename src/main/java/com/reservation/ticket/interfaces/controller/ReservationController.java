@@ -27,7 +27,7 @@ public class ReservationController {
             HttpServletRequest request
     ) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        reservationUsecase.makeReservation(requestDto.toCreate(), token);
+        reservationUsecase.makeReservation(requestDto.toCriteria(), token);
         return ResponseEntity.ok().build();
     }
 

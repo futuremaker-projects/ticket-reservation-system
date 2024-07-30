@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ReservationRepository {
 
-    Reservation save(Reservation reservation);
+    Reservation reserve(Reservation reservation);
 
     List<Reservation> findAllByReservationStatusOrderByIdAsc(ReservationStatus reservationStatus, int limit);
-
     List<Reservation> findAllByReservationStatus(ReservationStatus reservationStatus);
+    List<Reservation> findAll();
 
     Reservation findById(Long reservationId);
 }

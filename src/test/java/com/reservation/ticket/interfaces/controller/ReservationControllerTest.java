@@ -1,8 +1,8 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.application.dto.result.ReservationResult;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -58,10 +58,9 @@ class ReservationControllerTest {
         ReservationDto.Request request = ReservationDto.Request.of(concertScheduleId, seatIds, price);
 
         Long reservationId = 1L;
-        ReservationCommand.Get reservationCommand =
-                ReservationCommand.Get.of(reservationId, price, PaymentStatus.NOT_PAID, ReservationStatus.ACTIVE, LocalDateTime.now());
+        ReservationResult reservation = ReservationResult.of(reservationId, price, PaymentStatus.NOT_PAID, ReservationStatus.ACTIVE, LocalDateTime.now());
 
-        given(reservationUsecase.makeReservation(request.toCreate(), token)).willReturn(reservationCommand);
+        given(reservationUsecase.makeReservation(request.toCriteria(), token)).willReturn(reservation);
 
         // when
         mockMvc.perform(post("/api/reservation")
@@ -72,7 +71,7 @@ class ReservationControllerTest {
                 .andDo(print());
 
         // then
-        then(reservationUsecase).should().makeReservation(request.toCreate(), token);
+        then(reservationUsecase).should().makeReservation(request.toCriteria(), token);
     }
 
 }

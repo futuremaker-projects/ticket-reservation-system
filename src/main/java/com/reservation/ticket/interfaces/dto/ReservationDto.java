@@ -1,6 +1,6 @@
 package com.reservation.ticket.interfaces.dto;
 
-import com.reservation.ticket.domain.dto.command.ReservationCommand;
+import com.reservation.ticket.application.dto.criteria.ReservationCriteria;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ public class ReservationDto {
             return new Request(concertScheduleId, seatIds, price);
         }
 
-        public ReservationCommand.Create toCreate() {
-            return ReservationCommand.Create.of(concertScheduleId, seatIds, price);
+        public ReservationCriteria toCriteria() {
+            return ReservationCriteria.of(concertScheduleId, seatIds, price);
         }
     }
 

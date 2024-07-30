@@ -1,6 +1,6 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.dto.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.info.ReservationInfo;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
 import com.reservation.ticket.domain.entity.point.PointService;
@@ -63,7 +63,7 @@ class PaymentUsecaseTest {
         assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
 
         // 예약 상태값 `NOT_PAID` -> `PAID` 변경확인
-        ReservationCommand.Get reservation = reservationService.getReservationById(reservationId);
+        ReservationInfo reservation = reservationService.getReservationById(reservationId);
         assertThat(reservation.paymentStatus()).isEqualTo(PaymentStatus.PAID);
 
         // 결재 후 사용자의 포인트가 차감 됬는지 확인

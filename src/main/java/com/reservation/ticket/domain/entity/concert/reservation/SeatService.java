@@ -1,9 +1,14 @@
 package com.reservation.ticket.domain.entity.concert.reservation;
 
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.dto.command.SeatCommand;
 import com.reservation.ticket.domain.dto.info.SeatInfo;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,5 +40,7 @@ public class SeatService {
                 .map(SeatCommand.Get::from)
                 .toList();
     }
+
+
 }
 

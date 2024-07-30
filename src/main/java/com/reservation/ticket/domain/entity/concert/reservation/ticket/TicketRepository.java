@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface TicketRepository {
 
-    Ticket save(Ticket ticket);
+    Ticket issue(Ticket ticket);
 
     List<Ticket> selectAllSeats();
 
