@@ -1,6 +1,7 @@
 package com.reservation.ticket.domain.service;
 
 import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 import com.reservation.ticket.domain.entity.concert.reservation.Seat;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatRepository;
@@ -34,7 +35,7 @@ class SeatServiceTest {
         given(seatRepository.findAllByConcertScheduleId(concertScheduleId)).willReturn(seats);
 
         // when
-        List<SeatCommand.Get> seatCommands = sut.selectSeatsByConcertScheduleId(concertScheduleId);
+        List<SeatInfo> seatCommands = sut.selectSeatsByConcertScheduleId(concertScheduleId);
 
         // then
         assertThat(seatCommands.size()).isEqualTo(seats.size());

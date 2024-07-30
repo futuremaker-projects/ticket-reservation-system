@@ -1,8 +1,10 @@
 package com.reservation.ticket.application.usecase;
 
 import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
+import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
 import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +60,7 @@ class ConcertScheduleUsecaseTest {
         Long concertId = 1L;
 
         // when
-        List<SeatCommand.Get> seats = concertScheduleUsecase.selectSeatsByConcertScheduleId(concertId, token);
+        List<SeatResult> seats = concertScheduleUsecase.selectSeatsByConcertScheduleId(concertId, token);
 
         // then
         int availableSeats = 50;

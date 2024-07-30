@@ -1,6 +1,7 @@
 package com.reservation.ticket.domain.entity.concert.reservation;
 
 import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,9 @@ public class SeatService {
     /**
      *  콘서트 스케줄 id로 좌석 목록조회
      */
-    public List<SeatCommand.Get> selectSeatsByConcertScheduleId(Long concertScheduleId) {
+    public List<SeatInfo> selectSeatsByConcertScheduleId(Long concertScheduleId) {
         return seatRepository.findAllByConcertScheduleId(concertScheduleId).stream()
-                .map(SeatCommand.Get::from)
+                .map(SeatInfo::from)
                 .toList();
     }
 

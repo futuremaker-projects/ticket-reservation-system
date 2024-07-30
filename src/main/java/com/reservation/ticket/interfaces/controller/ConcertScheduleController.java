@@ -1,8 +1,9 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
+import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
-import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
 import com.reservation.ticket.interfaces.dto.SeatDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,9 +50,8 @@ public class ConcertScheduleController {
     ) {
 //        Long userId = 1L;   // spring security, JWT를 이용한 인증 구현 필요
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        List<SeatCommand.Get> seats =
-                concertScheduleUsecase.selectSeatsByConcertScheduleId(concertScheduleId, token);
-        List<SeatDto.Response> seatResponses = seats.stream().map(SeatDto.Response::from).toList();
+        List<SeatResult> seatResults = concertScheduleUsecase.selectSeatsByConcertScheduleId(concertScheduleId, token);
+        List<SeatDto.Response> seatResponses = seatResults.stream().map(SeatDto.Response::from).toList();
         return ResponseEntity.ok().body(seatResponses);
     }
 

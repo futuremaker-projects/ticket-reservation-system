@@ -1,6 +1,7 @@
 package com.reservation.ticket.interfaces.dto;
 
-import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.application.dto.result.SeatResult;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +11,8 @@ public class SeatDto {
             return new Response(id, concertScheduleId, occupiedAt, occupied);
         }
 
-        public static Response from(SeatCommand.Get get) {
-            return Response.of(get.id(), get.concertScheduleId(), get.occupiedAt(), get.occupied());
+        public static Response from(SeatResult result) {
+            return Response.of(result.id(), result.concertScheduleId(), result.occupiedAt(), result.occupied());
         }
     }
 

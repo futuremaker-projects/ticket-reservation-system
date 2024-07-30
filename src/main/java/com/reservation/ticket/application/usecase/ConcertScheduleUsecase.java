@@ -1,13 +1,13 @@
 package com.reservation.ticket.application.usecase;
 
 import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
-import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.domain.dto.info.ConcertScheduleInfo;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleService;
-import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -37,14 +37,14 @@ public class ConcertScheduleUsecase {
      * 1. 대기열 상태 검증
      * 2. 날짜로 선택된 콘서트 스케줄에서 연관된 좌석을 조회한다.
      */
-    public List<SeatCommand.Get> selectSeatsByConcertScheduleId(Long concertScheduleId, String token) {
+    public List<SeatResult> selectSeatsByConcertScheduleId(Long concertScheduleId, String token) {
         // 콘서트 스케줄 id로 콘서트 스케줄 조회
         ConcertSchedule concertSchedule = concertScheduleService.getConcertScheduleById(concertScheduleId);
         // 콘서트 스케줄에 연관된 좌석 목록조회
-        List<SeatCommand.Get> seats = seatService.selectSeatsByConcertScheduleId(concertSchedule.getId());
+        List<SeatInfo> seatInfos = seatService.selectSeatsByConcertScheduleId(concertSchedule.getId());
         // 토큰의 만료시간 5분 연장
         queueService.renewQueueExpirationDate(token);
-        return seats;
+        return seatInfos.stream().map(SeatResult::from).toList();
     }
 
 }
