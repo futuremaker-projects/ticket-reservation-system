@@ -1,12 +1,13 @@
 package com.reservation.ticket.domain.service;
 
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueRepository;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
+import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,10 +23,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class QueueServiceTest {
+class QueueEntityServiceTest {
 
     @InjectMocks
-    QueueService sut;
+    QueueServiceImpl sut;
     @Mock
     QueueRepository queueRepository;
     @Mock
@@ -47,21 +48,21 @@ class QueueServiceTest {
         Long queueId = 21L;
         String token = generateToken();
 
-        Queue savedQueue = Queue.of(queueId, userAccount, token, QueueStatus.WAIT);
+        QueueEntity savedQueueEntity = QueueEntity.of(queueId, userAccount, token, QueueStatus.WAIT);
 
-        given(queueRepository.save(any(Queue.class))).willReturn(savedQueue);
+        given(queueRepository.save(any(QueueStatement.class))).willReturn(savedQueueEntity);
 
         // when
         QueueCommand.Get getQueue = sut.createQueue(userId);
 
         // then
         assertThat(getQueue).isNotNull();
-        assertThat(getQueue.id()).isEqualTo(savedQueue.getId());
+        assertThat(getQueue.id()).isEqualTo(savedQueueEntity.getId());
         assertThat(getQueue.status()).isEqualTo(QueueStatus.WAIT);
-        assertThat(getQueue.token()).isEqualTo(savedQueue.getToken());
+        assertThat(getQueue.token()).isEqualTo(savedQueueEntity.getToken());
 
         then(userAccountRepository).should().findById(userId);
-        then(queueRepository).should().save(any(Queue.class));
+        then(queueRepository).should().save(any(QueueStatement.class));
     }
 
     @DisplayName("사용자 토큰을 이용하여 대기열을 만료상태로 변경한다.")
@@ -70,15 +71,15 @@ class QueueServiceTest {
         // given
         Long queueId = 1L;
         String token = generateToken();
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueRepository.findByToken(token)).willReturn(queue);
+        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueRepository.getQueueByToken(token)).willReturn(queueEntity);
 
         // when
         sut.expireQueue(token);
 
         // then
-        assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
-        then(queueRepository).should().findByToken(token);
+        assertThat(queueEntity.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
+        then(queueRepository).should().getQueueByToken(token);
     }
 
 

@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
 import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
-import com.reservation.ticket.domain.dto.command.SeatCommand;
-import com.reservation.ticket.domain.dto.info.SeatInfo;
-import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
 import com.reservation.ticket.interfaces.dto.SeatDto;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +42,7 @@ class ConcertScheduleControllerTest {
     @MockBean
     ConcertScheduleUsecase concertScheduleUsecase;
     @MockBean
-    QueueService queueService;
+    QueueServiceImpl queueService;
 
     @DisplayName("콘서트 id를 이용하여 콘서트 스케줄 id를 조회한다.")
     @Test
@@ -52,8 +50,8 @@ class ConcertScheduleControllerTest {
         // given
         String token = "27c4c82ba7c3";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         Long concertId = 1L;
         List<ConcertScheduleResult> concertScheduleCommands = List.of(
@@ -83,8 +81,8 @@ class ConcertScheduleControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         Long concertScheduleId = 1L;
         List<SeatResult> commandSeats = List.of(

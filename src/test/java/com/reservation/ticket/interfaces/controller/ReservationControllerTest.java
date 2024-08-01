@@ -3,11 +3,11 @@ package com.reservation.ticket.interfaces.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.dto.result.ReservationResult;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.interfaces.dto.ReservationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ class ReservationControllerTest {
     @MockBean
     ReservationUsecase reservationUsecase;
     @MockBean
-    QueueService queueService;
+    QueueServiceImpl queueService;
 
     @DisplayName("콘서트 스케줄 id와 자리 id를 받아 예약 생성한다.")
     @Test
@@ -49,8 +49,8 @@ class ReservationControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(1L, 2L, 3L);

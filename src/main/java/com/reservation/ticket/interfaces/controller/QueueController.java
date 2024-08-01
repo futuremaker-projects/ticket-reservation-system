@@ -1,7 +1,7 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.interfaces.dto.QueueDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QueueController {
 
-    private final QueueService queueService;
+    private final QueueServiceImpl queueService;
 
     /**
      * 사용자의 정보를 이용하여 최초 대기열 데이터 생성한다.

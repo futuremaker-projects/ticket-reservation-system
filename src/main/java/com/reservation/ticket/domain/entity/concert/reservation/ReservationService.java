@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class ReservationService {
         return ReservationInfo.from(reservationRepository.findById(reservationId));
     }
 
+    @Transactional
     public ReservationInfo reserve(ReservationCommand.Create create, UserAccount userAccount, LockType lockType) {
         Reservation reservation = Reservation.of(userAccount, create.price());
         Reservation savedReservation = reservationRepository.reserve(reservation);

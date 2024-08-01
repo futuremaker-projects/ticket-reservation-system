@@ -7,7 +7,7 @@ import com.reservation.ticket.domain.dto.info.SeatInfo;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleService;
 import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConcertScheduleUsecase {
 
-    private final QueueService queueService;
+    private final QueueServiceImpl queueService;
     private final SeatService seatService;
     private final ConcertScheduleService concertScheduleService;
 

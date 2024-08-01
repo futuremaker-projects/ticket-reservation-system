@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-class QueueRepositoryImplTest {
+class QueueEntityRepositoryImplTest {
 
     @Autowired
     private QueueRepository repository;
@@ -33,8 +33,8 @@ class QueueRepositoryImplTest {
         // given
 
         // when
-        List<Queue> allByQueueStatus = repository.findAllByQueueStatus(QueueStatus.ACTIVE);
-        System.out.println("allByQueueStatus = " + allByQueueStatus);
+        List<QueueEntity> allByQueueEntityStatuses = repository.getQueuesByStatus(QueueStatus.ACTIVE);
+        System.out.println("allByQueueStatus = " + allByQueueEntityStatuses);
 
         // then
     }
@@ -43,12 +43,12 @@ class QueueRepositoryImplTest {
     @Test
     public void qpqpqpqp() {
         // given
-        List<Queue> queues = repository.findAllByQueueStatus(QueueStatus.ACTIVE);
-        System.out.println("queues.size() = " + queues.size());
-        List<Queue> waits = List.of();
-        if (queues.size() < 30) {
-            int count = 30 - queues.size();
-            waits = repository.findAllByQueueStatusPerLimit(QueueStatus.WAIT, count);
+        List<QueueEntity> queueEntities = repository.getQueuesByStatus(QueueStatus.ACTIVE);
+        System.out.println("queues.size() = " + queueEntities.size());
+        List<QueueEntity> waits = List.of();
+        if (queueEntities.size() < 30) {
+            int count = 30 - queueEntities.size();
+            waits = repository.getQueuesByStatusPerLimit(QueueStatus.WAIT, count);
             System.out.println("waits.size() = " + waits.size());
         }
 
@@ -65,9 +65,9 @@ class QueueRepositoryImplTest {
         Long userId = 1L;
 
         // when
-        Queue queueByUserId = repository.findQueueByUserId(userId);
-        System.out.println("queueByUserId = " + queueByUserId);
-        System.out.println("queueByUserId = " + queueByUserId.getUserAccount());
+        QueueEntity queueEntityByUserId = repository.getQueueByUserId(userId);
+        System.out.println("queueByUserId = " + queueEntityByUserId);
+        System.out.println("queueByUserId = " + queueEntityByUserId.getUserAccount());
 
         // then
     }

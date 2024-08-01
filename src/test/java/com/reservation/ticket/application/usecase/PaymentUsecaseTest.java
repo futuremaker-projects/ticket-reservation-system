@@ -4,8 +4,8 @@ import com.reservation.ticket.domain.dto.info.ReservationInfo;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
 import com.reservation.ticket.domain.entity.point.PointService;
-import com.reservation.ticket.domain.entity.queue.Queue;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountService;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -26,7 +26,7 @@ class PaymentUsecaseTest {
     @Autowired
     UserAccountService userAccountService;
     @Autowired
-    QueueService queueService;
+    QueueServiceImpl queueService;
     @Autowired
     ReservationService reservationService;
     @Autowired
@@ -59,8 +59,8 @@ class PaymentUsecaseTest {
 
         // then
         // 대기열의 상태값이 `ACTIVE` -> `EXPIRED` 변경확인
-        Queue queue = queueService.getQueueByToken(token);
-        assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
+        QueueEntity queueEntity = queueService.getQueueByToken(token);
+        assertThat(queueEntity.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
 
         // 예약 상태값 `NOT_PAID` -> `PAID` 변경확인
         ReservationInfo reservation = reservationService.getReservationById(reservationId);

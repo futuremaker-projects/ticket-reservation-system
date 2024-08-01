@@ -1,7 +1,7 @@
 package com.reservation.ticket.support.config.interceptor;
 
-import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class TokenVerificationInterceptor implements HandlerInterceptor {
 //             throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token is required");
             return false;
         }
-        Queue queue = queueService.getQueueByToken(token);
-        queue.verifyQueueStatus();
+        QueueEntity queueEntity = queueService.getQueueByToken(token);
+        queueEntity.verifyQueueStatus();
         return true;
     }
 

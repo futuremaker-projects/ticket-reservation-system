@@ -2,9 +2,9 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.interfaces.dto.QueueDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(QueueController.class)
 @ExtendWith(SpringExtension.class)
-class QueueControllerTest {
+class QueueEntityControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -36,7 +36,7 @@ class QueueControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    QueueService queueService;
+    QueueServiceImpl queueService;
 
     @DisplayName("사용자의 정보를 이용하여 최초 대기열 데이터 생성한다.")
     @Test
@@ -44,8 +44,8 @@ class QueueControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         Long userId = 1L;
         QueueDto.Request request = QueueDto.Request.of(userId);

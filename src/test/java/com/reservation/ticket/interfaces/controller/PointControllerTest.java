@@ -2,10 +2,10 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.domain.dto.command.PointCommand;
-import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.point.PointService;
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.interfaces.dto.PointDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class PointControllerTest {
     @MockBean
     PointService pointService;
     @MockBean
-    QueueService queueService;
+    QueueServiceImpl queueService;
 
     @DisplayName("토큰을 이용하여 사용자가 가진 포인트를 조회한다.")
     @Test
@@ -45,8 +45,8 @@ class PointControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         int point = 100;
         PointCommand.Get pointCommand = PointCommand.Get.of(point);

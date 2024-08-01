@@ -1,20 +1,23 @@
 package com.reservation.ticket.domain.entity.queue;
 
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
+import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
 
 import java.util.List;
 
 public interface QueueRepository {
 
-    List<Queue> findAllByQueueStatus(QueueStatus queueStatus);
+    List<QueueEntity> getQueuesByStatus(QueueStatus queueStatus);
 
-    List<Queue> findAllByQueueStatusPerLimit(QueueStatus queueStatus, int limit);
+    List<QueueEntity> getQueuesByStatusPerLimit(QueueStatus queueStatus, int limit);
 
-    Queue findByToken(String token);
+    QueueEntity getQueueByToken(String token);
 
     int countByStatus(QueueStatus status);
 
-    Queue save(Queue queue);
+    QueueEntity save(QueueStatement statement);
 
-    Queue findQueueByUserId(Long userId);
+    QueueEntity getQueueByUserId(Long userId);
+
 }

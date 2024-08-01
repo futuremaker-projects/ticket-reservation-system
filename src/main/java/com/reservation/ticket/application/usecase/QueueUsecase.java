@@ -1,6 +1,6 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QueueUsecase {
 
-    private final QueueService queueService;
+    private final QueueServiceImpl queueService;
 
     public void changeTokenStatus() {
         queueService.changeTokenStatusExpiredOrActive();

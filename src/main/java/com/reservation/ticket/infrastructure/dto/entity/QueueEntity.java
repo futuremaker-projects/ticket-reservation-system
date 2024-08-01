@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.entity.queue;
+package com.reservation.ticket.infrastructure.dto.entity;
 
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Entity
 @ToString(of = {"id", "token", "queueStatus", "shouldExpiredAt", "createdAt"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Queue {
+public class QueueEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,14 +34,14 @@ public class Queue {
     private LocalDateTime shouldExpiredAt;
     private LocalDateTime createdAt;
 
-    public Queue(Long id, UserAccount userAccount, String token, QueueStatus queueStatus) {
+    public QueueEntity(Long id, UserAccount userAccount, String token, QueueStatus queueStatus) {
         this.id = id;
         this.userAccount = userAccount;
         this.token = token;
         this.queueStatus = queueStatus;
     }
 
-    public Queue(Long id, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+    public QueueEntity(Long id, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
         this.id = id;
         this.token = token;
         this.queueStatus = queueStatus;
@@ -49,24 +49,24 @@ public class Queue {
         this.createdAt = createdAt;
     }
 
-    public static Queue of() {
-        return new Queue();
+    public static QueueEntity of() {
+        return new QueueEntity();
     }
 
-    public static Queue of(Long id, String token, QueueStatus status) {
-        return new Queue(id, null, token, status);
+    public static QueueEntity of(Long id, String token, QueueStatus status) {
+        return new QueueEntity(id, null, token, status);
     }
 
-    public static Queue of(Long id, UserAccount userAccount, String token, QueueStatus status) {
-        return new Queue(id, userAccount, token, status);
+    public static QueueEntity of(Long id, UserAccount userAccount, String token, QueueStatus status) {
+        return new QueueEntity(id, userAccount, token, status);
     }
 
-    public static Queue of(UserAccount userAccount, String token, QueueStatus status) {
-        return new Queue(null, userAccount, token, status);
+    public static QueueEntity of(UserAccount userAccount, String token, QueueStatus status) {
+        return new QueueEntity(null, userAccount, token, status);
     }
 
-    public static Queue of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
-        return new Queue(id, token, status, shouldExpiredAt, createdAt);
+    public static QueueEntity of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+        return new QueueEntity(id, token, status, shouldExpiredAt, createdAt);
     }
 
     @PrePersist
@@ -77,8 +77,8 @@ public class Queue {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Queue queue)) return false;
-        return id != null && id.equals(queue.id);
+        if (!(o instanceof QueueEntity queueEntity)) return false;
+        return id != null && id.equals(queueEntity.id);
     }
 
     @Override
