@@ -26,7 +26,9 @@ public class QueueRedisRepositoryImpl implements QueueRepository {
 
     @Override
     public QueueEntity save(QueueStatement statement) {
-        return null;
+        // 키를 어떻게 가져가야 하나
+        this.zSetOps.add(statement.token(), "userId_%d".formatted(statement.userAccount().getId()), System.currentTimeMillis());
+        return QueueEntity.of(statement.userAccount(), statement.token(), statement.queueStatus());
     }
 
     @Override
@@ -41,6 +43,7 @@ public class QueueRedisRepositoryImpl implements QueueRepository {
 
     @Override
     public QueueEntity getQueueByToken(String token) {
+//        this.zSetOps.
         return null;
     }
 
@@ -53,4 +56,10 @@ public class QueueRedisRepositoryImpl implements QueueRepository {
     public QueueEntity getQueueByUserId(Long userId) {
         return null;
     }
+
+    @Override
+    public void removeQueue(String token) {
+        this.zSetOps.remove(token);
+    }
+
 }

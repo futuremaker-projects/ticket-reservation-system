@@ -21,14 +21,14 @@ public class QueueServiceImpl implements QueueService{
     private final UserAccountRepository userAccountRepository;
 
     @Transactional
-    public QueueCommand.Get createQueue(Long userId) {
+    public String createQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
         String token = generateToken();
         // 생성된 토큰을 사용자 정보에 저장
         userAccount.saveToken(token);
         // 새로운 대기열 데이터에 토큰 저장하여 생성
         QueueStatement statement = QueueStatement.of(userAccount, token, QueueStatus.WAIT);
-        return QueueCommand.Get.from(queueRepository.save(statement));
+        return token;
     }
 
     @Transactional(readOnly = true)

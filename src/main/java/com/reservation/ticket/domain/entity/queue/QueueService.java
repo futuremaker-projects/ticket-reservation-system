@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface QueueService {
 
-    QueueCommand.Get createQueue(Long userId);
+    String createQueue(Long userId);
 
     List<QueueCommand.Get> selectQueueByStatus(QueueStatus status);
 

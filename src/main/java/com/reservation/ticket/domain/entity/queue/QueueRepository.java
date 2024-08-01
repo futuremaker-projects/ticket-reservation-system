@@ -20,4 +20,5 @@ public interface QueueRepository {
 
     QueueEntity getQueueByUserId(Long userId);
 
+    void removeQueue(String token);
 }

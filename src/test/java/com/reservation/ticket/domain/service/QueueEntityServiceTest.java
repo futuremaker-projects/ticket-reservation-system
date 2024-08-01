@@ -1,12 +1,11 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
-import com.reservation.ticket.domain.entity.userAccount.UserAccount;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
-import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueRepository;
+import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
+import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,13 +52,10 @@ class QueueEntityServiceTest {
         given(queueRepository.save(any(QueueStatement.class))).willReturn(savedQueueEntity);
 
         // when
-        QueueCommand.Get getQueue = sut.createQueue(userId);
+        String generatedToken = sut.createQueue(userId);
 
         // then
-        assertThat(getQueue).isNotNull();
-        assertThat(getQueue.id()).isEqualTo(savedQueueEntity.getId());
-        assertThat(getQueue.queueStatus()).isEqualTo(QueueStatus.WAIT);
-        assertThat(getQueue.token()).isEqualTo(savedQueueEntity.getToken());
+        assertThat(generatedToken).isEqualTo(savedQueueEntity.getToken());
 
         then(userAccountRepository).should().findById(userId);
         then(queueRepository).should().save(any(QueueStatement.class));

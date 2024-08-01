@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenVerificationInterceptor)
                 .addPathPatterns(       // 토큰검증이 필요한 URI
                         "/api/concertSchedules/**", "/api/payment/**",
-                        "/api/queue/**", "/api/reservation/**"
+                        "/api/reservation/**"
                 )
                 .excludePathPatterns(   // swagger는 ignore
                         "/swagger-ui/**", "/v3/api-docs/**", "/error"

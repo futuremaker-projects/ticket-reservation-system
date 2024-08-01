@@ -23,8 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(QueueController.class)
 @ExtendWith(SpringExtension.class)
@@ -50,22 +49,16 @@ class QueueEntityControllerTest {
         Long userId = 1L;
         QueueDto.Request request = QueueDto.Request.of(userId);
 
-        QueueCommand.Get queueCommand = QueueCommand.Get.of(1L, token, QueueStatus.WAIT,
-                LocalDateTime.of(2022, 5, 20, 2, 10),
-                LocalDateTime.of(2022, 5, 20, 2, 10));
-        given(queueService.createQueue(userId)).willReturn(queueCommand);
-
-        QueueDto.Response response = QueueDto.Response.from(queueCommand);
+        given(queueService.createQueue(userId)).willReturn(token);
 
         // when
         mockMvc.perform(post("/api/queue/token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .header(HttpHeaders.AUTHORIZATION, token)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().bytes(objectMapper.writeValueAsBytes(response)));
+                .andExpect(header().string(HttpHeaders.AUTHORIZATION, token));
 
         // then
         then(queueService).should().createQueue(userId);
