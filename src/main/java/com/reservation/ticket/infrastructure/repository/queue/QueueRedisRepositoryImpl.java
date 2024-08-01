@@ -1,8 +1,9 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.entity.queue.QueueRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
+import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,26 +25,22 @@ public class QueueRedisRepositoryImpl implements QueueRepository {
     }
 
     @Override
-    public Queue save(Queue queue) {
-        /**
-         * 키 벨류 스코어
-         *
-         */
-        return zSetOps.add();
+    public QueueEntity save(QueueStatement statement) {
+        return null;
     }
 
     @Override
-    public List<Queue> findAllByQueueStatus(QueueStatus queueStatus) {
+    public List<QueueEntity> getQueuesByStatus(QueueStatus queueStatus) {
         return List.of();
     }
 
     @Override
-    public List<Queue> findAllByQueueStatusPerLimit(QueueStatus queueStatus, int limit) {
+    public List<QueueEntity> getQueuesByStatusPerLimit(QueueStatus queueStatus, int limit) {
         return List.of();
     }
 
     @Override
-    public Queue findByToken(String token) {
+    public QueueEntity getQueueByToken(String token) {
         return null;
     }
 
@@ -53,7 +50,7 @@ public class QueueRedisRepositoryImpl implements QueueRepository {
     }
 
     @Override
-    public Queue findQueueByUserId(Long userId) {
+    public QueueEntity getQueueByUserId(Long userId) {
         return null;
     }
 }
