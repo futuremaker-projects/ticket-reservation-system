@@ -2,6 +2,7 @@ package com.reservation.ticket.dummy;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class DummyData {
 
@@ -50,6 +51,11 @@ public class DummyData {
                 "a7c9a66556c7"
         );
         return tokens;
+    }
+
+    public static String generateToken() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.substring(uuid.lastIndexOf("-") + 1);
     }
 
 }

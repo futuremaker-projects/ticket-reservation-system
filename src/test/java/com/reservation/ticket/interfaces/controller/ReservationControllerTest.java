@@ -4,11 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.dto.result.ReservationResult;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.interfaces.dto.ReservationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,7 @@ class ReservationControllerTest {
     @MockBean
     ReservationUsecase reservationUsecase;
     @MockBean
-    QueueServiceImpl queueService;
+    QueueService queueService;
 
     @DisplayName("콘서트 스케줄 id와 자리 id를 받아 예약 생성한다.")
     @Test

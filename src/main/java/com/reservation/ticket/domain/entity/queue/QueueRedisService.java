@@ -6,6 +6,8 @@ import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
+import com.reservation.ticket.infrastructure.repository.queue.ActiveQueueRedisRepository;
+import com.reservation.ticket.infrastructure.repository.queue.WaitQueueRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +16,18 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class QueueRedisServiceImpl  {
+public class QueueRedisService {
 
     private final UserAccountRepository userAccountRepository;
-    private final QueueRepository queueRepository;
+    private final WaitQueueRedisRepository waitQueueRedisRepository;
+    private final ActiveQueueRedisRepository activeQueueRedisRepository;
 
-    public String createQueue(Long userId) {
+    public String createWaitQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
         String token = generateToken();
         // 생성된 토큰을 사용자 정보에 저장
         userAccount.saveToken(token);
-        queueRepository.save(QueueStatement.of(userAccount, token, QueueStatus.WAIT));
+        waitQueueRedisRepository.save(QueueStatement.of(userAccount, token, QueueStatus.WAIT));
         // response header에 넣어주기 위한 토큰을 리턴
         return token;
     }
@@ -37,8 +40,8 @@ public class QueueRedisServiceImpl  {
 
     }
 
-    public void expireQueue(String token) {
-
+    public void removeQueue(String token) {
+        activeQueueRedisRepository.removeQueue(token);
     }
 
     public QueueCommand.Get getQueueByToken(String token) {
@@ -46,8 +49,7 @@ public class QueueRedisServiceImpl  {
     }
 
     public void verifyQueue(String token) {
-        QueueEntity queue = queueRepository.getQueueByToken(token);
-
+        activeQueueRedisRepository.verify(token);
     }
 
     public void changeTokenStatusToExpire() {
@@ -55,7 +57,11 @@ public class QueueRedisServiceImpl  {
     }
 
     public void changeTokenStatusToActive() {
-
+        int limit = 30;
+        List<QueueEntity> queues = waitQueueRedisRepository.getQueuesByStatusPerLimit(QueueStatus.WAIT, limit);
+        for (QueueEntity queue : queues) {
+            activeQueueRedisRepository.save(QueueStatement.of(queue.getToken(), QueueStatus.ACTIVE));
+        }
     }
 
     private String generateToken() {

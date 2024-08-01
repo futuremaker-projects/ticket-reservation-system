@@ -2,9 +2,8 @@ package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.interfaces.dto.QueueDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDateTime;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -35,7 +32,7 @@ class QueueEntityControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    QueueServiceImpl queueService;
+    QueueService queueService;
 
     @DisplayName("사용자의 정보를 이용하여 최초 대기열 데이터 생성한다.")
     @Test

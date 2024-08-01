@@ -6,8 +6,6 @@ import com.reservation.ticket.domain.entity.concert.reservation.ReservationServi
 import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
 import com.reservation.ticket.domain.entity.point.PointService;
 import com.reservation.ticket.domain.entity.queue.QueueService;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountService;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;

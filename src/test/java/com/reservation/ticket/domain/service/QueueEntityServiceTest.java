@@ -1,7 +1,7 @@
 package com.reservation.ticket.domain.service;
 
 import com.reservation.ticket.domain.entity.queue.QueueRepository;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.then;
 class QueueEntityServiceTest {
 
     @InjectMocks
-    QueueServiceImpl sut;
+    QueueService sut;
     @Mock
     QueueRepository queueRepository;
     @Mock

@@ -5,9 +5,8 @@ import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
 import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
 import com.reservation.ticket.interfaces.dto.SeatDto;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +42,7 @@ class ConcertScheduleControllerTest {
     @MockBean
     ConcertScheduleUsecase concertScheduleUsecase;
     @MockBean
-    QueueServiceImpl queueService;
+    QueueService queueService;
 
     @DisplayName("콘서트 id를 이용하여 콘서트 스케줄 id를 조회한다.")
     @Test

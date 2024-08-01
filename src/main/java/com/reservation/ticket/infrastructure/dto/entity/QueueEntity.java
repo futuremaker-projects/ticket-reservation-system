@@ -74,6 +74,10 @@ public class QueueEntity {
         return new QueueEntity(null, userAccount, token, null);
     }
 
+    public static QueueEntity of(String token) {
+        return new QueueEntity(null, null, token, null);
+    }
+
     public static QueueEntity of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
         return new QueueEntity(id, token, status, shouldExpiredAt, createdAt);
     }

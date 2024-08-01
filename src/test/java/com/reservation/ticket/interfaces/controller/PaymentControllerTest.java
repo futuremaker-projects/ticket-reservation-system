@@ -3,9 +3,8 @@ package com.reservation.ticket.interfaces.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.usecase.PaymentUsecase;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.interfaces.dto.PaymentDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,7 @@ class PaymentControllerTest {
     @MockBean
     PaymentUsecase paymentUsecase;
     @MockBean
-    QueueServiceImpl queueService;
+    QueueService queueService;
 
     @DisplayName("예약 정보를 이용하여 결재를 생성한다.")
     @Test

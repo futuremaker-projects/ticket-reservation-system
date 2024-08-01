@@ -1,7 +1,6 @@
 package com.reservation.ticket.support.config.interceptor;
 
 import com.reservation.ticket.domain.entity.queue.QueueService;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

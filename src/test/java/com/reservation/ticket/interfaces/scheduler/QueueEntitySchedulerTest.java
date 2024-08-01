@@ -2,7 +2,7 @@ package com.reservation.ticket.interfaces.scheduler;
 
 import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.support.config.ScheduledConfig;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ public class QueueEntitySchedulerTest {
     SchedulerManager schedulerManager;
 
     @Autowired
-    QueueServiceImpl queueService;
+    QueueService queueService;
 
     @DisplayName("등록일을 기준으로 5분이 지났을 때 상태값이 `ACTIVE`면 `EXPIRED`로 변경시킨다.")
     @Test

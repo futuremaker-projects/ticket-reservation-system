@@ -31,6 +31,10 @@ public record QueueStatement(Long id,
         return new QueueStatement(null, userAccount, token, queueStatus, null, null);
     }
 
+    public static QueueStatement of(String token, QueueStatus queueStatus) {
+        return new QueueStatement(null, null, token, queueStatus, null, null);
+    }
+
     public QueueEntity toEntity() {
         return QueueEntity.of(userAccount, token, queueStatus);
     }

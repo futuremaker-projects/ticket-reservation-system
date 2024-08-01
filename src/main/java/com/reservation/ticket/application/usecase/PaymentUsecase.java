@@ -5,7 +5,7 @@ import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentS
 import com.reservation.ticket.domain.entity.point.PointService;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
-import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
+import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentUsecase {
 
     private final UserAccountService userAccountService;
-    private final QueueServiceImpl queueService;
+    private final QueueService queueService;
     private final ReservationService reservationService;
     private final PaymentService paymentService;
     private final PointService pointService;

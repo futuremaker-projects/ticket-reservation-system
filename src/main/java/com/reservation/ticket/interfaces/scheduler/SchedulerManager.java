@@ -1,10 +1,8 @@
 package com.reservation.ticket.interfaces.scheduler;
 
-import com.reservation.ticket.application.usecase.QueueUsecase;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
 import com.reservation.ticket.domain.entity.queue.QueueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
