@@ -34,6 +34,11 @@ public class QueueEntity {
     private LocalDateTime shouldExpiredAt;
     private LocalDateTime createdAt;
 
+    @PrePersist
+    public void setDates() {
+        this.createdAt = LocalDateTime.now();
+    }
+
     public QueueEntity(Long id, UserAccount userAccount, String token, QueueStatus queueStatus) {
         this.id = id;
         this.userAccount = userAccount;
@@ -69,23 +74,6 @@ public class QueueEntity {
         return new QueueEntity(id, token, status, shouldExpiredAt, createdAt);
     }
 
-    @PrePersist
-    public void setDates() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof QueueEntity queueEntity)) return false;
-        return id != null && id.equals(queueEntity.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
     public void saveStatusInQueue(int countActiveStatus) {
         int allowedActiveCount = 30;
         if (countActiveStatus < allowedActiveCount) {
@@ -116,7 +104,19 @@ public class QueueEntity {
 
     public void verifyQueueStatus() {
         if (!(this.queueStatus == QueueStatus.ACTIVE)) {
-            throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token status is not Active : %s".formatted(this.queueStatus));
+            throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token queueStatus is not Active : %s".formatted(this.queueStatus));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof QueueEntity queueEntity)) return false;
+        return id != null && id.equals(queueEntity.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

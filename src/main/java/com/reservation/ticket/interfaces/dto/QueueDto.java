@@ -28,7 +28,7 @@ public class QueueDto {
 
         public static Response from(QueueCommand.Get queueCommand) {
             return Response.of(
-                    queueCommand.id(), queueCommand.token(), queueCommand.status(),
+                    queueCommand.id(), queueCommand.token(), queueCommand.queueStatus(),
                     queueCommand.shouldExpiredAt(), queueCommand.createdAt()
             );
         }

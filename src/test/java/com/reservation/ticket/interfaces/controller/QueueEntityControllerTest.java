@@ -44,8 +44,8 @@ class QueueEntityControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
+        QueueCommand.Get get = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(get);
 
         Long userId = 1L;
         QueueDto.Request request = QueueDto.Request.of(userId);

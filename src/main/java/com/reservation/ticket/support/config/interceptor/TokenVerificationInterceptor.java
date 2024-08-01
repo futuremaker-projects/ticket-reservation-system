@@ -25,8 +25,7 @@ public class TokenVerificationInterceptor implements HandlerInterceptor {
 //             throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token is required");
             return false;
         }
-        QueueEntity queueEntity = queueService.getQueueByToken(token);
-        queueEntity.verifyQueueStatus();
+        queueService.verifyQueue(token);
         return true;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
 import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.queue.QueueServiceImpl;
@@ -50,7 +51,7 @@ class ConcertScheduleControllerTest {
         // given
         String token = "27c4c82ba7c3";
         Long queueId = 1L;
-        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
+        QueueCommand.Get queueEntity = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
         given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         Long concertId = 1L;
@@ -81,8 +82,8 @@ class ConcertScheduleControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
+        QueueCommand.Get queue = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queue);
 
         Long concertScheduleId = 1L;
         List<SeatResult> commandSeats = List.of(

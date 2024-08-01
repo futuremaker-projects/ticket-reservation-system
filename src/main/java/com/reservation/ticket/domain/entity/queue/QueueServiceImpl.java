@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
 public class QueueServiceImpl implements QueueService{
 
@@ -56,8 +55,13 @@ public class QueueServiceImpl implements QueueService{
         queueEntity.changeStatus(QueueStatus.EXPIRED);
     }
 
-    public QueueEntity getQueueByToken(String token) {
-        return queueRepository.getQueueByToken(token);
+    public QueueCommand.Get getQueueByToken(String token) {
+        return QueueCommand.Get.from(queueRepository.getQueueByToken(token));
+    }
+
+    @Override
+    public void verifyQueue(String token) {
+
     }
 
     /**

@@ -10,16 +10,20 @@ public class QueueCommand {
     public record Get(Long id,
                       UserCommand.Get userAccount,
                       String token,
-                      QueueStatus status,
+                      QueueStatus queueStatus,
                       LocalDateTime shouldExpiredAt,
                       LocalDateTime createdAt
     ) {
-        public static Get of(Long id, UserCommand.Get user, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
-            return new Get(id, user, token, status, shouldExpiredAt, createdAt);
+        public static Get of(Long id, UserCommand.Get user, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+            return new Get(id, user, token, queueStatus, shouldExpiredAt, createdAt);
         }
 
-        public static Get of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
-            return new Get(id, null, token, status, shouldExpiredAt, createdAt);
+        public static Get of(Long id, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+            return new Get(id, null, token, queueStatus, shouldExpiredAt, createdAt);
+        }
+
+        public static Get of(Long id, String token, QueueStatus queueStatus) {
+            return new Get(id, null, token, queueStatus, null, null);
         }
 
         public static Get from(QueueEntity queueEntity) {
@@ -33,7 +37,7 @@ public class QueueCommand {
         }
 
         public QueueDto.Response toResponse() {
-            return QueueDto.Response.of(id, token, status, shouldExpiredAt, createdAt);
+            return QueueDto.Response.of(id, token, queueStatus, shouldExpiredAt, createdAt);
         }
     }
 }

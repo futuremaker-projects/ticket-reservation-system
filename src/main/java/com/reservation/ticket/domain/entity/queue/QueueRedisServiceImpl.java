@@ -2,6 +2,7 @@ package com.reservation.ticket.domain.entity.queue;
 
 import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.infrastructure.repository.queue.QueueRedisRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class QueueRedisService implements QueueService{
+public class QueueRedisServiceImpl implements QueueService {
 
-    private final QueueRedisRepositoryImpl queueRedisRepositoryImpl;
+    private final QueueRepository queueRepository;
 
     @Override
     public QueueCommand.Get createQueue(Long userId) {
@@ -31,6 +32,17 @@ public class QueueRedisService implements QueueService{
 
     @Override
     public void expireQueue(String token) {
+
+    }
+
+    @Override
+    public QueueCommand.Get getQueueByToken(String token) {
+        return null;
+    }
+
+    @Override
+    public void verifyQueue(String token) {
+        QueueEntity queue = queueRepository.getQueueByToken(token);
 
     }
 

@@ -3,6 +3,7 @@ package com.reservation.ticket.interfaces.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reservation.ticket.application.dto.result.ReservationResult;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -49,8 +50,8 @@ class ReservationControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
+        QueueCommand.Get get = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(get);
 
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(1L, 2L, 3L);

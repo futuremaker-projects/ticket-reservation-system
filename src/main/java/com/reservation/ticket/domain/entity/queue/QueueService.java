@@ -5,7 +5,7 @@ import com.reservation.ticket.domain.enums.QueueStatus;
 
 import java.util.List;
 
-interface QueueService {
+public interface QueueService {
 
     QueueCommand.Get createQueue(Long userId);
 
@@ -13,6 +13,9 @@ interface QueueService {
 
     void renewQueueExpirationDate(String token);
     void expireQueue(String token);
+
+    QueueCommand.Get getQueueByToken(String token);
+    void verifyQueue(String token);
 
     void changeTokenStatusToExpire();
     void changeTokenStatusToActive();

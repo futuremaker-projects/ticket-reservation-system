@@ -58,7 +58,7 @@ class QueueEntityServiceTest {
         // then
         assertThat(getQueue).isNotNull();
         assertThat(getQueue.id()).isEqualTo(savedQueueEntity.getId());
-        assertThat(getQueue.status()).isEqualTo(QueueStatus.WAIT);
+        assertThat(getQueue.queueStatus()).isEqualTo(QueueStatus.WAIT);
         assertThat(getQueue.token()).isEqualTo(savedQueueEntity.getToken());
 
         then(userAccountRepository).should().findById(userId);
