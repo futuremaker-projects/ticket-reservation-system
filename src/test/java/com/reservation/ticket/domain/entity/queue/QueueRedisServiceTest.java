@@ -34,18 +34,17 @@ class QueueRedisServiceTest {
         String token = queueRedisService.createWaitQueue(userId);
 
         // then
-
+        // 결과는 medis 에서 확인했습니다
     }
 
+    @DisplayName("WAIT 대기열의 데이터를 ACTIVE로 변경한다.")
     @Test
     void test02() {
-        // given
-
         // when
         queueRedisService.changeTokenStatusToActive();
 
         // then
-
+        // 결과는 medis 에서 확인했습니다
     }
 
     @DisplayName("토큰을 이용하여 ACTIVE 대기열의 데이터르 삭제한다.")

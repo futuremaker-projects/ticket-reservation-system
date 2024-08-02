@@ -1,6 +1,8 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
 import com.reservation.ticket.domain.enums.QueueStatus;
+import com.reservation.ticket.domain.exception.ApplicationException;
+import com.reservation.ticket.domain.exception.ErrorCode;
 import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
 import jakarta.annotation.PostConstruct;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,34 +33,34 @@ public class ActiveQueueRedisRepository {
         return QueueEntity.of(statement.token());
     }
 
-    public void removeQueues(QueueStatus queueStatus, List<String> queues) {
-
-    }
-
+    /**
+     * members() 를 이용하여 token의 ACTIVE 대기열 정보를 가져옴
+     *  데이터가 없으면 null
+     */
     public QueueEntity getQueueByToken(String token) {
-        String pop = this.setOperations.pop(token);
-        return null;
+        Set<String> members = this.setOperations.members(token);
+        assert members != null;
+        return members.stream()
+                .filter(member -> member.equals(token))
+                .map(QueueEntity::of)
+                .findFirst().orElse(null);
     }
-
 
     public void removeQueue(String token) {
         this.setOperations.remove(QueueStatus.ACTIVE.name(), token);
     }
 
-    public List<QueueEntity> getQueuesByStatusPerLimit(QueueStatus queueStatus, int limit) {
-        return List.of();
+    /**
+     * 인터셉터에서 사용예정
+     */
+    public void verify(String token) {
+        QueueEntity queueByToken = getQueueByToken(token);
+        if (queueByToken == null) {
+            throw new ApplicationException(ErrorCode.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+        }
     }
-    public List<QueueEntity> getQueuesByStatus(QueueStatus queueStatus) {
-        return List.of();
-    }
+
     public int countByStatus(QueueStatus status) {
         return Objects.requireNonNull(this.setOperations.size(status.name())).intValue();
-    }
-    public QueueEntity getQueueByUserId(Long userId) {
-        return null;
-    }
-
-    public void verify(String token) {
-
     }
 }
