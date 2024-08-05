@@ -21,19 +21,19 @@ import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Import({RedisConfig.class, WebTestConfig.class, WaitQueueRedisRepository.class})
+@Import({RedisConfig.class, WebTestConfig.class, QueueRedisRepository.class})
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class WaitQueueRedisRepositoryTest {
+class QueueRedisRepositoryTest {
 
-    private final WaitQueueRedisRepository waitQueueRedisRepository;
+    private final QueueRedisRepository queueRedisRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
-    public WaitQueueRedisRepositoryTest(
-            @Autowired WaitQueueRedisRepository waitQueueRedisRepository,
+    public QueueRedisRepositoryTest(
+            @Autowired QueueRedisRepository queueRedisRepository,
             @Autowired RedisTemplate redisTemplate
     ) {
-        this.waitQueueRedisRepository = waitQueueRedisRepository;
+        this.queueRedisRepository = queueRedisRepository;
         this.redisTemplate = redisTemplate;
     }
 
@@ -44,7 +44,7 @@ class WaitQueueRedisRepositoryTest {
         for (String token: DummyData.tokens()) {
             UserAccount userAccount = UserAccount.of(userId++);
             QueueStatement statement = QueueStatement.of(userAccount, token, QueueStatus.WAIT);
-            waitQueueRedisRepository.save(statement);
+            queueRedisRepository.save(statement);
         }
     }
 
@@ -59,12 +59,24 @@ class WaitQueueRedisRepositoryTest {
         QueueStatement statement = QueueStatement.of(userAccount, token, QueueStatus.WAIT);
 
         // when
-        waitQueueRedisRepository.save(statement);
+        queueRedisRepository.save(statement);
 
         // then
-        QueueEntity queueByToken = waitQueueRedisRepository.getQueueByToken(token);
+        QueueEntity queueByToken = queueRedisRepository.getQueueByToken(token);
         assertThat(queueByToken).isNotNull();
         assertThat(queueByToken.getToken()).isEqualTo(token);
+    }
+
+    @DisplayName("토큰을 이용하여 해당 토큰이 대기열에 존재하는지 확인한다.")
+    @Test
+    void redisGetByToken() {
+        // given
+        String token = "b02567dca467";
+
+        // when
+        queueRedisRepository.getQueueByToken(token);
+
+        // then
     }
 
     @DisplayName("WAIT 대기열의 정보를 정해진 수만큼 가져져온다.")
@@ -75,7 +87,7 @@ class WaitQueueRedisRepositoryTest {
         int limit = 9;
 
         // when
-        List<QueueEntity> queues = waitQueueRedisRepository.getQueuesByStatusPerLimit(queueStatus, limit);
+        List<QueueEntity> queues = queueRedisRepository.getQueuesByStatusPerLimit(queueStatus, limit);
 
         // then
         assertThat(queues.size()).isEqualTo(limit + 1);
@@ -88,7 +100,7 @@ class WaitQueueRedisRepositoryTest {
         String token = "734488355d85";
 
         // when
-        waitQueueRedisRepository.removeQueue(QueueStatus.WAIT, token);
+        queueRedisRepository.removeQueue(QueueStatus.WAIT, token);
     }
 
 }
