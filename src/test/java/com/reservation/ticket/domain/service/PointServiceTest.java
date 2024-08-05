@@ -1,12 +1,13 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.PointCommand;
-import com.reservation.ticket.domain.entity.PointHistory;
-import com.reservation.ticket.domain.entity.UserAccount;
+import com.reservation.ticket.domain.dto.command.PointCommand;
+import com.reservation.ticket.domain.entity.point.pointhistory.PointHistory;
+import com.reservation.ticket.domain.entity.point.PointService;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.TransactionType;
-import com.reservation.ticket.domain.repository.PointHistoryRepository;
-import com.reservation.ticket.domain.repository.UserAccountRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.domain.entity.point.pointhistory.PointHistoryRepository;
+import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.utils.DummyData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,8 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class PointServiceTest {
 
-    @InjectMocks PointService sut;
+    @InjectMocks
+    PointService sut;
 
     @Mock PointHistoryRepository pointHistoryRepository;
     @Mock UserAccountRepository userAccountRepository;

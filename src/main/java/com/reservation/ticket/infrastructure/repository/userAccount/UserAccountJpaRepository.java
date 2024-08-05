@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.userAccount;
 
-import com.reservation.ticket.domain.entity.UserAccount;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

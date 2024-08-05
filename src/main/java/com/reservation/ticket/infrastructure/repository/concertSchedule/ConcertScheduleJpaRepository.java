@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.concertSchedule;
 
-import com.reservation.ticket.domain.entity.ConcertSchedule;
+import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

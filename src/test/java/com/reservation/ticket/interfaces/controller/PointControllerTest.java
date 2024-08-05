@@ -1,12 +1,12 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.ticket.domain.command.PointCommand;
-import com.reservation.ticket.domain.entity.Queue;
+import com.reservation.ticket.domain.dto.command.PointCommand;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.service.PointService;
-import com.reservation.ticket.domain.service.QueueService;
-import com.reservation.ticket.interfaces.controller.dto.PointDto;
+import com.reservation.ticket.domain.entity.point.PointService;
+import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.interfaces.dto.PointDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,8 +45,8 @@ class PointControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueCommand.Get get = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(get);
 
         int point = 100;
         PointCommand.Get pointCommand = PointCommand.Get.of(point);

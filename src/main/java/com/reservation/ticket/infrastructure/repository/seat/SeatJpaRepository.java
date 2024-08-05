@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.seat;
 
-import com.reservation.ticket.domain.entity.Seat;
+import com.reservation.ticket.domain.entity.concert.reservation.Seat;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

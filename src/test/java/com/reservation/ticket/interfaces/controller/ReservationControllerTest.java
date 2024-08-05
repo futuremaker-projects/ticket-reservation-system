@@ -1,14 +1,14 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.application.dto.result.ReservationResult;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
-import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.entity.Queue;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.service.QueueService;
-import com.reservation.ticket.interfaces.controller.dto.ReservationDto;
+import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.interfaces.dto.ReservationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,8 +49,8 @@ class ReservationControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueCommand.Get get = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(get);
 
         Long concertScheduleId = 1L;
         List<Long> seatIds = List.of(1L, 2L, 3L);
@@ -58,10 +58,9 @@ class ReservationControllerTest {
         ReservationDto.Request request = ReservationDto.Request.of(concertScheduleId, seatIds, price);
 
         Long reservationId = 1L;
-        ReservationCommand.Get reservationCommand =
-                ReservationCommand.Get.of(reservationId, price, PaymentStatus.NOT_PAID, ReservationStatus.ACTIVE, LocalDateTime.now());
+        ReservationResult reservation = ReservationResult.of(reservationId, price, PaymentStatus.NOT_PAID, ReservationStatus.ACTIVE, LocalDateTime.now());
 
-        given(reservationUsecase.makeReservation(request.toCreate(), token)).willReturn(reservationCommand);
+        given(reservationUsecase.makeReservation(request.toCriteria(), token)).willReturn(reservation);
 
         // when
         mockMvc.perform(post("/api/reservation")
@@ -72,7 +71,7 @@ class ReservationControllerTest {
                 .andDo(print());
 
         // then
-        then(reservationUsecase).should().makeReservation(request.toCreate(), token);
+        then(reservationUsecase).should().makeReservation(request.toCriteria(), token);
     }
 
 }

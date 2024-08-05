@@ -1,14 +1,14 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
+import com.reservation.ticket.application.dto.result.SeatResult;
 import com.reservation.ticket.application.usecase.ConcertScheduleUsecase;
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
-import com.reservation.ticket.domain.entity.Queue;
+import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.service.QueueService;
-import com.reservation.ticket.interfaces.controller.dto.ConcertScheduleDto;
-import com.reservation.ticket.interfaces.controller.dto.SeatDto;
+import com.reservation.ticket.domain.entity.queue.QueueService;
+import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
+import com.reservation.ticket.interfaces.dto.SeatDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,13 +50,13 @@ class ConcertScheduleControllerTest {
         // given
         String token = "27c4c82ba7c3";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueService.getQueueByToken(token)).willReturn(queue);
+        QueueCommand.Get queueEntity = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueService.getQueueByToken(token)).willReturn(queueEntity);
 
         Long concertId = 1L;
-        List<ConcertScheduleCommand.Get> concertScheduleCommands = List.of(
-                ConcertScheduleCommand.Get.of(1L, 50, LocalDateTime.now()),
-                ConcertScheduleCommand.Get.of(1L, 50, LocalDateTime.now())
+        List<ConcertScheduleResult> concertScheduleCommands = List.of(
+                ConcertScheduleResult.of(1L, 50, LocalDateTime.now()),
+                ConcertScheduleResult.of(1L, 50, LocalDateTime.now())
         );
         List<ConcertScheduleDto.Response> responses = concertScheduleCommands.stream().map(ConcertScheduleDto.Response::from).toList();
         given(concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token)).willReturn(concertScheduleCommands);
@@ -81,14 +81,14 @@ class ConcertScheduleControllerTest {
         // given
         String token = "734488355d85";
         Long queueId = 1L;
-        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
+        QueueCommand.Get queue = QueueCommand.Get.of(queueId, token, QueueStatus.ACTIVE);
         given(queueService.getQueueByToken(token)).willReturn(queue);
 
         Long concertScheduleId = 1L;
-        List<SeatCommand.Get> commandSeats = List.of(
-                SeatCommand.Get.of(1L, 1L, null, false),
-                SeatCommand.Get.of(2L, 1L, null, false),
-                SeatCommand.Get.of(3L, 1L, null, false)
+        List<SeatResult> commandSeats = List.of(
+                SeatResult.of(1L, 1L, null, false),
+                SeatResult.of(2L, 1L, null, false),
+                SeatResult.of(3L, 1L, null, false)
         );
         List<SeatDto.Response> responses = commandSeats.stream().map(SeatDto.Response::from).toList();
         given(concertScheduleUsecase.selectSeatsByConcertScheduleId(concertScheduleId, token)).willReturn(commandSeats);

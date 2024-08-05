@@ -1,10 +1,11 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.application.dto.criteria.ReservationCriteria;
+import com.reservation.ticket.application.dto.result.ReservationResult;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.service.SeatService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ class ReservationUsecaseTest {
     @Autowired ReservationUsecase reservationUsecase;
     @Autowired SeatService seatService;
 
-    @DisplayName("예약정보가 주어지면 예약이 이루어지며, 예약한 좌석이 점유된다.")
+    @DisplayName("예약정보가 주어지면 예약이 이루어지며, 선택한 좌석이 점유된다.")
     @Test
     void givenReservationData_whenMakeReservation_thenNothingReturn() {
         // given
@@ -31,10 +32,10 @@ class ReservationUsecaseTest {
         Long concertScheduleId = 1L;
         List<Long> seats = List.of(5L, 8L);
         String token = "734488355d85";
-        ReservationCommand.Create create = ReservationCommand.Create.of(concertScheduleId, seats, price);
+        ReservationCriteria criteria = ReservationCriteria.of(concertScheduleId, seats, price);
 
         // when
-        ReservationCommand.Get reservation = reservationUsecase.makeReservation(create, token);
+        ReservationResult reservation = reservationUsecase.makeReservation(criteria, token);
 
         // then
         assertThat(reservation).isNotNull();

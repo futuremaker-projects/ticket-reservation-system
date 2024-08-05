@@ -1,14 +1,14 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.ReservationCommand;
-import com.reservation.ticket.domain.entity.Reservation;
-import com.reservation.ticket.domain.entity.UserAccount;
+import com.reservation.ticket.domain.dto.command.ReservationCommand;
+import com.reservation.ticket.domain.dto.info.ReservationInfo;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.enums.LockType;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.repository.ReservationRepository;
-import com.reservation.ticket.domain.repository.TicketRepository;
-import jakarta.persistence.LockModeType;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,10 +50,10 @@ class ReservationServiceTest {
 
         Long reservationId = 1L;
         Reservation reservation = Reservation.of(userAccount, price, PaymentStatus.NOT_PAID, ReservationStatus.ACTIVE);
-        given(reservationRepository.save(any(Reservation.class))).willReturn(reservation);
+        given(reservationRepository.reserve(any(Reservation.class))).willReturn(reservation);
 
         // when
-        ReservationCommand.Get savedReservation = sut.reserve(create, userAccount, LockType.NONE);
+        ReservationInfo savedReservation = sut.reserve(create, userAccount, LockType.NONE);
 
         // then
         assertThat(savedReservation.price()).isEqualTo(reservation.getPrice());
@@ -61,7 +61,7 @@ class ReservationServiceTest {
         assertThat(savedReservation.reservationStatus()).isEqualTo(reservation.getReservationStatus());
 
         ArgumentCaptor<Reservation> reservationArgumentCaptor = ArgumentCaptor.forClass(Reservation.class);
-        then(reservationRepository).should().save(reservationArgumentCaptor.capture());
+        then(reservationRepository).should().reserve(reservationArgumentCaptor.capture());
 
         Reservation argumentCaptorValue = reservationArgumentCaptor.getValue();
         assertThat(argumentCaptorValue).isNotNull();

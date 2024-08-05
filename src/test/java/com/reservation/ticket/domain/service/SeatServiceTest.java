@@ -1,9 +1,11 @@
 package com.reservation.ticket.domain.service;
 
-import com.reservation.ticket.domain.command.SeatCommand;
-import com.reservation.ticket.domain.entity.Seat;
-import com.reservation.ticket.domain.repository.SeatRepository;
-import com.reservation.ticket.infrastructure.exception.ApplicationException;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
+import com.reservation.ticket.domain.entity.concert.reservation.Seat;
+import com.reservation.ticket.domain.entity.concert.reservation.SeatService;
+import com.reservation.ticket.domain.entity.concert.reservation.SeatRepository;
+import com.reservation.ticket.domain.exception.ApplicationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -20,7 +21,8 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class SeatServiceTest {
 
-    @InjectMocks SeatService sut;
+    @InjectMocks
+    SeatService sut;
 
     @Mock SeatRepository seatRepository;
 
@@ -33,7 +35,7 @@ class SeatServiceTest {
         given(seatRepository.findAllByConcertScheduleId(concertScheduleId)).willReturn(seats);
 
         // when
-        List<SeatCommand.Get> seatCommands = sut.selectSeatsByConcertScheduleId(concertScheduleId);
+        List<SeatInfo> seatCommands = sut.selectSeatsByConcertScheduleId(concertScheduleId);
 
         // then
         assertThat(seatCommands.size()).isEqualTo(seats.size());

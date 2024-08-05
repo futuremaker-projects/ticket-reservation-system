@@ -1,7 +1,10 @@
 package com.reservation.ticket.application.usecase;
 
-import com.reservation.ticket.domain.command.ConcertScheduleCommand;
-import com.reservation.ticket.domain.command.SeatCommand;
+import com.reservation.ticket.application.dto.result.ConcertScheduleResult;
+import com.reservation.ticket.application.dto.result.SeatResult;
+import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
+import com.reservation.ticket.domain.dto.command.SeatCommand;
+import com.reservation.ticket.domain.dto.info.SeatInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 
 /**
  *  콘서트 스케줄 통합 테스트
@@ -33,14 +35,14 @@ class ConcertScheduleUsecaseTest {
         Long concertId = 1L;
 
         // when
-        List<ConcertScheduleCommand.Get> concertSchedules =
-                concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token);
+        List<ConcertScheduleResult> concertScheduleResults
+                = concertScheduleUsecase.selectConcertSchedulesByConcertId(concertId, token);
 
         // then
-        assertThat(concertSchedules).isNotEmpty();
-        assertThat(concertSchedules.size()).isEqualTo(3);
+        assertThat(concertScheduleResults).isNotEmpty();
+        assertThat(concertScheduleResults.size()).isEqualTo(3);
 
-        assertThat(concertSchedules)
+        assertThat(concertScheduleResults)
                 .extracting("openedAt")
                 .containsExactlyInAnyOrder(
                         LocalDateTime.of(2024, 7, 9, 9, 33, 40),
@@ -58,7 +60,7 @@ class ConcertScheduleUsecaseTest {
         Long concertId = 1L;
 
         // when
-        List<SeatCommand.Get> seats = concertScheduleUsecase.selectSeatsByConcertScheduleId(concertId, token);
+        List<SeatResult> seats = concertScheduleUsecase.selectSeatsByConcertScheduleId(concertId, token);
 
         // then
         int availableSeats = 50;

@@ -1,7 +1,7 @@
 package com.reservation.ticket.interfaces.controller;
 
-import com.reservation.ticket.domain.service.ConcertService;
-import com.reservation.ticket.interfaces.controller.dto.ConcertDto;
+import com.reservation.ticket.domain.entity.concert.ConcertService;
+import com.reservation.ticket.interfaces.dto.ConcertDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
