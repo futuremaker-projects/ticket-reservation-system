@@ -62,7 +62,7 @@ class QueueRedisRepositoryTest {
         queueRedisRepository.save(statement);
 
         // then
-        QueueEntity queueByToken = queueRedisRepository.getQueueByToken(token);
+        QueueEntity queueByToken = queueRedisRepository.getQueueByToken(statement);
         assertThat(queueByToken).isNotNull();
         assertThat(queueByToken.getToken()).isEqualTo(token);
     }
@@ -74,7 +74,7 @@ class QueueRedisRepositoryTest {
         String token = "b02567dca467";
 
         // when
-        queueRedisRepository.getQueueByToken(token);
+        queueRedisRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.WAIT));
 
         // then
     }
@@ -100,7 +100,7 @@ class QueueRedisRepositoryTest {
         String token = "734488355d85";
 
         // when
-        queueRedisRepository.removeQueue(QueueStatement.of(QueueStatus.WAIT, token));
+        queueRedisRepository.removeQueue(QueueStatement.of(token, QueueStatus.WAIT));
     }
 
 }
