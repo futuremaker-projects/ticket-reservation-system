@@ -54,7 +54,7 @@ class QueueRedisServiceTest {
         String token = "b02567dca468";
 
         // when
-        queueRedisService.removeQueue(token);
+        queueRedisService.removeActiveQueue(token);
 
         // then
     }

@@ -39,7 +39,7 @@ public class QueueService {
 
     @Transactional
     public void renewQueueExpirationDate(String token) {
-        QueueEntity queueEntity = queueRepository.getQueueByToken(token);
+        QueueEntity queueEntity = queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
         queueEntity.extendShouldExpiredAt();
     }
 
@@ -49,13 +49,13 @@ public class QueueService {
      *   - 대기열 만료
      */
     public void expireQueue(String token) {
-        QueueEntity queueEntity = queueRepository.getQueueByToken(token);
+        QueueEntity queueEntity = queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
         queueEntity.verifyQueueStatus();
         queueEntity.changeStatus(QueueStatus.EXPIRED);
     }
 
     public QueueCommand.Get getQueueByToken(String token) {
-        return QueueCommand.Get.from(queueRepository.getQueueByToken(token));
+        return QueueCommand.Get.from(queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE)));
     }
 
     public void verifyQueue(String token) {

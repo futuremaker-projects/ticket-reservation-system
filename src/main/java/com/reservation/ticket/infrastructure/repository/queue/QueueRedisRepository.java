@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.queue.QueueRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
-public class WaitQueueRedisRepository {
+public class QueueRedisRepository implements QueueRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
     private ZSetOperations<String, String> zSetOps;
@@ -25,12 +25,20 @@ public class WaitQueueRedisRepository {
         this.zSetOps = redisTemplate.opsForZSet();
     }
 
+    /**
+     * QueueStatus 에 따라서 대기열을 생성해주면 될거 같다.
+     */
     public QueueEntity save(QueueStatement statement) {
-        // 키를 어떻게 가져가야 하나
         this.zSetOps.add(statement.queueStatus().name(), statement.token(), System.currentTimeMillis());
         return QueueEntity.of(statement.token());
     }
 
+    @Override
+    public QueueEntity getQueueByUserId(Long userId) {
+        return null;
+    }
+
+    @Override
     public List<QueueEntity> getQueuesByStatus(QueueStatus queueStatus) {
         return List.of();
     }
@@ -41,25 +49,33 @@ public class WaitQueueRedisRepository {
         return values.stream().map(QueueEntity::of).toList();
     }
 
-    public QueueEntity getQueueByToken(String token) {
-        Set<String> value = this.zSetOps.range("%s".formatted(QueueStatus.WAIT), 0, -1);
-        return QueueEntity.of(UserAccount.of(1L), token, QueueStatus.WAIT);
+    public QueueEntity getQueueByToken(QueueStatement queueStatement) {
+        Long rank = this.zSetOps.rank(queueStatement.queueStatus().name(), queueStatement.token());
+        if (rank == null) {
+            return null;
+        }
+        return QueueEntity.of(queueStatement.token());
     }
 
+    @Override
     public int countByStatus(QueueStatus status) {
         return 0;
     }
 
-    public QueueEntity getQueueByUserId(Long userId) {
-        return null;
+    public void removeQueue(QueueStatement statement) {
+        this.zSetOps.remove(statement.queueStatus().name(), statement.token());
     }
 
-    public void removeQueue(QueueStatus queueStatus, String token) {
-        this.zSetOps.remove(queueStatus.name(), token);
-    }
-
-    public void removeQueues(QueueStatus queueStatus, List<String> tokens) {
-        this.zSetOps.remove(queueStatus.name(), tokens);
+    @Override
+    public void removeQueues(QueueStatus queueStatus, List<String> queues) {
+        /**
+         * 배열을 넣어주어야 하는건가..
+         */
+        String[] strings = new String[queues.size()];
+        for (int i = 0; i < queues.size(); i++) {
+            strings[i] = queues.get(i);
+        }
+        this.zSetOps.remove(queueStatus.name(), strings);
     }
 
 }

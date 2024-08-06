@@ -12,7 +12,7 @@ public interface QueueRepository {
 
     List<QueueEntity> getQueuesByStatusPerLimit(QueueStatus queueStatus, int limit);
 
-    QueueEntity getQueueByToken(String token);
+    QueueEntity getQueueByToken(QueueStatement statement);
 
     int countByStatus(QueueStatus status);
 
@@ -20,7 +20,7 @@ public interface QueueRepository {
 
     QueueEntity getQueueByUserId(Long userId);
 
-    void removeQueue(QueueStatus queueStatus, String token);
+    void removeQueue(QueueStatement statement);
 
     void removeQueues(QueueStatus queueStatus, List<String> queues);
 }
