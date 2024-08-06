@@ -6,7 +6,6 @@ import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
 import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
-import com.reservation.ticket.infrastructure.repository.queue.ActiveQueueRedisRepository;
 import com.reservation.ticket.infrastructure.repository.queue.QueueRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class QueueRedisService {
 
     private final UserAccountRepository userAccountRepository;
     private final QueueRedisRepository queueRedisRepository;
-    private final ActiveQueueRedisRepository activeQueueRedisRepository;
 
     public String createWaitQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
@@ -40,8 +38,12 @@ public class QueueRedisService {
 
     }
 
-    public void removeQueue(String token) {
-        activeQueueRedisRepository.removeQueue(token);
+    public void removeActiveQueue(String token) {
+        queueRedisRepository.removeQueue(QueueStatement.of(token, QueueStatus.ACTIVE));
+    }
+
+    public void removeWaitQueue(String token) {
+
     }
 
     public QueueCommand.Get getQueueByToken(String token) {

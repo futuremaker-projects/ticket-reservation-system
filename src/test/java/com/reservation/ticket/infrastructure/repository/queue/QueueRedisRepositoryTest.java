@@ -100,7 +100,7 @@ class QueueRedisRepositoryTest {
         String token = "734488355d85";
 
         // when
-        queueRedisRepository.removeQueue(QueueStatus.WAIT, token);
+        queueRedisRepository.removeQueue(QueueStatement.of(QueueStatus.WAIT, token));
     }
 
 }

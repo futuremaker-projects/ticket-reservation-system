@@ -20,7 +20,7 @@ public interface QueueRepository {
 
     QueueEntity getQueueByUserId(Long userId);
 
-    void removeQueue(QueueStatus queueStatus, String token);
+    void removeQueue(QueueStatement statement);
 
     void removeQueues(QueueStatus queueStatus, List<String> queues);
 }

@@ -25,8 +25,10 @@ public class QueueRedisRepository implements QueueRepository {
         this.zSetOps = redisTemplate.opsForZSet();
     }
 
+    /**
+     * QueueStatus 에 따라서 대기열을 생성해주면 될거 같다.
+     */
     public QueueEntity save(QueueStatement statement) {
-        // 키를 어떻게 가져가야 하나
         this.zSetOps.add(statement.queueStatus().name(), statement.token(), System.currentTimeMillis());
         return QueueEntity.of(statement.token());
     }
@@ -60,8 +62,8 @@ public class QueueRedisRepository implements QueueRepository {
         return 0;
     }
 
-    public void removeQueue(QueueStatus queueStatus, String token) {
-        this.zSetOps.remove(queueStatus.name(), token);
+    public void removeQueue(QueueStatement statement) {
+        this.zSetOps.remove(statement.queueStatus().name(), statement.token());
     }
 
     @Override
