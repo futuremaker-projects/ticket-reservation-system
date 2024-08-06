@@ -12,7 +12,7 @@ public interface QueueRepository {
 
     List<QueueEntity> getQueuesByStatusPerLimit(QueueStatus queueStatus, int limit);
 
-    QueueEntity getQueueByToken(String token);
+    QueueEntity getQueueByToken(QueueStatement statement);
 
     int countByStatus(QueueStatus status);
 

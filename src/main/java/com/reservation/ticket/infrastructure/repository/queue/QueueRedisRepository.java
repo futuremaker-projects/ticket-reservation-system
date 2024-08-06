@@ -49,12 +49,12 @@ public class QueueRedisRepository implements QueueRepository {
         return values.stream().map(QueueEntity::of).toList();
     }
 
-    public QueueEntity getQueueByToken(String token) {
-        Long rank = this.zSetOps.rank(QueueStatus.WAIT.name(), token);
+    public QueueEntity getQueueByToken(QueueStatement queueStatement) {
+        Long rank = this.zSetOps.rank(queueStatement.queueStatus().name(), queueStatement.token());
         if (rank == null) {
             return null;
         }
-        return QueueEntity.of(token);
+        return QueueEntity.of(queueStatement.token());
     }
 
     @Override
