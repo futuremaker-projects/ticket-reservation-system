@@ -38,10 +38,8 @@ public class ConcertScheduleUsecase {
      * 2. 날짜로 선택된 콘서트 스케줄에서 연관된 좌석을 조회한다.
      */
     public List<SeatResult> selectSeatsByConcertScheduleId(Long concertScheduleId, String token) {
-        // 콘서트 스케줄 id로 콘서트 스케줄 조회
-        ConcertSchedule concertSchedule = concertScheduleService.getConcertScheduleById(concertScheduleId);
         // 콘서트 스케줄에 연관된 좌석 목록조회
-        List<SeatInfo> seatInfos = seatService.selectSeatsByConcertScheduleId(concertSchedule.getId());
+        List<SeatInfo> seatInfos = seatService.selectSeatsByConcertScheduleId(concertScheduleId);
         // 토큰의 만료시간 5분 연장
         queueService.renewQueueExpirationDate(token);
         return seatInfos.stream().map(SeatResult::from).toList();
