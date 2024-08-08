@@ -68,14 +68,14 @@ class QueueEntityServiceTest {
         Long queueId = 1L;
         String token = generateToken();
         QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueRepository.getQueueByToken(token)).willReturn(queueEntity);
+        given(queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE))).willReturn(queueEntity);
 
         // when
         sut.expireQueue(token);
 
         // then
         assertThat(queueEntity.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
-        then(queueRepository).should().getQueueByToken(token);
+        then(queueRepository).should().getQueueByToken(QueueStatement.of(token, QueueStatus.EXPIRED));
     }
 
 
