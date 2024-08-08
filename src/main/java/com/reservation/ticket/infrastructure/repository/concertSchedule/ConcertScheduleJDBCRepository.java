@@ -15,7 +15,10 @@ import java.time.format.DateTimeFormatter;
 @Repository
 public class ConcertScheduleJDBCRepository {
 
-    // jdbc:mysql://220.88.103.159:13306/concert?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/concert-index?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true";
+    private static final String USER = "root";
+    private static final String PASSWORD = "1234";
+    private static final String BASE_INSERT_SQL = "INSERT INTO schedule_sep_id_op (limit_seat, opened_at, concert_id) VALUES ";
 
     public void bulkInsertConcertSchedules(int totalRecords, int batchSize) {
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
@@ -27,7 +30,7 @@ public class ConcertScheduleJDBCRepository {
             StringBuilder sqlBuilder = new StringBuilder(BASE_INSERT_SQL);
 
             // 시작 날짜 설정
-            LocalDate startDate = LocalDate.of(2024, 1, 1);
+            LocalDate startDate = LocalDate.of(2022, 1, 1);
             LocalDate currentDate = startDate;
 
             for (int i = 0; i < totalRecords; i++) {
@@ -37,9 +40,15 @@ public class ConcertScheduleJDBCRepository {
 
                 // 날짜 계산
                 LocalDateTime openedAt = LocalDateTime.of(currentDate, LocalTime.MIDNIGHT);
-                sqlBuilder.append("(50, '")
+
+                // concert_id 계산 (1에서 5000까지 순차적으로)
+                int concertId = (i % 500) + 1;
+
+                sqlBuilder.append("(100, '")
                         .append(openedAt.format(formatter))
-                        .append("', 1)");
+                        .append("', ")
+                        .append(concertId)
+                        .append(")");
 
                 // 날짜 증가
                 currentDate = currentDate.plusDays(1);
