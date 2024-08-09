@@ -20,7 +20,7 @@
 select * 
 from schedule_id_op 
 where concert_id = 2 
-  and opened_at between '2024-01-01 00:00:00' and '2024-07-31 23:59:59';
+  and opened_at between '2024-07-01 00:00:00' and '2024-07-31 23:59:59';
 ```
 - 현재 쿼리의 성능개선으로 concert_id, opened_at 컬럼의 인덱스를 생성하는 작업을 진행했다.
 - 인덱스는 아래와 같이 생성함
@@ -60,7 +60,7 @@ where concert_id = 2
     |------------|-------|--------------------------|--------------------------|-----|----------|-----------------------|
     | simple     | range | idx_concert_id_opened_at | idx_concert_id_opened_at |     | 100      | using index condition |
 
-- 해당 where 절의 조건에서는 모두 인덱스가 사용되었다고 나왔지만 `extra`를 비교시 복합 인덱스만 `using index condition` 을 보여주었으면 `filtered` 또한 `100` 인것을 확인했다.
+- 해당 where 절의 조건에서는 모두 인덱스가 사용되었다고 나왔지만 `extra`를 비교시 복합 인덱스만 `using index condition` 을 보여주었으며 `filtered` 또한 `100` 인것을 확인했다.
 
 ### 결론
 
