@@ -1,16 +1,14 @@
 package com.reservation.ticket.application.usecase;
 
+import com.reservation.ticket.application.dto.criteria.PaymentCriteria;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
-import com.reservation.ticket.domain.dto.info.ReservationInfo;
 import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
 import com.reservation.ticket.domain.entity.point.PointService;
 import com.reservation.ticket.domain.entity.queue.QueueRedisService;
-import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountService;
 import com.reservation.ticket.domain.enums.PaymentStatus;
-import com.reservation.ticket.domain.enums.QueueStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +53,10 @@ class PaymentUsecaseTest {
         Long reservationId = 1L;
         Long userId = 1L;
         String token = "734488355d85";
+        PaymentCriteria.Create create = PaymentCriteria.Create.of(reservationId, token);
 
         // when
-        sut.makePayment(reservationId, token);
+        sut.makePayment(create);
 
         // then
         // 대기열의 상태값이 `ACTIVE` -> `EXPIRED` 변경확인

@@ -1,5 +1,6 @@
 package com.reservation.ticket.application.usecase;
 
+import com.reservation.ticket.application.dto.criteria.PaymentCriteria;
 import com.reservation.ticket.domain.common.DataPlatformClient;
 import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
@@ -33,13 +34,13 @@ public class PaymentUsecase {
 
     private final DataPlatformClient dataPlatformClient;
 
-    public void makePayment(Long reservationId, String token) {
-        UserAccount userAccount = userAccountService.getUserAccountByToken(token);
-        Reservation reservation = reservationService.getReservation(reservationId);
+    public void makePayment(PaymentCriteria.Create create) {
+        UserAccount userAccount = userAccountService.getUserAccountByToken(create.token());
+        Reservation reservation = reservationService.getReservation(create.reservationId());
         // 예약완료를 위한 결제정보 등록
         Payment payment = paymentService.createPayment(reservation, userAccount);
         // 대기열 토큰 검증 및 만료 - redis에 저장된 ACTIVE 토큰 삭제
-        queueRedisService.expire(token);
+        queueRedisService.expire(create.token());
 
         /**
          * 포인트 차감 이벤트
