@@ -1,5 +1,7 @@
 package com.reservation.ticket.domain.service;
 
+import com.reservation.ticket.application.dto.criteria.PaymentCriteria;
+import com.reservation.ticket.domain.dto.command.PaymentCommand;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.Payment;
 import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.PaymentService;
@@ -35,6 +37,7 @@ class PaymentServiceTest {
         Long userId = 1L;
         Long reservationId = 1L;
         Long paymentId = 1L;
+        String token = "734488355d85";
         UserAccount userAccount = UserAccount.of(userId);
         Reservation reservation = Reservation.of(reservationId);
 
@@ -44,7 +47,7 @@ class PaymentServiceTest {
         given(paymentRepository.save(any(Payment.class))).willReturn(savedPayment);
 
         // when
-        sut.createPayment(reservation, userAccount);
+        sut.createPayment(PaymentCommand.Create.of(reservation, userAccount));
 
         // then
         ArgumentCaptor<Payment> paymentCaptor = ArgumentCaptor.forClass(Payment.class);

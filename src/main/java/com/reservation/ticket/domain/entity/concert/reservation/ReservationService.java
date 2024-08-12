@@ -35,8 +35,8 @@ public class ReservationService {
     /**
      *  예약 id를 이용하여 예약 정보를 가져온다.
      */
-    public ReservationInfo getReservationById(Long reservationId) {
-        return ReservationInfo.from(reservationRepository.findById(reservationId));
+    public Reservation getReservationById(Long reservationId) {
+        return reservationRepository.findById(reservationId);
     }
 
     @Transactional

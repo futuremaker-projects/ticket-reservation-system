@@ -32,18 +32,18 @@ public class PointService {
      * 포인트 사용 - 포인트가 결제할 금액보다 작을 경우 예외발생
      */
     @Transactional
-    public void usePoint(int reservedPrice, UserAccount userAccount) {
-        if (reservedPrice > userAccount.getPoint()) {
+    public void usePoint(PointCommand.Use use) {
+        if (use.price() > use.userAccount().getPoint()) {
             throw new ApplicationException(ErrorCode.NOT_ENOUGH_POINT,
-                    "not enough point for price - point : %d".formatted(userAccount.getPoint()));
+                    "not enough point for price - point : %d".formatted(use.userAccount().getPoint()));
         }
 
         // 사용자 포인트 삭감
-        int restPoint = userAccount.getPoint() - reservedPrice;
-        userAccount.chargePoint(restPoint);
+        int restPoint = use.userAccount().getPoint() - use.price();
+        use.userAccount().chargePoint(restPoint);
 
         // 포인트 히스토리 저장
-        PointHistory pointHistory = PointHistory.of(userAccount, TransactionType.USE, restPoint);
+        PointHistory pointHistory = PointHistory.of(use.userAccount(), TransactionType.USE, restPoint);
         pointHistoryRepository.save(pointHistory);
     }
 
