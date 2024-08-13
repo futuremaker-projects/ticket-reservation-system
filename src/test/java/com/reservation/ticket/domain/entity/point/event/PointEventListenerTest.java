@@ -1,5 +1,9 @@
 package com.reservation.ticket.domain.entity.point.event;
 
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
+import com.reservation.ticket.domain.entity.concert.reservation.payment.Payment;
+import com.reservation.ticket.domain.entity.concert.reservation.payment.event.PaymentEvent;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @RecordApplicationEvents
 @SpringBootTest
-class PointListenerTest {
+class PointEventListenerTest {
 
     @Autowired
     ApplicationEvents applicationEvents;
 
     @MockBean
-    PointListener pointListener;
+    PointEventListener pointEventListener;
 
     @DisplayName("이벤트를 이용하여 예약금액을 포인트에서 차감한다.")
     @Test
@@ -30,10 +34,14 @@ class PointListenerTest {
         int price = 100;
         Long reservationId = 1L;
         Long paymentId = 1L;
-        PointEvent.Use useEvent = PointEvent.Use.of(userId, userPoint, price, reservationId, paymentId);
+
+        UserAccount userAccount = UserAccount.of(userId, userPoint);
+        Reservation reservation = Reservation.of(reservationId, userAccount, price);
+        Payment payment = Payment.of(paymentId, userAccount, reservation);
+        PaymentEvent.Success success = PaymentEvent.Success.of(reservation, userAccount, payment);
 
         // when
-        pointListener.usePointEvent(useEvent);
+        pointEventListener.usePointEvent(success);
 
         // then
         assertThat(applicationEvents.stream(PointEvent.Use.class))

@@ -44,6 +44,10 @@ public class Payment {
         return new Payment(id, userAccount, reservation, paidAt);
     }
 
+    public static Payment of(Long id, UserAccount userAccount, Reservation reservation) {
+        return new Payment(id, userAccount, reservation, null);
+    }
+
     public static Payment of(UserAccount userAccount, Reservation reservation) {
         return new Payment(null, userAccount, reservation, null);
     }

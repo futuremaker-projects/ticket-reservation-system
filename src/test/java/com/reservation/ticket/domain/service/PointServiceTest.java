@@ -49,8 +49,10 @@ class PointServiceTest {
         PointHistory pointHistory = PointHistory.of(pointHistoryId, userAccount, TransactionType.USE, restPoint);
         given(pointHistoryRepository.save(any(PointHistory.class))).willReturn(pointHistory);
 
+        PointCommand.Use use = PointCommand.Use.of(reservedPrice, userAccount);
+
         // when
-        sut.usePoint(reservedPrice, userAccount);
+        sut.usePoint(use);
 
         // then
         assertThat(userAccount.getPoint()).isEqualTo(restPoint);
@@ -76,9 +78,10 @@ class PointServiceTest {
         Long userId = 1L;
         int userPoint = 1;
         UserAccount userAccount = UserAccount.of(userId, "noah", DummyData.generateToken(), userPoint);
+        PointCommand.Use use = PointCommand.Use.of(reservedPrice, userAccount);
 
         // when
-        Throwable t = catchThrowable(() -> sut.usePoint(reservedPrice, userAccount));
+        Throwable t = catchThrowable(() -> sut.usePoint(use));
 
         // then
         assertThat(t)

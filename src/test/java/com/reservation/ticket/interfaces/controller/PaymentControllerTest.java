@@ -1,6 +1,7 @@
 package com.reservation.ticket.interfaces.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reservation.ticket.application.dto.criteria.PaymentCriteria;
 import com.reservation.ticket.application.usecase.PaymentUsecase;
 import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -46,7 +47,8 @@ class PaymentControllerTest {
         given(queueService.getQueueByToken(token)).willReturn(get);
 
         Long reservationId = 1L;
-        willDoNothing().given(paymentUsecase).makePayment(reservationId, token);
+        PaymentCriteria.Create create = PaymentCriteria.Create.of(reservationId, token);
+        willDoNothing().given(paymentUsecase).makePayment(create);
 
         PaymentDto.Request request = PaymentDto.Request.of(reservationId);
 
@@ -60,7 +62,7 @@ class PaymentControllerTest {
                 .andExpect(status().isOk());
 
         // then
-        then(paymentUsecase).should().makePayment(reservationId, token);
+        then(paymentUsecase).should().makePayment(create);
     }
 
 }

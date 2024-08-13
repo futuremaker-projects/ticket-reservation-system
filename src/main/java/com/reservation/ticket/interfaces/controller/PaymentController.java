@@ -1,5 +1,6 @@
 package com.reservation.ticket.interfaces.controller;
 
+import com.reservation.ticket.application.dto.criteria.PaymentCriteria;
 import com.reservation.ticket.application.usecase.PaymentUsecase;
 import com.reservation.ticket.interfaces.dto.PaymentDto;
 import com.reservation.ticket.interfaces.dto.Response;
@@ -26,7 +27,7 @@ public class PaymentController {
             @RequestBody PaymentDto.Request request, HttpServletRequest servletRequest
     ) {
         String token = servletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        paymentUsecase.makePayment(request.reservationId(), token);
+        paymentUsecase.makePayment(PaymentCriteria.Create.of(request.reservationId(), token));
         return Response.success();
     }
 

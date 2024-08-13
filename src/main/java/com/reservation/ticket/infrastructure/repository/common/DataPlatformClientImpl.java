@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.common;
 
-import com.reservation.ticket.domain.common.DataPlatformClient;
+import com.reservation.ticket.domain.common.dataPlatform.DataPlatformClient;
 import org.springframework.stereotype.Component;
 
 @Component

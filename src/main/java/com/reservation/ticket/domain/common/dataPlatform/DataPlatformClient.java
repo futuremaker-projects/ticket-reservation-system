@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.common;
+package com.reservation.ticket.domain.common.dataPlatform;
 
 public interface DataPlatformClient {
 
