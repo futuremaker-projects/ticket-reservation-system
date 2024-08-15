@@ -1,8 +1,8 @@
 package com.reservation.ticket.interfaces.scheduler;
 
 import com.reservation.ticket.application.usecase.ReservationUsecase;
+import com.reservation.ticket.domain.common.outbox.OutboxMessageWriter;
 import com.reservation.ticket.domain.entity.queue.QueueRedisService;
-import com.reservation.ticket.domain.entity.queue.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,6 +13,7 @@ public class SchedulerManager {
 
     private final QueueRedisService queueRedisService;
     private final ReservationUsecase reservationUsecase;
+    private final OutboxMessageWriter outboxMessageWriter;
 
     @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
     public void activateQueueScheduler() {
@@ -27,6 +28,11 @@ public class SchedulerManager {
     @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
     public void activateReservationScheduler() {
         reservationUsecase.cancelReservation();
+    }
+
+    @Scheduled(cron = "5 * * * * *", zone = "Asia/Seoul")
+    public void resendMessage() {
+        outboxMessageWriter.resend();
     }
 
 }

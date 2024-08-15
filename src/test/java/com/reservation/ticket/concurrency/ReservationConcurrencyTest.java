@@ -2,7 +2,9 @@ package com.reservation.ticket.concurrency;
 
 import com.reservation.ticket.application.dto.criteria.ReservationCriteria;
 import com.reservation.ticket.application.usecase.ReservationUsecase;
+import com.reservation.ticket.domain.entity.concert.reservation.Reservation;
 import com.reservation.ticket.domain.entity.concert.reservation.ReservationRepository;
+import com.reservation.ticket.domain.entity.concert.reservation.ReservationService;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -29,13 +31,15 @@ public class ReservationConcurrencyTest {
     TicketRepository ticketRepository;
     @Autowired
     ReservationRepository reservationRepository;
+    @Autowired
+    private ReservationService reservationService;
 
     @DisplayName("[동시성 테스트 - Lock 미적용] 좌석 2개를 선택후 콘서트 예약시 하나 이상의 예약이 성공한다.")
     @Test
     public void test01() throws InterruptedException {
         // given
-        Long concertScheduleId = 4L;
-        List<Long> seatIds = List.of(4L, 5L);
+        Long concertScheduleId = 1L;
+        List<Long> seatIds = List.of(1L, 2L);
         int price = 100;
         ReservationCriteria criteria = ReservationCriteria.of(concertScheduleId, seatIds, price);
 
@@ -48,7 +52,7 @@ public class ReservationConcurrencyTest {
             // 선택한 좌석을 서로 차지하도록 해야 한다.
             executorService.submit(() -> {
                 try {
-                    sut.makeReservation(criteria, getToken());
+                    sut.makeReservationSendingMessage(criteria, getToken());
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -60,12 +64,12 @@ public class ReservationConcurrencyTest {
         executorService.shutdown();
 
         // then
-        List<Ticket> tickets = ticketRepository.getSeats(concertScheduleId, seatIds);
+        List<Reservation> reservations = reservationRepository.findAll();
 
         /**
          * 서로 다른 예약이 성공하며 2개의 좌석은 2개 티켓보다 그 이상으로 많이 발행된다.
          */
-        assertThat(tickets.size()).isNotEqualTo(2);
+        assertThat(reservations.size()).isEqualTo(50);
     }
 
     @DisplayName("[동시성 테스트 - 비관적락 적용] 좌석 2개를 선택후 콘서트 예약시 하나의 예약만 성공한다.")
@@ -149,7 +153,7 @@ public class ReservationConcurrencyTest {
      */
     private String getToken() {
         Random random = new Random();
-        int randomNumber = random.nextInt(100); // nextInt(100)은 0부터 99까지의 숫자를 반환
+        int randomNumber = random.nextInt(30); // nextInt(100)은 0부터 99까지의 숫자를 반환
         List<String> tokens = List.of(
                 "734488355d85",
                 "b02567dca468",

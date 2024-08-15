@@ -14,7 +14,7 @@ public interface TicketJpaRepository extends JpaRepository<Ticket, TicketComplex
 
     List<Ticket> findAllByIdConcertScheduleIdAndIdSeatIdIn(Long concertScheduleId, List<Long> seats);
 
-    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints(@QueryHint(name = "jakarta.persistence.lock.timeout", value = "1500"))
     @Query("select t from Ticket t where t.id.concertScheduleId = :concertScheduleId and t.id.seatId in :seats")
     List<Ticket> findAllWithPessimisticLock(@Param("concertScheduleId") Long concertScheduleId, @Param("seats") List<Long> seats);
