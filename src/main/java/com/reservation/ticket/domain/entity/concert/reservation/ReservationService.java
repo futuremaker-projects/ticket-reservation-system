@@ -2,13 +2,15 @@ package com.reservation.ticket.domain.entity.concert.reservation;
 
 import com.reservation.ticket.domain.dto.command.ReservationCommand;
 import com.reservation.ticket.domain.dto.info.ReservationInfo;
-import com.reservation.ticket.domain.entity.userAccount.UserAccount;
+import com.reservation.ticket.domain.entity.concert.reservation.event.ReservationEvent;
+import com.reservation.ticket.domain.entity.concert.reservation.event.ReservationEventPublisher;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.Ticket;
 import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketComplexIds;
+import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
+import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.LockType;
 import com.reservation.ticket.domain.enums.PaymentStatus;
 import com.reservation.ticket.domain.enums.ReservationStatus;
-import com.reservation.ticket.domain.entity.concert.reservation.ticket.TicketRepository;
 import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.domain.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -31,6 +34,8 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final TicketRepository ticketRepository;
     private final RedissonClient redissonClient;
+
+    private final ReservationEventPublisher successPublisher;
 
     /**
      *  예약 id를 이용하여 예약 정보를 가져온다.
@@ -47,11 +52,28 @@ public class ReservationService {
         // 좌석의 점유상태를 검증한다.
         switch (lockType) {
             case NONE -> checkIfSeatsAvailable(create.concertScheduleId(), create.seatIds());
-            case PESSIMISTIC_READ -> checkIfSeatsAvailableWithPessimisticLock(create.concertScheduleId(), create.seatIds());
+            case PESSIMISTIC_WRITE -> checkIfSeatsAvailableWithPessimisticLock(create.concertScheduleId(), create.seatIds());
             case DISTRIBUTED_LOCK -> checkIfSeatsAvailableWithDistributedLock(create.concertScheduleId(), create.seatIds());
         }
 
         occupySeats(create, savedReservation);
+        return ReservationInfo.from(savedReservation);
+    }
+
+    @Transactional
+    public ReservationInfo reserve(ReservationCommand.Create create, UserAccount userAccount) {
+        Reservation reservation = Reservation.of(userAccount, create.price());
+        Reservation savedReservation = reservationRepository.reserve(reservation);
+
+        /*
+            예약 이벤트
+                - outbox 처리
+                - kafka 메시지 처리
+         */
+        successPublisher.successReservation(
+                ReservationEvent.Success.of(generateOutboxId(), savedReservation.getId(),
+                        create.concertScheduleId(), create.seatIds()));
+
         return ReservationInfo.from(savedReservation);
     }
 
@@ -63,6 +85,15 @@ public class ReservationService {
         create.seatIds().forEach(seatId -> {
             Ticket ticket = Ticket.of(
                     new TicketComplexIds(create.concertScheduleId(), seatId, savedReservation.getId()));
+            ticketRepository.issue(ticket);
+        });
+    }
+
+    public void occupySeats(ReservationCommand.OccupySeats seats) {
+        seats.seatIds().forEach(seatId -> {
+            Ticket ticket = Ticket.of(
+                    new TicketComplexIds(seats.concertScheduleId(), seatId, seats.reservationId())
+            );
             ticketRepository.issue(ticket);
         });
     }
@@ -142,6 +173,11 @@ public class ReservationService {
 
     public void releaseSeats(List<Long> reservationIds) {
         ticketRepository.removeSeats(reservationIds);
+    }
+
+    private String generateOutboxId() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.substring(uuid.lastIndexOf("-") + 1);
     }
 }
 

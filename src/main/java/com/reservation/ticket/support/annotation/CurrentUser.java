@@ -1,4 +1,4 @@
-package com.reservation.ticket.domain.annotation;
+package com.reservation.ticket.support.annotation;
 
 import java.lang.annotation.*;
 

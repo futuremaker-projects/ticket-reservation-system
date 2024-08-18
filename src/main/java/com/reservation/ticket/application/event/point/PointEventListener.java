@@ -1,9 +1,8 @@
-package com.reservation.ticket.domain.entity.point.event;
+package com.reservation.ticket.application.event.point;
 
 import com.reservation.ticket.domain.dto.command.PointCommand;
 import com.reservation.ticket.domain.entity.concert.reservation.payment.event.PaymentEvent;
 import com.reservation.ticket.domain.entity.point.PointService;
-import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

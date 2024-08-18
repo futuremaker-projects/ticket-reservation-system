@@ -480,3 +480,9 @@ values (1, null, false),
        (5, null, false),
        (5, null, false),
        (5, null, false);
+
+insert into outbox_entity (`id`, message, outbox_type, created_at) values
+       ('548c3433f7ac', '{"reservationId":51,"concertScheduleId":1,"seatIds":[5,6]}', 'INIT', '2024-08-16 00:25:05'),
+       ('448c3433f7ac', '{"reservationId":51,"concertScheduleId":1,"seatIds":[7,8]}', 'INIT', '2024-08-16 00:25:05'),
+       ('348c3433f7ac', '{"reservationId":51,"concertScheduleId":1,"seatIds":[9,10]}', 'INIT', '2024-08-16 00:25:05'),
+       ('248c3433f7ac', '{"reservationId":51,"concertScheduleId":1,"seatIds":[11,12]}', 'INIT', '2024-08-16 00:25:05');

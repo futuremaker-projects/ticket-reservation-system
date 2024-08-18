@@ -31,4 +31,10 @@ public class ReservationCommand {
             return new Create(concertScheduleId, seatIds, price);
         }
     }
+
+    public record OccupySeats(Long reservationId, Long concertScheduleId, List<Long> seatIds) {
+        public static OccupySeats of(Long reservationId, Long concertScheduleId, List<Long> seatIds) {
+            return new OccupySeats(reservationId, concertScheduleId, seatIds);
+        }
+    }
 }
