@@ -1,7 +1,6 @@
-package com.reservation.ticket.infrastructure.repository.concertSchedule;
+package com.reservation.ticket.infrastructure.repository.concert;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,13 +11,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-@Repository
-public class ConcertScheduleJDBCRepository {
+@Component
+public class ConcertJDBCRepository {
 
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/concert?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
     private static final String PASSWORD = "1234";
-    private static final String BASE_INSERT_SQL = "INSERT INTO concert_schedule (limit_seat, opened_at, concert_id) VALUES ";
+    private static final String BASE_INSERT_SQL = "INSERT INTO concert (name, created_at) VALUES ";
 
     public void bulkInsertConcertSchedules(int totalRecords, int batchSize) {
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD)) {
@@ -30,7 +29,7 @@ public class ConcertScheduleJDBCRepository {
             StringBuilder sqlBuilder = new StringBuilder(BASE_INSERT_SQL);
 
             // 시작 날짜 설정
-            LocalDate startDate = LocalDate.of(2022, 1, 1);
+            LocalDate startDate = LocalDate.of(2023, 1, 1);
             LocalDate currentDate = startDate;
 
             for (int i = 0; i < totalRecords; i++) {
@@ -44,11 +43,11 @@ public class ConcertScheduleJDBCRepository {
                 // concert_id 계산 (1에서 5000까지 순차적으로)
                 int concertId = (i % 500) + 1;
 
-                sqlBuilder.append("(100, '")
+                sqlBuilder.append("('")
+                        .append("concert%d".formatted(concertId))
+                        .append("', '")
                         .append(openedAt.format(formatter))
-                        .append("', ")
-                        .append(concertId)
-                        .append(")");
+                        .append("')");
 
                 // 날짜 증가
                 currentDate = currentDate.plusDays(1);
@@ -88,4 +87,5 @@ public class ConcertScheduleJDBCRepository {
             e.printStackTrace();
         }
     }
+
 }

@@ -1,10 +1,9 @@
-package com.reservation.ticket.infrastructure.repository.concertSchedule;
+package com.reservation.ticket.infrastructure.bulkInsert;
 
+import com.reservation.ticket.infrastructure.repository.concertSchedule.ConcertScheduleJDBCRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ConcertScheduleJDBCRepositoryTest {
@@ -17,7 +16,7 @@ class ConcertScheduleJDBCRepositoryTest {
         // given
 
         // when
-        repository.bulkInsertConcertSchedules(2000000, 1000);
+        repository.bulkInsertConcertSchedules(100_000, 1000);
 
         // then
     }
