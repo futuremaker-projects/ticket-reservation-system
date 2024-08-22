@@ -9,10 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -51,6 +48,14 @@ public class ConcertScheduleController {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         List<ConcertScheduleEntity> concertSchedule = concertScheduleService.getConcertSchedule(concertScheduleId);
         return ResponseEntity.ok().body(concertSchedule);
+    }
+
+    @PostMapping
+    public ResponseEntity<List<ConcertScheduleEntity>> createConcertSchedule(
+            @RequestBody ConcertScheduleDto.Request request
+    ) {
+        List<ConcertScheduleEntity> list = concertScheduleService.getConcertScheduleByConcertId(request);
+        return ResponseEntity.ok().body(list);
     }
 
 //    /**

@@ -5,6 +5,7 @@ import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSched
 import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.domain.exception.ErrorCode;
 import com.reservation.ticket.infrastructure.dto.entity.ConcertScheduleEntity;
+import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -48,5 +49,10 @@ public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository 
     @Override
     public List<ConcertScheduleEntity> getConcertSchedule(Long concertId) {
         return concertScheduleJpaQuerySupport.getConcertSchedulesById(concertId);
+    }
+
+    @Override
+    public List<ConcertScheduleEntity> getConcertScheduleByConcertId(ConcertScheduleDto.Request request) {
+        return concertScheduleJpaQuerySupport.getConcertSchedulesByConcertId(request);
     }
 }

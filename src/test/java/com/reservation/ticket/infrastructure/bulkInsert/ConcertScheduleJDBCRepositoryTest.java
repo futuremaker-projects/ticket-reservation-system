@@ -16,7 +16,7 @@ class ConcertScheduleJDBCRepositoryTest {
         // given
 
         // when
-        repository.bulkInsertConcertSchedules(100_000, 1000);
+        repository.bulkInsertConcertSchedules(2_000_000, 1000);
 
         // then
     }

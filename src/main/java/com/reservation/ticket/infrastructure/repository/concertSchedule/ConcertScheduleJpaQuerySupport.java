@@ -5,6 +5,7 @@ import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSched
 import com.reservation.ticket.infrastructure.dto.entity.ConcertScheduleEntity;
 import com.reservation.ticket.infrastructure.dto.entity.QConcertScheduleEntity;
 import com.reservation.ticket.infrastructure.dto.entity.QSeatEntity;
+import com.reservation.ticket.interfaces.dto.ConcertScheduleDto;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
@@ -43,4 +44,13 @@ public class ConcertScheduleJpaQuerySupport extends QuerydslRepositorySupport {
     }
 
 
+    public List<ConcertScheduleEntity> getConcertSchedulesByConcertId(ConcertScheduleDto.Request request) {
+         return queryFactory.select(new QConcertScheduleEntity(
+                        concertSchedule.id, concertSchedule.limitSeat
+                ))
+                .from(concertSchedule)
+                .where(concertSchedule.concert.id.eq(request.concertId())
+                        .and(concertSchedule.openedAt.between(request.startDate(), request.endDate())))
+                .fetch();
+    }
 }

@@ -20,4 +20,10 @@ public class ConcertScheduleEntity {
         this.limitSeat = limitSeat;
         this.seats = seats;
     }
+
+    @QueryProjection
+    public ConcertScheduleEntity(Long id, Integer limitSeat) {
+        this.id = id;
+        this.limitSeat = limitSeat;
+    }
 }
