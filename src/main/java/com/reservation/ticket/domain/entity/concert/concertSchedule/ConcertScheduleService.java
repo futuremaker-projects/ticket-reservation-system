@@ -2,6 +2,7 @@ package com.reservation.ticket.domain.entity.concert.concertSchedule;
 
 import com.reservation.ticket.domain.dto.command.ConcertScheduleCommand;
 import com.reservation.ticket.domain.dto.info.ConcertScheduleInfo;
+import com.reservation.ticket.infrastructure.dto.entity.ConcertScheduleEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,10 @@ public class ConcertScheduleService {
      */
     public ConcertScheduleCommand.Get getConcertScheduleByOpenedDate(LocalDateTime openedDate) {
         return ConcertScheduleCommand.Get.from(concertScheduleRepository.findByOpenedAt(openedDate));
+    }
+
+    public List<ConcertScheduleEntity> getConcertSchedule(Long scheduleId) {
+        return concertScheduleRepository.getConcertSchedule(scheduleId);
     }
 
 }

@@ -29,7 +29,7 @@ public class ConcertScheduleUsecase {
         // 토큰 검증
         List<ConcertScheduleInfo> concertSchedules =
                 concertScheduleService.selectAllConcertSchedulesByConcertId(concertId);
-        queueService.renewQueueExpirationDate(token);
+//        queueService.renewQueueExpirationDate(token);
         return concertSchedules.stream().map(ConcertScheduleResult::from).toList();
     }
 
@@ -41,7 +41,7 @@ public class ConcertScheduleUsecase {
         // 콘서트 스케줄에 연관된 좌석 목록조회
         List<SeatInfo> seatInfos = seatService.selectSeatsByConcertScheduleId(concertScheduleId);
         // 토큰의 만료시간 5분 연장
-        queueService.renewQueueExpirationDate(token);
+//        queueService.renewQueueExpirationDate(token);
         return seatInfos.stream().map(SeatResult::from).toList();
     }
 

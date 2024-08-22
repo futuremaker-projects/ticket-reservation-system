@@ -4,6 +4,7 @@ import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertSched
 import com.reservation.ticket.domain.entity.concert.concertSchedule.ConcertScheduleRepository;
 import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.domain.exception.ErrorCode;
+import com.reservation.ticket.infrastructure.dto.entity.ConcertScheduleEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository {
 
     private final ConcertScheduleJpaRepository concertScheduleJpaRepository;
+    private final ConcertScheduleJpaQuerySupport concertScheduleJpaQuerySupport;
 
     @Override
     public List<ConcertSchedule> findAllConcertSchedules() {
@@ -41,5 +43,10 @@ public class ConcertScheduleRepositoryImpl implements ConcertScheduleRepository 
                         ErrorCode.CONTENT_NOT_FOUND,
                         "No concert schedule found for concert schedule id at %d".formatted(id))
         );
+    }
+
+    @Override
+    public List<ConcertScheduleEntity> getConcertSchedule(Long concertId) {
+        return concertScheduleJpaQuerySupport.getConcertSchedulesById(concertId);
     }
 }

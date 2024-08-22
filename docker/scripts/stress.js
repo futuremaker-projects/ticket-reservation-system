@@ -6,26 +6,49 @@ import {randomIntBetween, randomItem} from 'https://jslib.k6.io/k6-utils/1.2.0/i
  * 콘서트 검색 시나리오
  *  - 전체 콘서트 검색 vs 페이지네이션 적용한 콘서트 검색
  */
+// export let options = {
+//     scenarios: {
+//         concert_select_scenario: {
+//             vus: 100, // 가상 사용자
+//             exec: 'concert_select_scenario',
+//             executor: 'per-vu-iterations', // 각각의 가상 사용자들이 정확한 반복 횟수만큼 실행
+//             iterations: 200
+//         }
+//     }
+// };
+//
+// export function concert_select_scenario() {
+//     let response = http.get("http://localhost:8080/api/concerts");
+//     // 응답 확인
+//     check(response, {
+//         'is status 200': (r) => r.status === 200,
+//     });
+// }
+// export function concert_select_scenario() {
+//     let response = http.get("http://localhost:8080/api/concerts/paging");
+//     // 응답 확인
+//     check(response, {
+//         'is status 200': (r) => r.status === 200,
+//     });
+// }
+
+/**
+ *  콘서트 스케줄에 연관된 좌석을 검색 시 좌석의 콘서트 스케줄에 인덱스를 추가 유무에 따른 조인성능 향상 확인 테스트
+ */
 export let options = {
     scenarios: {
-        concert_select_scenario: {
+        select_seat_scenario: {
             vus: 100, // 가상 사용자
-            exec: 'concert_select_scenario',
+            exec: 'select_seat_scenario',
             executor: 'per-vu-iterations', // 각각의 가상 사용자들이 정확한 반복 횟수만큼 실행
-            iterations: 200
+            iterations: 1000
         }
     }
 };
 
-export function concert_select_scenario() {
-    let response = http.get("http://localhost:8080/api/concerts");
-    // 응답 확인
-    check(response, {
-        'is status 200': (r) => r.status === 200,
-    });
-}
-export function concert_select_scenario() {
-    let response = http.get("http://localhost:8080/api/concerts/paging");
+export function select_seat_scenario() {
+    // let concertScheduleId = randomIntBetween(1, 100000);
+    let response = http.get(`http://localhost:8080/api/concertSchedules/${600}/seats`);
     // 응답 확인
     check(response, {
         'is status 200': (r) => r.status === 200,
