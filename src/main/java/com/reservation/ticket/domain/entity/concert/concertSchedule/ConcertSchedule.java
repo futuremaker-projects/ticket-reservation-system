@@ -14,6 +14,7 @@ import java.util.Objects;
 @Entity
 @ToString(of = {"id", "limitSeat", "openedAt"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = @Index(name = "idx_concert_id_opened_at", columnList = "concert_id, opened_at"))
 public class ConcertSchedule {
 
     @Id
