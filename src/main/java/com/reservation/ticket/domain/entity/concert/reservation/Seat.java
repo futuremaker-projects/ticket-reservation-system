@@ -13,6 +13,7 @@ import java.util.Objects;
 @Entity
 @ToString(of = {"id", "concertScheduleId", "occupiedAt", "occupied"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = @Index(name = "idx_schedule_id", columnList = "concert_schedule_id"))
 public class Seat {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

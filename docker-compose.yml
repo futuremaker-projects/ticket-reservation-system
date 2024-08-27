@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  app:
+    container_name: concert_app
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+        reservations:
+          cpus: '1.0'
+          memory: 1024M
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: futuremaker019/concert_app
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=localhost
+      - MYSQL_PORT=3306
+    network_mode: host

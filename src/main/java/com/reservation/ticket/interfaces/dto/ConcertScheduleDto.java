@@ -36,7 +36,9 @@ public class ConcertScheduleDto {
         }
     }
 
-    public record Request() {
-
+    public record Request(Long concertId, LocalDateTime startDate, LocalDateTime endDate) {
+        public static Request of(Long concertId, LocalDateTime startDate, LocalDateTime endDate) {
+            return new Request(concertId, startDate, endDate);
+        }
     }
 }
