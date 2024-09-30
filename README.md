@@ -1,9 +1,7 @@
 # 콘서트 예약 서비스
 
-- 클린 아키텍처와 TDD를 적용한 콘서트 예약 서비스를 개발합니다.
-- 동시성 제어, Redis를 이용한 캐쉬 및 대기열 처리 
-- Kafka를 이용한 이벤트 스트리밍 기반 ~~  
-- 성능 최적화를 위한 인덱스 구성 및 부하테스트 
+<details>
+    <summary style="font-weight: bold; font-size: 17px;">요구사항</summary>
 
 ## Description
 
@@ -25,7 +23,12 @@
 - 동시성 이슈를 고려하여 구현합니다.
 - 대기열 개념을 고려해 구현합니다.
 
-### 마일스톤
+</details>
+
+<br>
+
+<details>
+    <summary style="font-weight: bold; font-size: 17px;">마일스톤</summary>
 
 ```mermaid
 gantt
@@ -37,38 +40,255 @@ gantt
     대기열 인터셉터, Log filter 적용               :active, dev2, 2024-07-14, 2024-07-19
   
   section 동시성 문제 확인 및 코드 리팩토링
-    상황에 맞는 락 적용을 위한 리팩토링  :active, enh1, 2024-07-20, 2024-07-25
+    락 적용을 위한 리팩토링                        :active, enh1, 2024-07-20, 2024-07-26
   
-  section 버퍼 기간
-    버퍼 기간                     :active, buf1, 2024-07-26, 2024-07-28
-  
-  section 대용량 트래픽 대비 개선
-    성능 최적화 및 트러블 슈팅     :active, opt1, 2024-07-29, 2024-08-02
-  
-  section 버퍼 기간
-    버퍼 기간                     :active, buf2, 2024-08-03, 2024-08-04
-  
-  section 트러블 슈팅 및 모니터링
-    실시간 모니터링 및 로그 관리   :active, mon1, 2024-08-05, 2024-08-09
-  
-  section 보안 강화 및 검토
-    보안 검토 및 강화             :active, sec1, 2024-08-10, 2024-08-14
-  
-  section 버퍼 기간
-    버퍼 기간                     :active, buf3, 2024-08-15, 2024-08-16
-  
-  section 최종 검토 및 배포 준비
-    시스템 검토 및 배포 준비       :active, rel1, 2024-08-17, 2024-08-23`
+  section 적은 부하로 트래픽 처리
+    Redis 캐쉬전략                            :active, buf1, 2024-07-27, 2024-07-29
+    Redis를 이용한 대기열 리팩토링                :active, buf1, 2024-07-30, 2024-08-02
+  section 부하 축소하기
+    인덱스 적용하여 쿼리성능 개선                  :active, opt1, 2024-08-03, 2024-08-05
+    트랜잭션 범위 조절 및 애플리케이션 이벤트 적용     :active, opt1, 2024-08-06, 2024-08-09
+  section 책임 분리
+    Kafka를 적용한 책임 분리                     :active, mon1, 2024-08-10, 2024-08-16
+  section 장애 대응
+    부하 테스트를 통한 장애대응 계획수립              :active, mon1, 2024-08-17, 2024-08-23
+```
+</details>
+
+<br>
+
+<details>
+    <summary style="font-weight: bold; font-size: 17px;">시퀀스 다이어그램</summary>
+
+#### 콘서트 및 콘서트 스케줄 조회
+<img width="700" alt="스크린샷 2024-07-05 오전 2 01 42" src="docs/images/sequenceDiagram/concert.png">
+
+#### 예약가능 날짜 및 좌석 조회, 포인트로 좌석 예약
+<img width="700" alt="스크린샷 2024-07-05 오전 2 01 42" src="docs/images/sequenceDiagram/reservation.png">
+
+#### 포인트 충전, 사용
+<img width="200" alt="스크린샷 2024-07-05 오전 2 01 42" src="docs/images/sequenceDiagram/point.png">
+
+</details>
+
+<br>
+
+<details>
+    <summary style="font-weight: bold; font-size: 17px;">ERD</summary>
+
+<img width="700" alt="스크린샷 2024-07-05 오전 2 01 42" src="./docs/images/readme/ticket-reservation.png">
+
+</details>
+
+<br>
+
+<details>
+    <summary style="font-weight: bold; font-size: 17px;">API 명세서</summary>
+
+### 대기열 토큰 발급 API
+
+Endpoint
+
+```
+POST /queue/token
 ```
 
+Response
+```json
+Http Status: 200 ok
 
+Body: 
+{
+  id: 1
+  userId : 1
+  token: ‘UUID’,
+  status: WAIT,
+  createdAt: 2024-07-10 10:10:10,
+  expiredAt: 2024-07-10. 10:15:10
+}
+```
 
+### 콘서트 목록조회 API
 
-### 시퀀스 다이어그램
+Endpoint
+```
+GET /concerts
+```
 
-### ERD 설계
+Response
+```json
+Http Status: 200 ok
+        
+Body:
+  {
+      concerts: [ 
+         { 
+            id: 1,  
+           name: ‘콘서트1’
+          },
+         { 
+            id: 2,  
+           name: ‘콘서트2’
+          }, 
+      ]
+  }
+```
 
-### API 명세서
+### 콘서트 단일조회 API
+
+Endpoint
+```
+GET /concert/{concertId}
+```
+
+Request
+```
+Request Body: 
+{
+  concertId: 1
+} 
+```
+
+Response
+```json
+Http Status: 200 ok
+
+Response Body:
+        
+  {
+    id: 1
+    name: ‘콘서트1’
+  }
+```
+
+### 예약가능 날짜 조회 API
+
+Endpoint
+```
+GET /concertSchedules/concerts/{cocnertId}
+```
+
+Request
+```
+Request Body: 
+{
+  concertId: 1
+} 
+```
+
+Response
+```json
+
+ResponseBody: 
+{
+    id : 1,
+    name: ‘콘서트1’,
+    concertSchedules: [
+        {
+           id: 1,
+           openedAt: 2024-02-10 02:30
+        },
+        {
+           id: 2,
+           openedAt: 2024-02-15 02:30
+        },
+        ...
+    ]
+}
+```
+
+### 예약가능 좌석조회 API
+
+EndPoint
+```
+/concertSchedules/{concertScheduleId}/seats
+```
+
+Request
+```
+Request Body
+{
+  concertSchedule: 1
+}
+```
+
+Response
+```json
+Http Status: 200 ok
+
+Response Body:
+{
+  seats: [
+     {
+         id: 2,
+         seatId: 3,
+         concertScheduleId: 1
+         occupied: false
+     },
+    {
+          id: 3,
+          seatId: 5,
+          concertScheduleId: 1
+          occupied: false
+    }
+   ]
+}
+```
+
+### 좌석예약 요청 API
+
+Endpoint
+```
+POST /reservation
+```
+
+Request
+```
+Request Body
+{
+  concertId: 1
+  concertSchedule: 1,
+  seatId: [1, 2]
+}
+```
+
+Response
+```json
+Http Status: 200 ok
+
+void (SUCCESS)
+```
+
+### 결제 API
+
+Endpoint
+```
+POST /reservation/payment
+```
+
+Request
+```
+```
+
+Response
+
+### 포인트 조회
+
+Endpoint
+
+Request
+
+Response
+
+### 포인트 충전
+
+Endpoint
+
+Request
+
+Response
+
+</details>
 
 ### Swagger
 
@@ -81,16 +301,10 @@ gantt
 ### 인덱스를 적용한 성능최적화
 
 ### 서비스 규모 확장에 따른 Transaction 분리 및 고찰
-
+  
 ### Kafka를 이용한 책임분리 및 Transactional Outbox Pattern 구현 보고서
 
 ### 부하테스트 및 장애 대응 보고서
-
-
-<br>
-
-<img width="700" alt="스크린샷 2024-07-05 오전 2 01 42" src="https://github.com/futuremaker019/ticket-reservation-system/assets/47493140/fe58fef8-5def-43c4-b9c1-5dbf741cce2f">
-
 
 ---
 
