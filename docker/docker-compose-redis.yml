@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  redis_local:
+    container_name: redis_local
+    build:
+      dockerfile: Dockerfile
+      context: redis
+    image: futuremaker019/redis_local
+    environment:
+      - REDIS_PASSWORD=1234
+    ports:
+      - "6379:6379"
