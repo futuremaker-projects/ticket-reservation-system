@@ -4,8 +4,8 @@ import com.reservation.ticket.domain.dto.command.QueueCommand;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
-import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
+import com.reservation.ticket.infrastructure.dto.queue.statement.QueueStatement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +14,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class QueueService {
 
-    private  QueueRepository queueRepository;
-    private  UserAccountRepository userAccountRepository;
+    private final QueueRepository queueRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Transactional
     public String createQueue(Long userId) {
@@ -39,8 +40,8 @@ public class QueueService {
 
     @Transactional
     public void renewQueueExpirationDate(String token) {
-        QueueEntity queueEntity = queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
-        queueEntity.extendShouldExpiredAt();
+        Queue queue = queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
+        queue.extendShouldExpiredAt();
     }
 
     /**
@@ -49,9 +50,9 @@ public class QueueService {
      *   - 대기열 만료
      */
     public void expireQueue(String token) {
-        QueueEntity queueEntity = queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
-        queueEntity.verifyQueueStatus();
-        queueEntity.changeStatus(QueueStatus.EXPIRED);
+        Queue queue = queueRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
+        queue.verifyQueueStatus();
+        queue.changeStatus(QueueStatus.EXPIRED);
     }
 
     public QueueCommand.Get getQueueByToken(String token) {
@@ -69,7 +70,7 @@ public class QueueService {
     @Transactional
     public void changeTokenStatusToExpire() {
         // ACTIVE 상태의 대기열을 EXPIRED 로 변경하는 작업
-        List<QueueEntity> queuesAsActive = queueRepository.getQueuesByStatus(QueueStatus.ACTIVE);
+        List<Queue> queuesAsActive = queueRepository.getQueuesByStatus(QueueStatus.ACTIVE);
         // ACTIVE 상태의 사용자가 한명도 없을때 리스트 확인
         if (!queuesAsActive.isEmpty()) {
             queuesAsActive.forEach(queue -> {
@@ -90,11 +91,11 @@ public class QueueService {
         // ACTIVE 상태의 대기열을 EXPIRED 로 변경하는 작업
         // 30명으로 인원 제한
         int maxAllowedActive = 30;
-        List<QueueEntity> newQueueEntityAsActive = queueRepository.getQueuesByStatus(QueueStatus.ACTIVE);
-        if (newQueueEntityAsActive.size() < maxAllowedActive) {
+        List<Queue> newQueueAsActive = queueRepository.getQueuesByStatus(QueueStatus.ACTIVE);
+        if (newQueueAsActive.size() < maxAllowedActive) {
             // 제한된 인원(30명)과 ACTIVE 대기열 목록을 비교하여 `ACTIVE`로 변경
-            int searchLimit = maxAllowedActive - newQueueEntityAsActive.size();
-            List<QueueEntity> queuesAsWait = queueRepository.getQueuesByStatusPerLimit(QueueStatus.WAIT, searchLimit);
+            int searchLimit = maxAllowedActive - newQueueAsActive.size();
+            List<Queue> queuesAsWait = queueRepository.getQueuesByStatusPerLimit(QueueStatus.WAIT, searchLimit);
             queuesAsWait.forEach(queue -> queue.changeStatus(QueueStatus.ACTIVE));
         }
     }

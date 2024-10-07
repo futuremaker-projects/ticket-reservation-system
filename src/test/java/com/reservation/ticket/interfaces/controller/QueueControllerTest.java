@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(QueueController.class)
 @ExtendWith(SpringExtension.class)
-class QueueEntityControllerTest {
+class QueueControllerTest {
 
     @Autowired
     MockMvc mockMvc;

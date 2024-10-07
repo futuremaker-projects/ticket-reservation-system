@@ -1,6 +1,6 @@
 package com.reservation.ticket.infrastructure.repository.queue;
 
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
+import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -11,19 +11,19 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface QueueJpaRepository extends JpaRepository<QueueEntity, Long> {
+public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
 
-    QueueEntity findByToken(String token);
+    Queue findByToken(String token);
 
-    @Query("select count(q.id) from QueueEntity q where q.queueStatus = :queueStatus")
+    @Query("select count(q.id) from Queue q where q.queueStatus = :queueStatus")
     int countQueueByQueueStatus(@Param("queueStatus") QueueStatus queueStatus);
 
-    @Query("select q from QueueEntity q where q.queueStatus = :queueStatus")
-    List<QueueEntity> findAllByQueueStatus(@Param("queueStatus") QueueStatus queueStatus);
+    @Query("select q from Queue q where q.queueStatus = :queueStatus")
+    List<Queue> findAllByQueueStatus(@Param("queueStatus") QueueStatus queueStatus);
 
-    @Query("select q from QueueEntity q where q.queueStatus = :queueStatus order by q.id asc")
-    List<QueueEntity> findAllByQueueStatusOrderByIdAsc(@Param("queueStatus") QueueStatus queueStatus, Pageable pageable);
+    @Query("select q from Queue q where q.queueStatus = :queueStatus order by q.id asc")
+    List<Queue> findAllByQueueStatusOrderByIdAsc(@Param("queueStatus") QueueStatus queueStatus, Pageable pageable);
 
     @EntityGraph(attributePaths = "userAccount")
-    Optional<QueueEntity> findByUserAccount_Id(Long userId);
+    Optional<Queue> findByUserAccount_Id(Long userId);
 }

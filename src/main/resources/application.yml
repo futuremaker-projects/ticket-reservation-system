@@ -21,7 +21,7 @@ spring:
       on-profile: common
 
 springdoc:
-  packages-to-scan: org.enrollment.lecture.application
+  packages-to-scan: com.reservation.ticket.application
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   swagger-ui:
@@ -36,9 +36,9 @@ spring:
   profiles.active: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
+    url: jdbc:mysql://127.0.0.1:3306/concert?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
   jpa:
     hibernate.ddl-auto: create
     show-sql: true
@@ -50,9 +50,9 @@ spring:
   sql.init.mode: always
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
+      host: 127.0.0.1
+      port: 6379
+      password: 1234
 
 
 ---
@@ -61,9 +61,9 @@ spring:
   profiles.active: test
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
+    url: jdbc:mysql://127.0.0.1:3306/concert?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: 1234
   jpa:
     hibernate.ddl-auto: create
     show-sql: true
@@ -75,6 +75,6 @@ spring:
   sql.init.mode: always
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
+      host: 127.0.0.1
+      port: 6379
+      password: 1234

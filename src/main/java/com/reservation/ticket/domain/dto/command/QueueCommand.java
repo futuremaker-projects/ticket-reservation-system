@@ -1,6 +1,6 @@
 package com.reservation.ticket.domain.dto.command;
 
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
+import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.interfaces.dto.QueueDto;
 
@@ -26,13 +26,13 @@ public class QueueCommand {
             return new Get(id, null, token, queueStatus, null, null);
         }
 
-        public static Get from(QueueEntity queueEntity) {
+        public static Get from(Queue queue) {
             return Get.of(
-                    queueEntity.getId(),
-                    queueEntity.getToken(),
-                    queueEntity.getQueueStatus(),
-                    queueEntity.getShouldExpiredAt(),
-                    queueEntity.getCreatedAt()
+                    queue.getId(),
+                    queue.getToken(),
+                    queue.getQueueStatus(),
+                    queue.getShouldExpiredAt(),
+                    queue.getCreatedAt()
             );
         }
 

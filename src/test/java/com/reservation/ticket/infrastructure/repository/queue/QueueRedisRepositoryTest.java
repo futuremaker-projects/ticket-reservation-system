@@ -4,8 +4,8 @@ import com.reservation.ticket.config.WebTestConfig;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.dummy.DummyData;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
-import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
+import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.queue.statement.QueueStatement;
 import com.reservation.ticket.support.config.RedisConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,7 +62,7 @@ class QueueRedisRepositoryTest {
         queueRedisRepository.save(statement);
 
         // then
-        QueueEntity queueByToken = queueRedisRepository.getQueueByToken(token);
+        Queue queueByToken = queueRedisRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.WAIT));
         assertThat(queueByToken).isNotNull();
         assertThat(queueByToken.getToken()).isEqualTo(token);
     }
@@ -74,7 +74,7 @@ class QueueRedisRepositoryTest {
         String token = "b02567dca467";
 
         // when
-        queueRedisRepository.getQueueByToken(token);
+        queueRedisRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.WAIT));
 
         // then
     }
@@ -87,7 +87,7 @@ class QueueRedisRepositoryTest {
         int limit = 9;
 
         // when
-        List<QueueEntity> queues = queueRedisRepository.getQueuesByStatusPerLimit(queueStatus, limit);
+        List<Queue> queues = queueRedisRepository.getQueuesByStatusPerLimit(queueStatus, limit);
 
         // then
         assertThat(queues.size()).isEqualTo(limit + 1);
@@ -100,7 +100,7 @@ class QueueRedisRepositoryTest {
         String token = "734488355d85";
 
         // when
-        queueRedisRepository.removeQueue(QueueStatement.of(QueueStatus.WAIT, token));
+        queueRedisRepository.removeQueue(QueueStatement.of(token, QueueStatus.WAIT));
     }
 
 }

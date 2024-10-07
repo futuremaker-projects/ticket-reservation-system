@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Import({ScheduledConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class QueueEntitySchedulerTest {
+public class QueueSchedulerTest {
 
     @Autowired
     SchedulerManager schedulerManager;

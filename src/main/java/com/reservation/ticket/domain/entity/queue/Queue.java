@@ -1,4 +1,4 @@
-package com.reservation.ticket.infrastructure.dto.entity;
+package com.reservation.ticket.domain.entity.queue;
 
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.QueueStatus;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Entity
 @ToString(of = {"id", "token", "queueStatus", "shouldExpiredAt", "createdAt"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QueueEntity {
+public class Queue {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,14 +39,14 @@ public class QueueEntity {
         this.createdAt = LocalDateTime.now();
     }
 
-    public QueueEntity(Long id, UserAccount userAccount, String token, QueueStatus queueStatus) {
+    public Queue(Long id, UserAccount userAccount, String token, QueueStatus queueStatus) {
         this.id = id;
         this.userAccount = userAccount;
         this.token = token;
         this.queueStatus = queueStatus;
     }
 
-    public QueueEntity(Long id, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+    public Queue(Long id, String token, QueueStatus queueStatus, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
         this.id = id;
         this.token = token;
         this.queueStatus = queueStatus;
@@ -54,32 +54,32 @@ public class QueueEntity {
         this.createdAt = createdAt;
     }
 
-    public static QueueEntity of() {
-        return new QueueEntity();
+    public static Queue of() {
+        return new Queue();
     }
 
-    public static QueueEntity of(Long id, String token, QueueStatus status) {
-        return new QueueEntity(id, null, token, status);
+    public static Queue of(Long id, String token, QueueStatus status) {
+        return new Queue(id, null, token, status);
     }
 
-    public static QueueEntity of(Long id, UserAccount userAccount, String token, QueueStatus status) {
-        return new QueueEntity(id, userAccount, token, status);
+    public static Queue of(Long id, UserAccount userAccount, String token, QueueStatus status) {
+        return new Queue(id, userAccount, token, status);
     }
 
-    public static QueueEntity of(UserAccount userAccount, String token, QueueStatus status) {
-        return new QueueEntity(null, userAccount, token, status);
+    public static Queue of(UserAccount userAccount, String token, QueueStatus status) {
+        return new Queue(null, userAccount, token, status);
     }
 
-    public static QueueEntity of(UserAccount userAccount, String token) {
-        return new QueueEntity(null, userAccount, token, null);
+    public static Queue of(UserAccount userAccount, String token) {
+        return new Queue(null, userAccount, token, null);
     }
 
-    public static QueueEntity of(String token) {
-        return new QueueEntity(null, null, token, null);
+    public static Queue of(String token) {
+        return new Queue(null, null, token, null);
     }
 
-    public static QueueEntity of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
-        return new QueueEntity(id, token, status, shouldExpiredAt, createdAt);
+    public static Queue of(Long id, String token, QueueStatus status, LocalDateTime shouldExpiredAt, LocalDateTime createdAt) {
+        return new Queue(id, token, status, shouldExpiredAt, createdAt);
     }
 
     public void saveStatusInQueue(int countActiveStatus) {
@@ -119,8 +119,8 @@ public class QueueEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof QueueEntity queueEntity)) return false;
-        return id != null && id.equals(queueEntity.id);
+        if (!(o instanceof Queue queue)) return false;
+        return id != null && id.equals(queue.id);
     }
 
     @Override

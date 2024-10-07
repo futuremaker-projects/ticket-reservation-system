@@ -1,6 +1,6 @@
-package com.reservation.ticket.infrastructure.dto.statement;
+package com.reservation.ticket.infrastructure.dto.queue.statement;
 
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
+import com.reservation.ticket.domain.entity.queue.Queue;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.enums.QueueStatus;
 
@@ -35,7 +35,11 @@ public record QueueStatement(Long id,
         return new QueueStatement(null, null, token, queueStatus, null, null);
     }
 
-    public QueueEntity toEntity() {
-        return QueueEntity.of(userAccount, token, queueStatus);
+    public static QueueStatement of(String token) {
+        return new QueueStatement(null, null, token, null, null, null);
+    }
+
+    public Queue toEntity() {
+        return Queue.of(userAccount, token, queueStatus);
     }
 }

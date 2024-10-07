@@ -5,8 +5,8 @@ import com.reservation.ticket.domain.entity.queue.QueueService;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
-import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
+import com.reservation.ticket.domain.entity.queue.Queue;
+import com.reservation.ticket.infrastructure.dto.queue.statement.QueueStatement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class QueueEntityServiceTest {
+class QueueServiceTest {
 
     @InjectMocks
     QueueService sut;
@@ -47,15 +47,15 @@ class QueueEntityServiceTest {
         Long queueId = 21L;
         String token = generateToken();
 
-        QueueEntity savedQueueEntity = QueueEntity.of(queueId, userAccount, token, QueueStatus.WAIT);
+        Queue savedQueue = Queue.of(queueId, userAccount, token, QueueStatus.WAIT);
 
-        given(queueRepository.save(any(QueueStatement.class))).willReturn(savedQueueEntity);
+        given(queueRepository.save(any(QueueStatement.class))).willReturn(savedQueue);
 
         // when
         String generatedToken = sut.createQueue(userId);
 
         // then
-        assertThat(generatedToken).isEqualTo(savedQueueEntity.getToken());
+        assertThat(generatedToken).isEqualTo(savedQueue.getToken());
 
         then(userAccountRepository).should().findById(userId);
         then(queueRepository).should().save(any(QueueStatement.class));
@@ -67,15 +67,15 @@ class QueueEntityServiceTest {
         // given
         Long queueId = 1L;
         String token = generateToken();
-        QueueEntity queueEntity = QueueEntity.of(queueId, token, QueueStatus.ACTIVE);
-        given(queueRepository.getQueueByToken(token)).willReturn(queueEntity);
+        Queue queue = Queue.of(queueId, token, QueueStatus.ACTIVE);
+        given(queueRepository.getQueueByToken(QueueStatement.of(token))).willReturn(queue);
 
         // when
         sut.expireQueue(token);
 
         // then
-        assertThat(queueEntity.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
-        then(queueRepository).should().getQueueByToken(token);
+        assertThat(queue.getQueueStatus()).isEqualTo(QueueStatus.EXPIRED);
+        then(queueRepository).should().getQueueByToken(QueueStatement.of(token));
     }
 
 
@@ -83,4 +83,5 @@ class QueueEntityServiceTest {
         String uuid = UUID.randomUUID().toString();
         return uuid.substring(uuid.lastIndexOf("-") + 1);
     }
+
 }

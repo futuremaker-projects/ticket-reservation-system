@@ -6,8 +6,7 @@ import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
 import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.domain.exception.ErrorCode;
-import com.reservation.ticket.infrastructure.dto.entity.QueueEntity;
-import com.reservation.ticket.infrastructure.dto.statement.QueueStatement;
+import com.reservation.ticket.infrastructure.dto.queue.statement.QueueStatement;
 import com.reservation.ticket.infrastructure.repository.queue.QueueRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class QueueRedisService {
     }
 
     public void verifyQueue(String token) {
-        QueueEntity queue = queueRedisRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
+        Queue queue = queueRedisRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
         if (queue == null) {
             throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token is not valid : %s".formatted(token));
         }
@@ -65,8 +64,8 @@ public class QueueRedisService {
 
     public void changeTokenStatusToActive() {
         int limit = 30;
-        List<QueueEntity> queues = queueRedisRepository.getQueuesByStatusPerLimit(QueueStatus.WAIT, limit);
-        for (QueueEntity queue : queues) {
+        List<Queue> queues = queueRedisRepository.getQueuesByStatusPerLimit(QueueStatus.WAIT, limit);
+        for (Queue queue : queues) {
             queueRedisRepository.save(QueueStatement.of(queue.getToken(), QueueStatus.ACTIVE));
         }
     }
