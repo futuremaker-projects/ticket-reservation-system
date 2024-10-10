@@ -14,7 +14,7 @@ public enum ErrorCode {
     USER_EXISTED(HttpStatus.OK, "USER_EXISTED"),
 
     // queue
-    UNAUTHORIZED(HttpStatus.OK, "UNAUTHORIZED"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED"),
 
     // point
     NOT_ENOUGH_POINT(HttpStatus.OK, "NOT_ENOUGH_POINT"),
@@ -22,6 +22,9 @@ public enum ErrorCode {
 
     // seat
     SEAT_ALREADY_OCCUPIED(HttpStatus.OK, "SEAT_ALREADY_OCCUPIED"),
+
+    // redis - active queue
+    ACTIVE_QUEUE_NOT_FOUND(HttpStatus.OK, "ACTIVE_QUEUE_NOT_FOUND"),
 
     ;
 

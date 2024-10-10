@@ -1,17 +1,17 @@
 package com.reservation.ticket.domain.entity.queue;
 
-import com.reservation.ticket.domain.dto.command.QueueCommand;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.reservation.ticket.domain.entity.userAccount.UserAccount;
 import com.reservation.ticket.domain.entity.userAccount.UserAccountRepository;
-import com.reservation.ticket.domain.enums.QueueStatus;
-import com.reservation.ticket.domain.exception.ApplicationException;
-import com.reservation.ticket.domain.exception.ErrorCode;
-import com.reservation.ticket.infrastructure.dto.queue.statement.QueueStatement;
-import com.reservation.ticket.infrastructure.repository.queue.QueueRedisRepository;
+import com.reservation.ticket.infrastructure.dto.queue.ActiveQueueRedisDto;
+import com.reservation.ticket.infrastructure.dto.queue.WaitingQueueRedisDto;
+import com.reservation.ticket.infrastructure.repository.queue.ActiveQueueRedisRepository;
+import com.reservation.ticket.infrastructure.repository.queue.WaitingQueueRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -19,60 +19,71 @@ import java.util.UUID;
 public class QueueRedisService {
 
     private final UserAccountRepository userAccountRepository;
-    private final QueueRedisRepository queueRedisRepository;
 
+    private final WaitingQueueRedisRepository waitingQueueRedisRepository;
+    private final ActiveQueueRedisRepository activeQueueRedisRepository;
+
+    /**
+        대기큐 생성
+    */
     public String createWaitQueue(Long userId) {
         UserAccount userAccount = userAccountRepository.findById(userId);
         String token = generateToken();
         // 생성된 토큰을 사용자 정보에 저장
         userAccount.saveToken(token);
-        queueRedisRepository.save(QueueStatement.of(userAccount, token, QueueStatus.WAIT));
-        // response header에 넣어주기 위한 토큰을 리턴
+        userAccountRepository.save(userAccount);
+        waitingQueueRedisRepository.save(userAccount.getId(), token);
         return token;
     }
 
-    public List<QueueCommand.Get> selectQueueByStatus(QueueStatus status) {
-        return List.of();
+    /**
+        활성큐 생성
+            - 놀이공원 방식의 `대기열`을 구성
+            - 일정 큐를 `대기큐`에서 `활성큐`로 변경
+    */
+    public void createActiveQueue(int limit) {
+        Set<WaitingQueueRedisDto> waitingQueues = waitingQueueRedisRepository.getQueueByRange(limit);
+        waitingQueues.forEach(dto -> {
+            activeQueueRedisRepository.save(dto.getToken(), dto.getUserId());
+            waitingQueueRedisRepository.remove(dto.getToken(), dto.getUserId());
+        });
     }
 
-    public void renewQueueExpirationDate(String token) {
-
+    /**
+        활성큐의 만료시간을 연장한다.
+     */
+    public void extendExpiration(String token) {
+        activeQueueRedisRepository.extendExpiration(token);
     }
 
-    public void removeActiveQueue(String token) {
-        queueRedisRepository.removeQueue(QueueStatement.of(token, QueueStatus.ACTIVE));
+    /**
+        대기큐의 순위를 리턴한다.
+     */
+    public Long getRank(String token, Long userId) {
+        return waitingQueueRedisRepository.getRank(token, userId);
     }
 
-    public void removeWaitQueue(String token) {
-
+    /**
+        활성큐를 검증한다.
+     */
+    public boolean verify(String token) {
+        return activeQueueRedisRepository.verify(token);
     }
 
-    public QueueCommand.Get getQueueByToken(String token) {
-        return null;
+    /**
+        파라미터 범위만큼 대기큐를 조회한다.
+     */
+    public Set<WaitingQueueRedisDto> getWaitingQueues(int limit) {
+        return waitingQueueRedisRepository.getQueueByRange(limit);
     }
 
-    public void verifyQueue(String token) {
-        Queue queue = queueRedisRepository.getQueueByToken(QueueStatement.of(token, QueueStatus.ACTIVE));
-        if (queue == null) {
-            throw new ApplicationException(ErrorCode.UNAUTHORIZED, "token is not valid : %s".formatted(token));
-        }
-    }
-
-    public void changeTokenStatusToExpire() {
-
-    }
-
-    public void changeTokenStatusToActive() {
-        int limit = 30;
-        List<Queue> queues = queueRedisRepository.getQueuesByStatusPerLimit(QueueStatus.WAIT, limit);
-        for (Queue queue : queues) {
-            queueRedisRepository.save(QueueStatement.of(queue.getToken(), QueueStatus.ACTIVE));
-        }
+    public ActiveQueueRedisDto getActiveQueue(String token) {
+        Optional<ActiveQueueRedisDto> queue = activeQueueRedisRepository.getQueueByToken(token);
+        return queue.orElse(null);
     }
 
     private String generateToken() {
         String uuid = UUID.randomUUID().toString();
         return uuid.substring(uuid.lastIndexOf("-") + 1);
     }
-
 }
