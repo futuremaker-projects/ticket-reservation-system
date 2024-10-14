@@ -9,14 +9,16 @@ public class ActiveQueueRedisDto {
 
     private Long userId;
     private long expireAt;
+    private String token;
 
-    public ActiveQueueRedisDto(Long userId, long expireAt) {
+    public ActiveQueueRedisDto(Long userId, long expireAt, String token) {
         this.userId = userId;
         this.expireAt = expireAt;
+        this.token = token;
     }
 
-    public static ActiveQueueRedisDto of(Long userId, long expireAt) {
-        return new ActiveQueueRedisDto(userId, expireAt);
+    public static ActiveQueueRedisDto of(Long userId, long expireAt, String token) {
+        return new ActiveQueueRedisDto(userId, expireAt, token);
     }
 
 }

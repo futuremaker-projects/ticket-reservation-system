@@ -6,10 +6,8 @@ import com.reservation.ticket.domain.enums.QueueStatus;
 import com.reservation.ticket.domain.exception.ApplicationException;
 import com.reservation.ticket.domain.exception.ErrorCode;
 import com.reservation.ticket.infrastructure.dto.queue.ActiveQueueRedisDto;
-import com.reservation.ticket.infrastructure.dto.queue.payload.QueuePayload;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -43,7 +41,7 @@ public class ActiveQueueRedisRepository {
     public void save(String token, Long userId) {
         String key = composeKey(token);
         try {
-            String value = serializeValue(ActiveQueueRedisDto.of(userId, getCurrentTimeInSeconds()));
+            String value = serializeValue(ActiveQueueRedisDto.of(userId, getCurrentTimeInSeconds(), token));
             this.setOperations.add(key, value);
             redisTemplate.expire(key, 300, TimeUnit.SECONDS);
         } catch (JsonProcessingException e) {
