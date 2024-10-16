@@ -1,31 +1,20 @@
 package com.reservation.ticket.domain.entity.queue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reservation.ticket.config.WebTestConfig;
 import com.reservation.ticket.infrastructure.dto.queue.ActiveQueueRedisDto;
 import com.reservation.ticket.infrastructure.dto.queue.WaitingQueueRedisDto;
-import com.reservation.ticket.infrastructure.dto.queue.payload.QueuePayload;
 import com.reservation.ticket.infrastructure.repository.queue.ActiveQueueRedisRepository;
 import com.reservation.ticket.infrastructure.repository.queue.WaitingQueueRedisRepository;
-import com.reservation.ticket.support.config.RedisConfig;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,7 +47,7 @@ class QueueRedisServiceTest {
 
     @DisplayName("대기큐(Waiting Queue)에 하나의 대기열을 생성한다.")
     @Test
-    void test01() throws JsonProcessingException {
+    void test01() {
         // given
         Long userId = 1L;
 

@@ -27,9 +27,6 @@ public class UserAccount {
     private String token;
     private int point;
 
-    @Version
-    private Long version;
-
     public UserAccount(Long id) {
         this.id = id;
     }
