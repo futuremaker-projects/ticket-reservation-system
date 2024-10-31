@@ -18,4 +18,10 @@ public class PaymentEvent {
         }
     }
 
+    public record Send(Long outboxId, Long paymentId) {
+        public static Send of(Long outboxId, Long paymentId) {
+            return new Send(outboxId, paymentId);
+        }
+    }
+
 }

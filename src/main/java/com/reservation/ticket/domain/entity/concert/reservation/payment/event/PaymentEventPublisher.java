@@ -1,17 +1,11 @@
 package com.reservation.ticket.domain.entity.concert.reservation.payment.event;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class PaymentEventPublisher {
+public interface PaymentEventPublisher {
 
-    private final ApplicationEventPublisher publisher;
+    void publishSuccess(PaymentEvent.Success success);
 
-    public void publishSuccess(PaymentEvent.Success success) {
-        publisher.publishEvent(success);
-    }
 
 }
