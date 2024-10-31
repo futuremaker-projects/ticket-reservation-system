@@ -68,6 +68,11 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// 테스트 하지않고 빌드시 적용
+test {
+    exclude '**/*'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

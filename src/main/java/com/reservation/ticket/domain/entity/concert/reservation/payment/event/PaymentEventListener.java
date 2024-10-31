@@ -28,7 +28,7 @@ public class PaymentEventListener {
     private final DataPlatformClient dataPlatformClient;
 
     // TODO - Async 구현 필요, config 하자
-//    @Async
+    @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void paymentSuccessHandler(PaymentEvent.Success success) {
         callDataPlatform(success.reservation().getId());

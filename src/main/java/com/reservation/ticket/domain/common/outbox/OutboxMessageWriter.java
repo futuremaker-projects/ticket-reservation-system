@@ -5,4 +5,6 @@ public interface OutboxMessageWriter {
     void complete(String outboxId);
 
     void resend();
+
+    void resendPaymentMessage();
 }

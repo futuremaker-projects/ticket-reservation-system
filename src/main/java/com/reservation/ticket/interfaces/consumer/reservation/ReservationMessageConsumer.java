@@ -22,6 +22,7 @@ public class ReservationMessageConsumer {
     private final ObjectMapper objectMapper;
     private final OutboxMessageWriter outboxMessageWriter;
 
+    // 필요없는 구성 - 테스트를 위해 작성했지만 Awatility 를 이용하여 작성해도 된다.
     private CountDownLatch latch = new CountDownLatch(1);
     private String payload;
 
