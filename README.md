@@ -25,8 +25,6 @@
 
 </details>
 
-<br>
-
 <details>
     <summary style="font-weight: bold; font-size: 17px;">마일스톤</summary>
 
@@ -55,8 +53,6 @@ gantt
 ```
 </details>
 
-<br>
-
 <details>
     <summary style="font-weight: bold; font-size: 17px;">시퀀스 다이어그램</summary>
 
@@ -71,7 +67,6 @@ gantt
 
 </details>
 
-<br>
 
 <details>
     <summary style="font-weight: bold; font-size: 17px;">ERD</summary>
@@ -80,7 +75,6 @@ gantt
 
 </details>
 
-<br>
 
 <details>
     <summary style="font-weight: bold; font-size: 17px;">API 명세서</summary>
@@ -202,7 +196,7 @@ EndPoint
 /concertSchedules/{concertScheduleId}/seats
 ```
 
-Request Body 
+Request Body
 ```
 {
   concertSchedule: 1
@@ -322,8 +316,6 @@ https://first-longan-7e1.notion.site/API-3c9b22117eae4c079f6228051e908ef7?pvs=4
 
 </details>
 
-<br>
-
 <details>
   <summary style="font-weight: bold; font-size: 17px;">Swagger</summary>
 
@@ -331,7 +323,6 @@ https://first-longan-7e1.notion.site/API-3c9b22117eae4c079f6228051e908ef7?pvs=4
 
 </details>
 
-<br>
 
 <details>
   <summary style="font-weight: bold; font-size: 17px;">동시성 분석 및 개선 - 개선</summary>
@@ -420,7 +411,6 @@ List<Ticket> findAllWithPessimisticLock(@Param("concertScheduleId") Long concert
 </details>
 
 
-<br>
 
 <details>
   <summary style="font-weight: bold; font-size: 17px;">Caching 전략 - 생성</summary>
@@ -428,18 +418,183 @@ List<Ticket> findAllWithPessimisticLock(@Param("concertScheduleId") Long concert
 </details>
 
 
-<br>
-
 <details>
-<summary style="font-weight: bold; font-size: 17px;">Redis를 이용한 대기열 리팩토링 - 생성</summary>
+  <summary style="font-weight: bold; font-size: 17px;">Redis를 이용한 대기열 리팩토링</summary>
+
+### 목적
+
+기존의 데이터베이스로 관리하던 대기열 시스템을 Redis를 이용하여 데이터베이스의 부하를 줄인다.
+
+### 대기열과 개발방식 고찰
+
+#### 은행창구 방식
+- 만료된 대기열의 큐만큼 서비스를 이용할 수 있는 토큰을 활성화
+- 현재 대기열은 데이터베이스를 이용하여 은행 창구 방식으로 관리된다.
+- 대기열 시스템을 요약하자면 아래와 같다.
+  1. 콘서트 스케줄 날짜 조회를 시도하는 사용자에게 토큰을 발급하고 데이터베이스에 저장한다. 토큰의 상태값은 `WAIT`이다.
+  2. 만료된 토큰을 기준으로 스케줄러를 이용하여 일정시간마다 `WAIT`의 토큰을 `ACTIVE`로 변경한다. (만료시간은 5분 - 평균 유저활동 시간)
+  3. 5분 내에 콘서트 예약이 이루어지지 않는다면 스케줄러를 이용하여 `ACTIVE`에서 `EXPIRE`로 변경한다.
+  4. 예약이 완료된다면 `ACTIVE`에서 `EXPIRE`로 변경한다.
+- 장점
+  - 서비스를 이용하는 유저를 일정한 수 만큼 유지할 수 있다.
+- 단점
+  - 유저의 행동에 따라 대기열의 전환시간이 불규칙하다.
+#### 놀이공원 방식
+- N초마다 M개의 Active token으로 전환한다.
+- Redis를 이용하여 개선될 방식이다.
+- 장점
+  - 대기열의 사용자들이 일정한 시간으로 서비스의 진입이 가능하다.
+- 단점
+  - 서비스를 이용하는 사용자의 수가 보장되지 않는다.
+
+#### 대기열 기능개발
+- RDB에서 관리하던 기존 대기열을 아래의 Redis 자료구조를 이용하여 처리함
+  - 기존
+    - 데이터베이스를 이용한 대기열 관리
+  - 신규
+    - 2가지 Redis 자료구조를 이용하여 대기열을 구성함
+    - 대기큐(WaitingQueue) : Sorted Set 자료구조를 이용
+    - 활성큐(ActiveQueue) : Set 자료구조 이용
+- 큐의 만료시간 설정
+  - 기존 : 스케줄러를 이용하여 5분경과된 데이터의 상태값 변경
+  - 신규 : 활성큐의 Key에 TTL을 적용하여 만료시간을 조절
+- 만료시간 연장
+  - 기존 : 토큰을 이용하여 해당 큐를 조회하여 만료시간을 연장함
+  - 신규 : 토큰을 이용하여 해당 큐의 TTL을 갱신
+
+### 코드
+
+```java
+@Service
+@RequiredArgsConstructor
+public class QueueRedisService {
+
+    private final UserAccountRepository userAccountRepository;
+
+    private final WaitingQueueRedisRepository waitingQueueRedisRepository;
+    private final ActiveQueueRedisRepository activeQueueRedisRepository;
+
+    /**
+        대기큐 생성
+    */
+    public String createWaitQueue(Long userId) {
+        String lockKey = "lock:user:" + userId;
+        // 10초동안 같은 유저가 큐에 진입하지 못하도록 함
+        Boolean isUserQueued = redisTemplate.opsForValue()
+                .setIfAbsent(lockKey, "LOCK:%d".formatted(userId), 10, TimeUnit.SECONDS);
+
+        if (Boolean.FALSE.equals(isUserQueued)) {
+            String s = redisTemplate.opsForValue().get(lockKey);
+            log.error("user already in the wait Queue : userId - {}, lockValue - {}", userId, s);
+            return "";
+        }
+
+        try {
+            UserAccount userAccount = userAccountRepository.findById(userId);
+            String token = generateToken();
+            // 생성된 토큰을 사용자 정보에 저장
+            userAccount.saveToken(token);
+            userAccountRepository.save(userAccount);
+            // 대기열에 사용자의 정보와 토큰을 저장
+            waitingQueueRedisRepository.save(userAccount.getId(), token);
+            return token;
+        } finally {
+            redisTemplate.delete(lockKey);
+        }
+    }
+
+    /**
+        활성큐('Active Queue')를 생성한다.
+            - 놀이공원 방식의 `대기열`을 구성
+            - 파라미터(limit)만큼의 큐를 `대기큐`에서 `활성큐`로 변경
+            - 스케줄러를 사용하여 변경함
+    */
+    public void createActiveQueue(int limit) {
+        Set<WaitingQueueRedisDto> waitingQueues = waitingQueueRedisRepository.getQueueByRange(limit);
+        waitingQueues.forEach(dto -> {
+            activeQueueRedisRepository.save(dto.getToken(), dto.getUserId());
+            waitingQueueRedisRepository.remove(dto.getToken(), dto.getUserId());
+        });
+    }
+
+    /**
+        활성큐의 만료시간을 연장한다.
+     */
+    public void extendExpiration(String token) {
+        activeQueueRedisRepository.extendExpiration(token);
+    }
+
+    /**
+        대기큐의 순위를 리턴한다. - 사용자의 접속 순서를 확인할 수 있음
+     */
+    public Long getRank(String token, Long userId) {
+        return waitingQueueRedisRepository.getRank(token, userId);
+    }
+
+    /**
+        활성큐를 검증한다.
+     */
+    public boolean verify(String token) {
+        return activeQueueRedisRepository.verify(token);
+    }
+
+    /**
+        파라미터 범위만큼 대기큐를 조회한다.
+     */
+    public Set<WaitingQueueRedisDto> getWaitingQueues(int limit) {
+        return waitingQueueRedisRepository.getQueueByRange(limit);
+    }
+
+    private String generateToken() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.substring(uuid.lastIndexOf("-") + 1);
+    }
+}
+```
+---
+### 부하테스트
+
+#### 목적
+
+부하테스트를 실시하여 대기열에서 처리열로 이동할 수 있는 토큰의 수량 및 시간을 특정할 수 있다.
+
+#### 테스트 환경
+
+- 서버: 로컬 테스트
+  - 사양: Mac CPU(M3) , RAM(18G)
+- 데이터베이스 : MySql (Server version: `8.3.0` MySQL Community Server - GPL)
+- Redis: redis_version: `6.2.14`
+- 부하테스트 : `k6`
+
+#### 테스트 시나리오 및 결과
+
+> 1. 30초 동안 점진적으로 사용자를 1명에서 1000명의 늘린다.
+> 2. 30초 동안 1000명의 사용자를 유지한다.
+> 3. 30초 동안 점진적으로 사용자를 1000명에서 1명으로 줄인다.
+
+<img src="./queue_test.png">
+
+테스트 결과
+- 평균: 7.99ms
+- 최대: 86.06ms
+- 평균 TPS: 660/s
+
+1분간 유저가 호출하는 API
+- 2(콘서트 좌석을 조회하는 API, 예약 API) * 1.5 ( 동시성 이슈에 의해 예약에 실패하는 케이스를 위한 재시도 계수(예측치)) = 3
+
+분당 처리할 수 있는 트랜잭션 수: 660/s * 60s = 39600
+
+분당 처리할 수 있는 동시 접속자 수: 39600 / 3(API 수) = 13200 명
+
+데스트 서버를 이용시 `1분당` 대략적으로 `13200명`을 동시 처리가능하므로 `10초`마다 `2200명`의 토큰을 대기큐에서 활성큐로 전환하여 수용할 수 있다는 추론이 나온다.
 
 
 </details>
 
-<br>
-
 <details>
   <summary style="font-weight: bold; font-size: 17px;">인덱스를 적용한 성능최적화 - 추가</summary>
+
+<br>
 
 > 제공되는 서비스의 요구사항 중 쿼리의 성능을 개선하여 검색 및 수정, 삭제의 성능을 높일수 있는 쿼리를 찾아 수정
 
@@ -510,23 +665,221 @@ where concert_id = 2
 
 </details>
 
-<br>
-
 <details>
-  <summary style="font-weight: bold; font-size: 17px;">서비스 규모 확장에 따른 Transaction 분리 및 고찰 - 수정</summary>
+  <summary style="font-weight: bold; font-size: 17px;">서비스 규모 확장에 따른 Transaction 분리 및 고찰</summary>
+
+### 문제 인식
+
+다음은 `Application Layer`의 예약된 콘서트를 결제하기 위한 로직이다.
+Service의 상호참조를 방지하기위해 `PaymentUsecase`를 이용하여 도메인 서비스를 구성하였다.
+
+```java
+@Component
+@RequiredArgsConstructor
+public class PaymentUsecase {
+    private final UserAccountService userAccountService;
+    private final QueueService queueService;
+    private final ReservationService reservationService;
+    private final PaymentService paymentService;
+    private final PointService pointService;
+
+    @Transactional
+    public void makePayment(Long reservationId, String token) {
+        // 대기열 토큰 검증 및 만료
+        queueService.expireQueue(token);
+        // 예약의 결제 상태값을 PAID로 변경
+        Reservation reservation = reservationService.changePaymentStatusAsPaid(reservationId);
+        UserAccount userAccount = userAccountService.getUserAccountByToken(token);
+        // 포인트 차감 -> 잔액부족이면 예외처리
+        pointService.usePoint(reservation.getPrice(), userAccount);
+        // 결재 생성
+        paymentService.createPayment(reservation, userAccount);
+
+        // 데이터 플랫폼으로 결재완료 데이터 전송
+        dataPlatform.send("payment success"); // 외부 API 호출
+    }
+}
+```
+
+하나의 트랜잭션에서 여러 서비스 로직을 실행시 다음과 같은 문제를 야기할 수 있다.
+
+- 메서드 실행 중, 외부 API 호출 등의 부가적인 로직의 예외 발생 시, 롤백을 유발하여 메인로직이 실패하게 된다.
+- 넓은 범위를 가진 트랜잭션은 데이터베이스와의 긴 커넥션을 유발하여 유저 증가 시, 커넥션 풀의 관리가 용이하지 못하게 된다.
+- Lock을 정의한 로직을 가진 서비스가 존재 시, 멀티 스레드 환경에서 트랜젝션끼리의 데드락을 유발할 가능성을 내포하게 된다.
+
+### 해결방안
+
+#### 각 책임에 맞는 서비스 별 트랜잭션 분리
+
+- 먼저 꼭 필요한 트랜잭션인지 파악하고(`중요`), 각 서비스 레이어에서 트랜잭션을 부여하는 방식으로 처리한다.
+
+기존 `makePayment`에 넓은 영역의 트랜잭션을 제거했다.
+
+```java
+public void makePayment(PaymentCriteria.Create create) {
+    UserAccount userAccount = userAccountService.getUserAccountByToken(create.token());
+    // 예약정보 조회
+    Reservation reservation = reservationService.getReservation(create.reservationId());
+    
+    PaymentCommand.Create command = PaymentCommand.Create.of(reservation, userAccount);
+    // 예약완료를 위한 결제생성
+    paymentService.createPayment(command);
+}
+```
+
+결제 생성 및 결제 성공에 따른 이벤트를 발행시킨다. 여기서 발행해야 하는 이벤트는 다음과 같다.
+- 예약금액 만큼의 포인트 차감
+- 대기열 토큰 만료 - Active Queue의 토큰을 삭제 (Redis)
+- 데이터 플랫폼으로 결제성공 데이터 전송
+
+```java
+@Transactional
+public void createPayment(PaymentCommand.Create create) {
+    Payment payment = Payment.of(create.userAccount(), create.reservation());
+    Payment savedPayment = paymentRepository.save(payment);
+
+    /**
+     *  결재성공 이벤트 발행
+     *  - 예약금액 만큼의 포인트 차감
+     *  - 대기열 토큰 만료 - redis의 Active 대기열에서 삭제
+     *  - 데이터 플랫폼에 결재성공 데이터 전송
+     */
+    paymentEventPublisher.publishSuccess(
+            PaymentEvent.Success.of(create.reservation(), create.userAccount(), savedPayment)
+    );
+}
+```
+
+#### 이벤트 기반 처리를 통한 결합도 낮추기
+
+결제금액 포인트로 차감하기
+
+- `TransactionPhase.BEFORE_COMMIT`을 선언하여 이벤트 발행부의 트랜잭션의 Commit 전에 포인트를 차감할 수 있도록 유도한다.
+- 포인트 부족 시, 예외처리하여 보상 트랜잭션이 발생할 수 있도록 한다.
+
+```java
+/**
+ * 예약금액을 포인트로 차감한다.
+ *  포인트가 부족시 보상 트랜잭션을 발행한다. (publish payment recover event)
+ */
+@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+public void usePointEvent(PaymentEvent.Success success) {
+    try {
+        pointService.usePoint(PointCommand.Use.of(
+                success.reservation().getPrice(), success.userAccount())
+        );
+    } catch (Exception e) {
+        // 보상 트랜젝션
+        publisher.publishEvent(
+                PaymentEvent.Recover.of(
+                        event.reservationId(),
+                        event.paymentId(),
+                        event.userId()
+                )
+        );
+        throw e;
+    }
+}
+
+/**
+ * 대기열 토큰을 만료시킨다.
+ */
+@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+public void paymentSuccessHandler(PaymentEvent.Success success) {
+    queueRedisService.expire(success.userAccount().getToken());
+}
+```
+
+데이터 플랫폼에 `결재성공` 데이터를 전송한다.
+- `TransactionPhase.AFTER_COMMIT`를 사용하여 메인 로직의 트랜잭션이 종료된 후, 실행할 수 있도록 한다.
+- `@Retryable`을 사용하여 최대 2번, 1초 간격으로 메서드 호출 실패 시, 재시도할 수 있도록 한다.
+- 실패 시, 로그를 남겨 메서드 호출 실패 유무를 저장한다.
+
+
+```java
+/**
+ * 데이터 플랫폼으로 결재성공 데이터 전송
+ */ 
+@Async
+@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+public void paymentSuccessHandler(PaymentEvent.Success success) {
+    callDataPlatform(success.reservation().getId());
+}
+
+@Retryable(
+        maxAttempts = 2,                    // 최대 시도 횟수
+        backoff = @Backoff(delay = 1000)    // 재시도 간격
+)
+private void callDataPlatform(Long reservationId) {
+    boolean result = dataPlatformClient.send(reservationId);
+    if (!result) {
+        log.warn("data platform send failed");
+    }
+}
+```
 
 
 </details>
-  
-<br>
+
 
 <details>
-  <summary style="font-weight: bold; font-size: 17px;">Kafka를 이용한 책임분리 및 Transactional Outbox Pattern 구현 보고서 - 생성</summary>
+  <summary style="font-weight: bold; font-size: 17px;">Kafka를 이용한 책임분리 및 Transactional Outbox Pattern 구현 보고서</summary>
+
+
+### Outbox 패턴을 활용한 신뢰성있는 이벤트 메시지 발행
+
+도메인 로직이 성공적으로 수행된 후
+
+데이터 플랫폼(외부 API)과 연동하여
+
+아키텍쳐 구성
+
+```
+├── application/
+│   └── event/
+│       └── payment/
+│           └── PaymentEventListener
+├── domain/
+│   ├── common/
+│   │   ├── dataplatform/
+│   │   │   └── DataPlatformClient (interface)
+│   │   ├── notification/
+│   │   │   ├── Notification
+│   │   │   └── NotificationSender (interface)
+│   │   └── outbox/
+│   │       ├── Outbox
+│   │       ├── OutboxMessageWriter (interface)
+│   │       └── OutboxRepository    (interface)
+│   └── payment/
+│       ├── event/
+│       │   ├── PaymentEvent
+│       │   └── PaymentEventPublisher (interface)
+│       └── message/
+│           ├── PaymentMessage
+│           └── PaymentMessageSender (interface)
+├── infrastructures/
+│   ├── kafka/
+│   │   ├── KafkaMessage
+│   │   ├── payment/
+│   │   │   └── PaymentKafkaMessageSender (PaymentMessageSender 구현체)
+│   │   └── notification/
+│   │       └── SlackNotificationSender (NotificationSener 구현체)
+│   └── spring/
+│       └── payment/
+│           └── PaymentSpringEventPublisher (PaymentEventPublisher 구현체)
+├── interfaces/
+│   └── consumer/
+│       └── payment/
+│           └── PaymentMessageConsumer
+└── support/
+    └── KafkaConfig
+```
+
+주요 아키텍처 설명
 
 
 </details>
 
-<br>
 
 <details>
     <summary style="font-weight: bold; font-size: 17px;">부하테스트 및 장애 대응 보고서</summary>
@@ -563,7 +916,6 @@ where concert_id = 2
 
 </details>
 
-<br>
 
 <details>
     <summary style="font-weight: bold">부하테스트 및 결과</summary>
