@@ -88,7 +88,7 @@ POST /queue/token
 ```
 
 Response
-```json
+```
 Http Status: 200 ok
 
 Body: 
@@ -110,7 +110,7 @@ GET /concerts
 ```
 
 Response
-```json
+```
 Http Status: 200 ok
         
 Body:
@@ -143,7 +143,7 @@ Request Body
 ```
 
 Response
-```json
+```
 Http Status: 200 ok
 
 Response Body:
@@ -169,7 +169,7 @@ Request Body
 ```
 
 Response
-```json
+```
 
 ResponseBody: 
 {
@@ -204,7 +204,7 @@ Request Body
 ```
 
 Response
-```json
+```
 Http Status: 200 ok
 
 Response Body:
