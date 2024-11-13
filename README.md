@@ -825,9 +825,11 @@ private void callDataPlatform(Long reservationId) {
 <details>
   <summary style="font-weight: bold; font-size: 17px;">Kafka를 이용한 책임분리 및 Transactional Outbox Pattern 구현 보고서</summary>
 
+<br>
 
-- `Transactional Outbox pattern`이란
-  - 아웃 박스는 `보낸 편지함`  을 뜻하며, 발생된 message 를 Message Brocker로 publish되었는지를 확인하여 신뢰성을 보장해주는 패턴이다.
+### Transactional Outbox pattern
+
+- 아웃 박스는 `보낸 편지함`  을 뜻하며, 발생된 message 를 Message Brocker로 publish되었는지를 확인하여 신뢰성을 보장해주는 패턴이다.
 - 이러한 패턴은 왜 필요한가
   - 트랜잭션이 커밋된 이 후 카프카등의 Message Brocker에서 메시지 발행이 되지 않았다면 반드시 처리되야 하는 메시지는 소실 될 것이다.
   - 또한 DB 트랜잭션은 데이터 베이스 차원의 원자성을 보장하지만 비동기로 이루어지는 Event Driven Architecture로 구성된 시스템에서는 메시지 발행의 유무는 Cusumer를 통해 메시지를 직접 확인하지 않는다면 메시지 유실 유무를 확인할 수 없다.
