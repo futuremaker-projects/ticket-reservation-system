@@ -325,7 +325,7 @@ https://first-longan-7e1.notion.site/API-3c9b22117eae4c079f6228051e908ef7?pvs=4
 
 
 <details>
-  <summary style="font-weight: bold; font-size: 17px;">동시성 분석 및 개선 - 개선</summary>
+  <summary style="font-weight: bold; font-size: 17px;">동시성 분석 및 개선</summary>
 
 ```
 동시성 로직 파악
@@ -413,7 +413,7 @@ List<Ticket> findAllWithPessimisticLock(@Param("concertScheduleId") Long concert
 
 
 <details>
-  <summary style="font-weight: bold; font-size: 17px;">Caching 전략 - 생성</summary>
+  <summary style="font-weight: bold; font-size: 17px;">Caching 전략</summary>
 
 </details>
 
@@ -586,13 +586,13 @@ public class QueueRedisService {
 
 분당 처리할 수 있는 동시 접속자 수: 39600 / 3(API 수) = 13200 명
 
-데스트 서버를 이용시 `1분당` 대략적으로 `13200명`을 동시 처리가능하므로 `10초`마다 `2200명`의 토큰을 대기큐에서 활성큐로 전환하여 수용할 수 있다는 추론이 나온다.
+데스트 서버를 이용시 `1분당` 대략적으로 `13200명`을 동시 처리가능하므로 `10초`마다 `2200명`의 토큰을 대기큐에서 활성큐로 전환하여 수용할 수 있다.
 
 
 </details>
 
 <details>
-  <summary style="font-weight: bold; font-size: 17px;">인덱스를 적용한 성능최적화 - 추가</summary>
+  <summary style="font-weight: bold; font-size: 17px;">인덱스를 적용한 성능최적화</summary>
 
 <br>
 
